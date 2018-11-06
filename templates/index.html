@@ -1,5 +1,37 @@
 {% extends 'base.html'%} {% block content %}
+<h2>Welcome to Your Online Cookbook!</h2>
+    <div class="row">
+        <form class="col s12 m7">
+            <div class="row">
+                <div class="input-field col s10">
+                    <input placeholder="What are you looking for?" id="search" type="text" class="validate">
+                </div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
+                </div>
 
-<h2>Landing Page</h2>
+            </div>
+            <div class="row">
+                <div class="input-field col s10">
+                    <select>
+                    <option value="" disabled selected>Browse Recipes...</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                </select>
+                </div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn">Go</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <a href="{{url_for('add_recipe')}}" class="waves-effect waves-light btn-large"><i class="material-icons right">add</i>Add your own recipe</a>
+                </div>
+            </div>
+        </form>
+        <img class="col m5 hidden-mobile" src="/static/img/indeximg.jpg">
+    </div>
+
 
 {% endblock %}
