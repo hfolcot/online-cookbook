@@ -1,14 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <title>Your Online Cookbook</title>
 </head>
+
 <body>
-    <h1>Online Cookbook</h1>
-    {% block content %}
-    {% endblock %}
+    <nav>
+        <div class="nav-wrapper">
+            <a href="{{url_for('index')}}" class="hidden-mobile"><img class= "headerimg" src="/static/img/headerimg.jpg"></a>
+            <a href="{{url_for('index')}}" class="brand-logo">Your Online Cookbook</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="large material-icons">dehaze</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{url_for('index')}}">Home</a></li>
+                <li>|</li>
+                <li><a href="#">Browse</a></li>
+                <li>|</li>
+                <li><a href="#">Add a Recipe</a></li>
+                <li>|</li>
+                <li><a href="{{url_for('index')}}">Search</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="{{url_for('index')}}">Home</a></li>
+        <li><a href="#">Browse</a></li>
+        <li><a href="#">Add a Recipe</a></li>
+        <li><a href="#">Search</a></li>
+    </ul>
+
+    {% block content %} {% endblock %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.sidenav').sidenav();
+            $('select').formSelect();
+        });
+    </script>
 </body>
+
 </html>

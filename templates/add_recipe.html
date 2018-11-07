@@ -1,41 +1,42 @@
 {% extends 'base.html'%} {% block content %}
-<div class="row">
-    <form class="col s12">
-        <div class="row">
-            <div class="input-field col s12">
-                <input placeholder="This is the title that will appear on the recipe's page" id="recipe_name" type="text" class="validate">
-                <label for="recipe_name">Recipe Name</label>
+<main class="text-centered container">
+    <div class="row">
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input placeholder="This is the title that will appear on the recipe's page" id="recipe_name" type="text" class="validate">
+                    <label for="recipe_name">Recipe Name</label>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s10">
-                <input id="ingredients" placeholder="Enter first ingredient" type="text" class="validate">
-                <label for="ingredients">Ingredients</label>
+            <div class="row">
+                <div class="input-field col s10">
+                    <input id="ingredients" placeholder="Enter first ingredient" type="text" class="validate">
+                    <label for="ingredients">Ingredients</label>
+                </div>
+                <div class="input-field col s2">
+                    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                </div>
             </div>
-            <div class="input-field col s2">
-                <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+            <div class="row">
+                <div class="input-field col s10">
+                    <input id="method" placeholder="Enter step one" type="text" class="validate">
+                    <label for="method">Method</label>
+                </div>
+                <div class="input-field col s2">
+                    <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s10">
-                <input id="method" placeholder="Enter step one" type="text" class="validate">
-                <label for="method">Method</label>
-            </div>
-            <div class="input-field col s2">
-                <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s4">
-                <input id="prep_time" placeholder="Number of minutes" type="text" class="validate">
-                <label>Prep Time</label>
-            </div>
-            <div class="input-field col s4">
-                <input id="cook_time" type="text" class="validate">
-                <label for="cook_time">Cook Time (minutes)</label>
-            </div>
-            <div class="input-field col s4">
-                <select id="serves">
+            <div class="row">
+                <div class="input-field col s4">
+                    <input id="prep_time" placeholder="Number of minutes" type="text" class="validate">
+                    <label>Prep Time</label>
+                </div>
+                <div class="input-field col s4">
+                    <input id="cook_time" type="text" class="validate">
+                    <label for="cook_time">Cook Time (minutes)</label>
+                </div>
+                <div class="input-field col s4">
+                    <select id="serves">
                     <option value="" disabled selected>Number of people</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -51,210 +52,210 @@
                     <option value="3">12</option>
                     <option value="3">Over 12</option>
                 </select>
-                <label for="serves">Serves</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <input placeholder="Who created this recipe?" id="author" type="text" class="validate">
-                <label for="author">Author</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s4">
-                <div class="file-field input-field">
-                    <div class="btn">
-                        <span>Add an Image</span>
-                        <input type="file">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
+                    <label for="serves">Serves</label>
                 </div>
             </div>
-        </div>
-        <div class="row">
-
             <div class="row">
-                <div class="col s2">
-                    <h5>Categories</h5>
+                <div class="input-field col s12">
+                    <input placeholder="Who created this recipe?" id="author" type="text" class="validate">
+                    <label for="author">Author</label>
                 </div>
             </div>
+            <div class="row">
+                <div class="col s4">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Add an Image</span>
+                            <input type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
 
-            <div class="col s2">
-                <h6>Main Ingredients</h6>
-                <p>
-                    <label>
+                <div class="row">
+                    <div class="col s2">
+                        <h5>Categories</h5>
+                    </div>
+                </div>
+
+                <div class="col s2">
+                    <h6>Main Ingredients</h6>
+                    <p>
+                        <label>
                         <input type="checkbox" id="chicken" />
                         <span>Chicken</span>
                       </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="pasta" />
                         <span>Pasta</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="noodles" />
                         <span>Noodles</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="pork"/>
                         <span>Pork</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="seafood"/>
                         <span>Seafood</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="beef"/>
                         <span>Beef</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="fish"/>
                         <span>Fish</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="turkey"/>
                         <span>Turkey</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="lamb"/>
                         <span>Lamb</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="rice"/>
                         <span>Rice</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="potato"/>
                         <span>Potato</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="mushroom"/>
                         <span>Mushroom</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="fruit"/>
                         <span>Fruit</span>
                     </label>
-                </p>
-            </div>
+                    </p>
+                </div>
 
-            <div class="col s2">
-                <h6>Recipe Type</h6>
-                <p>
-                    <label>
+                <div class="col s2">
+                    <h6>Recipe Type</h6>
+                    <p>
+                        <label>
                         <input type="checkbox" id="baking"/>
                         <span>Baking</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="vegan" />
                         <span>Vegan</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="vegetarian" />
                         <span>Vegetarian</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="soup" />
                         <span>Soup</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="stew" />
                         <span>Stew</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="salad" />
                         <span>Salad</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="dessert" />
                         <span>Dessert</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="pizza" />
                         <span>Pizza</span>
                     </label>
-                </p>
-            </div>
+                    </p>
+                </div>
 
-            <div class="col s2">
-                <h6>Health</h6>
-                <p>
-                    <label>
+                <div class="col s2">
+                    <h6>Health</h6>
+                    <p>
+                        <label>
                         <input type="checkbox" id="diabetic" />
                         <span>Diabetic</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="gluten-free" />
                         <span>Gluten Free</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="nut-free" />
                         <span>Nut Free</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="low-cal" />
                         <span>Low Calorie</span>
                     </label>
-                </p>
-                <p>
-                    <label>
+                    </p>
+                    <p>
+                        <label>
                         <input type="checkbox" id="low-sugar" />
                         <span>Low Sugar</span>
                     </label>
-                </p>
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col s2 offset-s9">
-                <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i></button>
+            <div class="row">
+                <div class="col s2 offset-s9">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i></button>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
-
+        </form>
+    </div>
+</main>
 {% endblock %}

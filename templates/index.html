@@ -1,5 +1,6 @@
 {% extends 'base.html'%} {% block content %}
-<h2>Welcome to Your Online Cookbook!</h2>
+<main class="text-centered container">
+    <h2>Welcome to Your Online Cookbook!</h2>
     <div class="row">
         <form class="col s12 m7">
             <div class="row">
@@ -7,7 +8,7 @@
                     <input placeholder="What are you looking for?" id="search" type="text" class="validate">
                 </div>
                 <div class="col s2">
-                    <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
+                    <a class="waves-effect waves-light btn" href={{ url_for( "results") }}><i class="material-icons">search</i></a>
                 </div>
 
             </div>
@@ -33,5 +34,5 @@
         <img class="col m5 hidden-mobile" src="/static/img/indeximg.jpg">
     </div>
 
-
+</main>
 {% endblock %}
