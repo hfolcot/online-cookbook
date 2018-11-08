@@ -16,10 +16,25 @@
                 <div class="input-field col s10">
                     <select>
                     <option value="" disabled selected>Browse Recipes...</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                    <option value="3">Option 3</option>
-                </select>
+                        <option disabled>Main Ingredients:</option>
+                        {% for i in categories[0]["main_ing"] %}
+                            {% for k, v in i.items(): %}
+                            <option value="1">{{ v.capitalize() }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                        <option disabled>Recipe Type:</option>
+                        {% for i in categories[0]["recipe_type"] %}
+                            {% for k, v in i.items(): %}
+                            <option value="1">{{ v.capitalize() }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                        <option disabled>Health Options:</option>
+                        {% for i in categories[0]["health_concerns"] %}
+                            {% for k, v in i.items(): %}
+                            <option value="1">{{ v.capitalize() }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn">Go</a>

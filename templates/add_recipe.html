@@ -84,178 +84,42 @@
 
                 <div class="col s2">
                     <h6>Main Ingredients</h6>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="chicken" />
-                        <span>Chicken</span>
-                      </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="pasta" />
-                        <span>Pasta</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="noodles" />
-                        <span>Noodles</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="pork"/>
-                        <span>Pork</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="seafood"/>
-                        <span>Seafood</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="beef"/>
-                        <span>Beef</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="fish"/>
-                        <span>Fish</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="turkey"/>
-                        <span>Turkey</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="lamb"/>
-                        <span>Lamb</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="rice"/>
-                        <span>Rice</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="potato"/>
-                        <span>Potato</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="mushroom"/>
-                        <span>Mushroom</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="fruit"/>
-                        <span>Fruit</span>
-                    </label>
-                    </p>
+                        <form>
+                            {% for i in categories[0]["main_ing"] %} {% for k, v in i.items(): %}
+                            <p><input type="checkbox" id={{ v }}/>
+                            <span>{{ v.capitalize() }}</span> {% endfor %} {% endfor %}</p>
+                        </form>
                 </div>
 
                 <div class="col s2">
                     <h6>Recipe Type</h6>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="baking"/>
-                        <span>Baking</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="vegan" />
-                        <span>Vegan</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="vegetarian" />
-                        <span>Vegetarian</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="soup" />
-                        <span>Soup</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="stew" />
-                        <span>Stew</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="salad" />
-                        <span>Salad</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="dessert" />
-                        <span>Dessert</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="pizza" />
-                        <span>Pizza</span>
-                    </label>
-                    </p>
+                    <form>
+                        {% for i in categories[0]["recipe_type"] %} 
+                            {% for k, v in i.items(): %}
+                                <p><input type="checkbox" id={{ v }}/>
+                                <span>{{ v.capitalize() }}</span> </p>
+                            {% endfor %} 
+                        {% endfor %}
+                    </form>
                 </div>
-
                 <div class="col s2">
                     <h6>Health</h6>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="diabetic" />
-                        <span>Diabetic</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="gluten-free" />
-                        <span>Gluten Free</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="nut-free" />
-                        <span>Nut Free</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="low-cal" />
-                        <span>Low Calorie</span>
-                    </label>
-                    </p>
-                    <p>
-                        <label>
-                        <input type="checkbox" id="low-sugar" />
-                        <span>Low Sugar</span>
-                    </label>
-                    </p>
+                    <form>
+                        {% for i in categories[0]["health_concerns"] %} 
+                            {% for k, v in i.items(): %}
+                                <p><input type="checkbox" id={{ v }}/>
+                                <span>{{ v.capitalize() }}</span> </p>
+                            {% endfor %} 
+                        {% endfor %}
+                    </form>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col s2 offset-s9">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i></button>
+                
+                <div class="row">
+                    <div class="col s2 offset-s9">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i></button>
+                    </div>
                 </div>
-            </div>
         </form>
-    </div>
+        </div>
 </main>
 {% endblock %}
