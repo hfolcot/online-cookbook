@@ -2,6 +2,7 @@ import os, pymongo
 
 from flask import Flask, render_template, url_for
 from flask_pymongo import PyMongo
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -24,9 +25,11 @@ def add_recipe():
 def results():
     return render_template("results.html", recipes=mongo.db.recipes.find())
     
-@app.route("/recipe")
-def recipePage():
-    return render_template("recipe.html")
+@app.route("/recipe/<recipe_id>")
+def recipePage(recipe_id):
+    current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    rating = int(current_recipe["rating"])
+    return render_template("recipe.html", recipe=current_recipe, rating=rating)
     
 
     
