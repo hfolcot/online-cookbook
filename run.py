@@ -20,6 +20,10 @@ def index():
 @app.route("/add_recipe")
 def add_recipe():
     return render_template("add_recipe.html", categories=mongo.db.categories.find())
+    
+@app.route("/add_category")
+def add_category():
+    return render_template("add_category.html", categories=mongo.db.categories.find())
 
 @app.route("/results")
 def results():
