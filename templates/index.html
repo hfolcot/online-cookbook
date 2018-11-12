@@ -16,23 +16,8 @@
                 <div class="input-field col s10">
                     <select>
                     <option value="" disabled selected>Browse Recipes...</option>
-                        <option disabled>Main Ingredients:</option>
-                        {% for i in categories[0]["main_ing"] %}
-                            {% for k, v in i.items(): %}
-                            <option value="1">{{ v.capitalize() }}</option>
-                            {% endfor %}
-                        {% endfor %}
-                        <option disabled>Recipe Type:</option>
-                        {% for i in categories[0]["recipe_type"] %}
-                            {% for k, v in i.items(): %}
-                            <option value="1">{{ v.capitalize() }}</option>
-                            {% endfor %}
-                        {% endfor %}
-                        <option disabled>Health Options:</option>
-                        {% for i in categories[0]["health_concerns"] %}
-                            {% for k, v in i.items(): %}
-                            <option value="1">{{ v.capitalize() }}</option>
-                            {% endfor %}
+                        {% for i in categories %}
+                            <option value={{ i.cat_name }}>{{ i.cat_name.capitalize() }}</option>
                         {% endfor %}
                     </select>
                 </div>
