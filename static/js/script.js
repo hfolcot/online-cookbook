@@ -32,7 +32,7 @@ $(document).ready(function() {
     $('#add_method').click(function() {
         $('#method_container').append(`<div class="method">
                                             <div class="input-field col s12">
-                                            <input id="step_no" type="hidden" name="step_no" value="` + step_count + `">
+                                            <input id="step_no" type="hidden" name="step_no_` + step_count + `" value="` + step_count + `">
                                             <textarea id="method" placeholder="Enter step ` + step_count + `" type="text" name="step_desc_` + step_count + `" class="validate"></textarea>
                                         </div>`);
         if(step_count > 1) {

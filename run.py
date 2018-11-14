@@ -1,6 +1,6 @@
-import os, pymongo
+import os, pymongo, data_functions
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -19,11 +19,47 @@ def index():
     
 @app.route("/add_recipe")
 def add_recipe():
-    return render_template("add_recipe.html", categories=mongo.db.categories.find())
+    return render_template("add_recipe.html", health_concerns=data_functions.health_concerns, recipe_type=data_functions.recipe_type, main_ing=data_functions.main_ing)
+    
+@app.route("/insert_recipe", methods=["POST"])
+def insert_recipe():
+    #print(request.form)
+    ingredients = {}
+    count = 1
+
+    for k, v in request.form.items():
+        ingredients[count] = {}
+        if k == "ing_name_{0}".format(count):
+            name = "ing_name_{0}".format(count)
+            ingredients[count][name] = v
+        if k == "ing_amount_{0}".format(count):
+            amount = "ing_amount_{0}".format(count)
+            ingredients[count][amount] = v
+            count += 1
+    
+
+            
+    print(ingredients)
+        ##if k == "ing_amount_{0}".format(count):
+        #    ingredients[count] += {k: v}
+        #    count += 1
+            
+#    method = {}
+#    for k, v in request.form.items():
+#        if k.startswith()
+    recipes = mongo.db.recipes
+    recipes.insert_one(request.form.to_dict())
+    return redirect(url_for('index'))
     
 @app.route("/add_category")
 def add_category():
     return render_template("add_category.html", categories=mongo.db.categories.find())
+    
+@app.route("/insert_category", methods=["POST"])
+def insert_category():
+    categories =  mongo.db.categories
+    categories.insert_one(request.form.to_dict())
+    return redirect(url_for('add_recipe'))
 
 @app.route("/results")
 def results():
