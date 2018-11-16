@@ -23,11 +23,8 @@ def add_recipe():
     
 @app.route("/insert_recipe", methods=["POST"])
 def insert_recipe():
-    #print(request.form)
     form = request.form.to_dict()
-    print(form)
     data = data_functions.build_dict(form)
-    #print(data)
     recipes = mongo.db.recipes
     recipes.insert_one(data)
     return redirect(url_for('index'))
@@ -50,7 +47,9 @@ def results():
 def recipePage(recipe_id):
     current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     rating = int(current_recipe["rating"])
-    return render_template("recipe.html", recipe=current_recipe, rating=rating)
+    ingredients = data_functions.build_ings_to_display(current_recipe)
+    method = data_functions.build_method_to_display(current_recipe)
+    return render_template("recipe.html", recipe=current_recipe, rating=rating, ingredients=ingredients, method=method)
     
 
     

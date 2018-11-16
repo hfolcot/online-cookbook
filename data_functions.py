@@ -32,6 +32,9 @@ health_concerns_list = build_list("health_concerns")
 recipe_type_list = build_list("recipe_type")
 main_ing_list = build_list("main_ing")
 
+"""
+Packing up the data to send to the database
+"""
 
 def sort_ingredients(form):
     #Build the list to push into the 'ingredients' heading of the recipe dict         
@@ -83,6 +86,7 @@ def sort_categories(form):
         elif item in recipe_type_list:
             category = {item : value}
             categories['recipe_type'].update(category)
+    return categories
 
 
 def build_dict(form):
@@ -103,3 +107,30 @@ def build_dict(form):
     recipe["method"] = sort_method(form)
     recipe['categories'] = [sort_categories(form)]
     return recipe
+    
+    
+"""
+Unpacking the data when retrieving from the database
+"""
+
+def build_ings_to_display(recipe):
+    #Pair up the ingredients and amounts and return a single value for each
+    ingredients = recipe['ingredients']
+    count = 1
+    displayed_ingredients = {}
+    for i in ingredients:
+        value = (i['ing_amount_{0}'.format(count)] + " " + i['ing_name_{0}'.format(count)])
+        displayed_ingredients[count] = value
+        count += 1
+    return displayed_ingredients
+
+def build_method_to_display(recipe):
+    #Pair up the step numbers with the associated step and return a single value for each
+    method = recipe['method']
+    count = 1
+    displayed_method = {}
+    for i in method:
+        value = (str(i['step_no_{0}'.format(count)]) + ": " + i['step_desc_{0}'.format(count)].capitalize())
+        displayed_method[count] = value
+        count += 1
+    return displayed_method

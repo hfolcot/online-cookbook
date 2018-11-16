@@ -28,18 +28,18 @@
     <div class="row">
         <div class="col s3">
             <h5>Ingredients</h5>
-            {% for i in recipe.ingredients %}
-            <p>{{ i["ing_amount"] + " " + i["ing_name"] }}</p>
-            {% endfor %}
+            
+                {% for k, v in ingredients.items() %}
+                    <p>{{ v }}</p>
+                {% endfor %}
         </div>
         <div class="col s5">
             <h5>Method</h5>
-            <ol>
-                {% for i in recipe.method %}
-                <li>{{ i["step_desc"].capitalize() }}</li>
-
+            <ul>
+                {% for k, v in method.items() %}
+                <li>{{ v }}</li>
                 {% endfor %}
-            </ol>
+            </ul>
         </div>
         <div class="col s4">
             {% if recipe.image %}
