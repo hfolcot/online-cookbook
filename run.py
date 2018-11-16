@@ -19,36 +19,17 @@ def index():
     
 @app.route("/add_recipe")
 def add_recipe():
-    return render_template("add_recipe.html", health_concerns=data_functions.health_concerns, recipe_type=data_functions.recipe_type, main_ing=data_functions.main_ing)
+    return render_template("add_recipe.html", health_concerns=data_functions.health_concerns_list, recipe_type=data_functions.recipe_type_list, main_ing=data_functions.main_ing_list)
     
 @app.route("/insert_recipe", methods=["POST"])
 def insert_recipe():
     #print(request.form)
-    ingredients = {}
-    count = 1
-
-    for k, v in request.form.items():
-        ingredients[count] = {}
-        if k == "ing_name_{0}".format(count):
-            name = "ing_name_{0}".format(count)
-            ingredients[count][name] = v
-        if k == "ing_amount_{0}".format(count):
-            amount = "ing_amount_{0}".format(count)
-            ingredients[count][amount] = v
-            count += 1
-    
-
-            
-    print(ingredients)
-        ##if k == "ing_amount_{0}".format(count):
-        #    ingredients[count] += {k: v}
-        #    count += 1
-            
-#    method = {}
-#    for k, v in request.form.items():
-#        if k.startswith()
+    form = request.form.to_dict()
+    print(form)
+    data = data_functions.build_dict(form)
+    #print(data)
     recipes = mongo.db.recipes
-    recipes.insert_one(request.form.to_dict())
+    recipes.insert_one(data)
     return redirect(url_for('index'))
     
 @app.route("/add_category")
