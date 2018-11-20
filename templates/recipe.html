@@ -32,15 +32,15 @@
         <div class="col s3">
             <h5>Ingredients</h5>
             
-                {% for k, v in recipe.ingredients.items() %}
-                    <p>{{ v }}</p>
+                {% for i in recipe.ingredients %}
+                    <p>{{ i }}</p>
                 {% endfor %}
         </div>
         <div class="col s5">
             <h5>Method</h5>
             <ul>
-                {% for k, v in method.items() %}
-                <li>{{ v }}</li>
+                {% for i in method %}
+                <li>{{ i }}</li>
                 {% endfor %}
             </ul>
         </div>

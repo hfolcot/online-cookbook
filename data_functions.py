@@ -34,39 +34,18 @@ def build_list(cat_type):
 Packing up the data to send to the database
 """
 
-def sort_ingredients(form):
-    #Build the list to push into the 'ingredients' heading of the recipe dict         
-    ingredients = []  
-    count = 1
-    for item, value in form.items():
-        for item, value in form.items(): #Running the for loop inside another for loop ensures that the loop begins again after each result is found.
-            if item == "ing_name_{0}".format(count):
-                ingredient = {item : value}
-                for item, value in form.items(): #for loop is run again for every ing_name that is found to locate the matching ing_amount before the count is incremented.
-                    if item == 'ing_amount_{0}'.format(count):
-                        amount = {item : value}
-                        ingredient.update(amount)
-                count += 1
-                ingredients.append(ingredient)
-                break #return to the outer loop once a result is found
-    return ingredients
-
 def sort_method(form):
     #Build the list to push into the 'method' heading of the recipe dict   
-    method = []
+    method = {}
     count = 1
-    for item, value in form.items():
+    for item in form:
         for item, value in form.items():
-            if item == 'step_no_{0}'.format(count):
-                step = {item: value}
-                for item, value in form.items():
-                    if item == "step_desc_{0}".format(count):
-                        description = {item:value}
-                        step.update(description)
-                        break
+            if item == str(count):
+                print(item)
+                step = {item : value}
+                print(step)
+                method.update(step)
                 count += 1
-                method.append(step)
-                break
     return method
     
 def sort_categories(form):
@@ -92,9 +71,10 @@ def sort_categories(form):
 
 def build_dict(form):
     #Build a nested dictionary from the data in the add recipe form to send to db
+    flatFalseForm = form.to_dict(flat=False)
     recipe = {"name" : form['name'], 
               "image" : form['image'],
-              "ingredients" : [],
+              "ingredients" : flatFalseForm['ingredients'],
               "method" : [],
               "prep_time" : form['prep_time'],
               "cook_time" : form['cook_time'],
@@ -103,9 +83,7 @@ def build_dict(form):
               "categories" : [],
               "rating" : form['rating']
               }
-              
-    recipe["ingredients"] = sort_ingredients(form)
-    recipe["method"] = sort_method(form)
+    recipe['method'] = sort_method(form)
     recipe['categories'] = [sort_categories(form)]
     return recipe
     
@@ -128,10 +106,14 @@ def build_ings_to_display(recipe):
 def build_method_to_display(recipe):
     #Pair up the step numbers with the associated step and return a single value for each
     method = recipe['method']
+    returned_method = []
     count = 1
-    displayed_method = {}
-    for i in method:
-        value = (str(i['step_no_{0}'.format(count)]) + ": " + i['step_desc_{0}'.format(count)].capitalize())
-        displayed_method[count] = value
-        count += 1
-    return displayed_method
+    for item in method:
+        for k,v in method.items():
+            if k == str(count):
+                step = k + ": " + v.capitalize()
+                print(step)
+                returned_method.append(step)
+                break
+        count += 1    
+    return returned_method

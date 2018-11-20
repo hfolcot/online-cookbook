@@ -7,7 +7,7 @@ $(document).ready(function() {
     $('#add_ingredient').click(function() {
         $('#ingredients_container').append(`<div class="row ingredient">
                                                 <div class="input-field col s6">
-                                                    <input id="ing_` + ing_count + `" placeholder="Enter ingredient ` + ing_count + `" type="text" name="ing_` + ing_count + `" class="validate">
+                                                    <input id="ing_name`  + ing_count + `" placeholder="Enter ingredient `  + ing_count + `" type="text" name="ingredients" class="validate">
                                                 </div>
                                                 `);
         if(ing_count > 1) {
@@ -29,8 +29,7 @@ $(document).ready(function() {
     $('#add_method').click(function() {
         $('#method_container').append(`<div class="method">
                                             <div class="input-field col s12">
-                                            <input id="step_no" type="hidden" name="step_no_` + step_count + `" value="` + step_count + `">
-                                            <textarea id="method" placeholder="Enter step ` + step_count + `" type="text" name="step_desc_` + step_count + `" class="validate"></textarea>
+                                            <textarea id="method" placeholder="Enter step ` + step_count + `" type="text" name="` + step_count + `" class="validate"></textarea>
                                         </div>`);
         if(step_count > 1) {
             $('#remove_step_button').removeClass('hidden');
@@ -46,7 +45,3 @@ $(document).ready(function() {
         }
     });
 });
-
-    $('.remove_current_ingredient').click(function() {
-        $('.ingredient').last().remove();
-    })
