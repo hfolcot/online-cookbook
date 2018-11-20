@@ -1,0 +1,175 @@
+{% extends 'base.html'%} {% block content %}
+<main class="text-centered container">
+    <h2>Edit</h2>
+    <div class="row">
+        <form action="" method="POST" class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input value="{{ recipe.name }}" id="recipe_name" type="text" name="name" class="validate">
+                    <label for="recipe_name">Recipe Name</label>
+                </div>
+            </div>
+            <div class="row" id="ingredients_container">
+                    {% for k, v in recipe.ingredients.items() %}
+                    <div class="row ingredient">
+                        <div class="input-field col s6 offset-s3">
+                            <input id="{{ k }}" type="text" name="{{ k }}" value="{{ v }}" class="validate" disabled>
+                        </div>
+                        <div class="input-field col s2">
+                            <a class="btn waves-effect waves-light red remove_current_ingredient"><i class="material-icons">remove</i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+            </div>
+            <div class="row" id="ing_button_container">
+                <div class="input-field col s2 offset-s8">
+                    <a class="btn waves-effect waves-light green" id="add_ingredient"><i class="material-icons right">add</i>Add another</a>
+                </div>
+
+            </div>
+
+            <div class="row" id="method_container">
+                <div class="method">
+                    <div class="input-field col s12">
+                        <input id="step_no" type="hidden" name="step_no_1" value="1">
+                        <textarea id="method" placeholder="Enter step 1" type="text" name="step_desc_1" class="validate"></textarea>
+                        <label for="method">Method</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" id="method_button_container">
+                <div class="input-field col s2 offset-s8">
+                    <a class="btn waves-effect waves-light green" id="add_method"><i class="material-icons right">add</i>Add another</a>
+                </div>
+                <div class="input-field col s2 hidden" id="remove_step_button">
+                    <a class="btn waves-effect waves-light red" id="remove_step"><i class="material-icons">remove</i></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s4">
+                    <input id="prep_time" value="{{ recipe.prep_time }}" type="text" name="prep_time" class="validate">
+                    <label>Prep Time</label>
+                </div>
+                <div class="input-field col s4">
+                    <input id="cook_time" type="text" class="validate" name="cook_time" value="{{ recipe.cook_time }}">
+                    <label for="cook_time">Cook Time (minutes)</label>
+                </div>
+                <div class="input-field col s4">
+                    <select id="serves" name="serves">
+                    <option value="" disabled selected>Number of people</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="3">4</option>
+                    <option value="3">5</option>
+                    <option value="3">6</option>
+                    <option value="3">7</option>
+                    <option value="3">8</option>
+                    <option value="3">9</option>
+                    <option value="3">10</option>
+                    <option value="3">11</option>
+                    <option value="3">12</option>
+                    <option value="3">Over 12</option>
+                </select>
+                    <label for="serves">Serves</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input value="{{ recipe.author }}" id="author" type="text" name="author" class="validate">
+                    <label for="author">Author</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Add an Image</span>
+                            <input type="file">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" name="image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!--        <div class="col s4">
+            <h6>Main ingredient:</h6>
+            {% for i, j in recipe.categories[0].main_ing.items() %} {% if j == "on" %}
+            <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
+            {% endif %} {% endfor %}
+        </div>-->
+                <div class="col s3">
+                    <h6>Main Ingredients</h6>
+                    {% for i in main_ing %} 
+                        {% for k, v in recipe.categories[0].main_ing.items() %} 
+                            {% if i.lower() == k.lower() and v == "on" %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox" checked="checked"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% else %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% endif %} 
+                        {% endfor %} 
+                    {% endfor %}
+                </div>
+
+                <div class="col s4">
+                    <h6>Recipe type :</h6>
+                    {% for i in recipe_type %} 
+                        {% for k, v in recipe.categories[0].recipe_type.items() %} 
+                            {% if i.lower() == k.lower() and v == "on" %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox" checked="checked"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% else %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% endif %} 
+                        {% endfor %} 
+                    {% endfor %}
+                </div>
+                <div class="col s4">
+                    <h6>Health:</h6>
+                    {% for i in health_concerns %} 
+                        {% for k, v in recipe.categories[0].health_concerns.items() %} 
+                            {% if i.lower() == k.lower() and v == "on" %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox" checked="checked"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% else %}
+                            <p>
+                                <label>
+                                    <input name="{{ i }}" type="checkbox"/>
+                                    <span>{{ i.capitalize() }}</span>
+                                </label>
+                            </p>
+                            {% endif %} 
+                        {% endfor %} 
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
