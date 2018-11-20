@@ -24,12 +24,15 @@
                 
             </form>
         </div>
+        <div class="col s3 offset-s5">
+            <p>Problem? <a href={{ url_for('edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
+        </div>
     </div>
     <div class="row">
         <div class="col s3">
             <h5>Ingredients</h5>
             
-                {% for k, v in ingredients.items() %}
+                {% for k, v in recipe.ingredients.items() %}
                     <p>{{ v }}</p>
                 {% endfor %}
         </div>

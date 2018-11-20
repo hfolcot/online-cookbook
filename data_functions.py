@@ -28,9 +28,7 @@ def build_list(cat_type):
             output.append(new_item)
     return output
 
-health_concerns_list = build_list("health_concerns")
-recipe_type_list = build_list("recipe_type")
-main_ing_list = build_list("main_ing")
+
 
 """
 Packing up the data to send to the database
@@ -76,6 +74,9 @@ def sort_categories(form):
     categories = {'health_concerns': {}, 
                   'main_ing'  : {}, 
                   'recipe_type' : {}}
+    health_concerns_list = build_list("health_concerns")
+    main_ing_list = build_list("main_ing")
+    recipe_type_list = build_list("recipe_type")
     for item, value in form.items():
         if item in health_concerns_list:
             category = {item : value}

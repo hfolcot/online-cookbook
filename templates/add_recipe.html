@@ -12,11 +12,8 @@
             <div class="row" id="ingredients_container">
                 <div class="row ingredient">
                     <div class="input-field col s6">
-                        <input id="ing_name_1" placeholder="Enter ingredient 1" type="text" name="ing_name_1" class="validate">
-                        <label for="ing_name_1">Ingredients</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="ing_amount_1" placeholder="Enter amount" type="text" name="ing_amount_1" class="validate">
+                        <input id="ing_n1" placeholder="Enter ingredient 1" type="text" name="ing_1" class="validate">
+                        <label for="ing_1">Ingredients</label>
                     </div>
                 </div>
             </div>
@@ -141,11 +138,12 @@
                 </div>
                 <div class="row">
                     <div class="col s2 offset-s9">
-                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit<i class="material-icons right">send</i></button>
+                        <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
                     </div>
                 </div>
                 <input type="hidden" name="rating" value="0" />
+            </div>
         </form>
-        </div>
+    </div>
 </main>
 {% endblock %}

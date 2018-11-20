@@ -7,10 +7,7 @@ $(document).ready(function() {
     $('#add_ingredient').click(function() {
         $('#ingredients_container').append(`<div class="row ingredient">
                                                 <div class="input-field col s6">
-                                                    <input id="ing_name_` + ing_count + `" placeholder="Enter ingredient ` + ing_count + `" type="text" name="ing_name_` + ing_count + `" class="validate">
-                                                </div>
-                                                <div class="input-field col s6">
-                                                    <input id="ing_amount_` + ing_count + `" placeholder="Enter amount" type="text" name="ing_amount_` + ing_count + `" class="validate">
+                                                    <input id="ing_` + ing_count + `" placeholder="Enter ingredient ` + ing_count + `" type="text" name="ing_` + ing_count + `" class="validate">
                                                 </div>
                                                 `);
         if(ing_count > 1) {
@@ -49,3 +46,7 @@ $(document).ready(function() {
         }
     });
 });
+
+    $('.remove_current_ingredient').click(function() {
+        $('.ingredient').last().remove();
+    })

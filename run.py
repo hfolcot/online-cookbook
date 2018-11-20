@@ -19,7 +19,10 @@ def index():
     
 @app.route("/add_recipe")
 def add_recipe():
-    return render_template("add_recipe.html", health_concerns=data_functions.health_concerns_list, recipe_type=data_functions.recipe_type_list, main_ing=data_functions.main_ing_list)
+    health_concerns_list = data_functions.build_list("health_concerns")
+    recipe_type_list = data_functions.build_list("recipe_type")
+    main_ing_list = data_functions.build_list("main_ing")
+    return render_template("add_recipe.html", health_concerns=health_concerns_list, recipe_type=recipe_type_list, main_ing=main_ing_list)
     
 @app.route("/insert_recipe", methods=["POST"])
 def insert_recipe():
@@ -47,11 +50,25 @@ def results():
 def recipePage(recipe_id):
     current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     rating = int(current_recipe["rating"])
-    ingredients = data_functions.build_ings_to_display(current_recipe)
     method = data_functions.build_method_to_display(current_recipe)
-    return render_template("recipe.html", recipe=current_recipe, rating=rating, ingredients=ingredients, method=method)
+    return render_template("recipe.html", recipe=current_recipe, rating=rating, method=method)
     
-
+@app.route("/edit_recipe/<recipe_id>")
+def edit_recipe(recipe_id):
+    current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    health_concerns_list = data_functions.build_list("health_concerns")
+    recipe_type_list = data_functions.build_list("recipe_type")
+    main_ing_list = data_functions.build_list("main_ing")
+    return render_template("edit_recipe.html", 
+                            recipe=current_recipe, 
+                            health_concerns=health_concerns_list, 
+                            recipe_type=recipe_type_list, 
+                            main_ing=main_ing_list)
+    
+@app.route("/update_recipe/<recipe_id>")
+def update_recipe(recipe_id):
+    
+    return redirect(url_for('recipePage', recipe_id=recipe_id))
     
 if __name__ == '__main__':
     app.run(host=os.environ.get("IP"),
