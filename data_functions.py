@@ -83,6 +83,8 @@ def build_dict(form):
               "categories" : [],
               "rating" : form['rating']
               }
+    if form['image'] == "": 
+        recipe['image'] = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
     recipe['method'] = sort_method(form)
     recipe['categories'] = [sort_categories(form)]
     return recipe
