@@ -2,41 +2,45 @@
 <main class="text-centered container">
     <h2>Add a Recipe</h2>
     <div class="row">
-        <form action="{{url_for('insert_recipe') }}" method="POST" class="col s12">
+        <form action="{{ url_for('insert_recipe') }}" method="POST">
             <div class="row">
-                <div class="input-field col s12">
-                    <input placeholder="This is the title that will appear on the recipe's page" id="recipe_name" type="text" name="name" class="validate">
-                    <label for="recipe_name">Recipe Name</label>
+                <div class="row recipe_name">
+                    <div class="input-field col s12">
+                        <input placeholder="This is the title that will appear on the recipe's page" id="recipe_name" type="text" name="name" class="validate">
+                        <label for="recipe_name">Recipe Name</label>
+                    </div>
                 </div>
             </div>
             <div class="row" id="ingredients_container">
                 <div class="row ingredient">
-                    <div class="input-field col s6">
-                        <input id="ing_1" placeholder="Enter ingredient 1" type="text" name="ingredients" class="validate">
-                        <label for="ing_1">Ingredients</label>
+                    <div class="input-field col s6 offset-s3">
+                        <input id="ing" type="text" name="ingredients" placeholder="Enter Ingredient" class="validate">
+                        <label for="ing">Ingredients</label>
                     </div>
                 </div>
-            </div>
+            </div>    
             <div class="row" id="ing_button_container">
-                <div class="input-field col s2 offset-s8">
+                <div class="input-field col s2 offset-s3" id="add_ingredient_button">
                     <a class="btn waves-effect waves-light green" id="add_ingredient"><i class="material-icons right">add</i>Add another</a>
                 </div>
-                <div class="input-field col s2 hidden" id="remove_ing_button">
-                    <a class="btn waves-effect waves-light red" id="remove_ingredient"><i class="material-icons">remove</i></a>
+                <div class="input-field col s2 offset-s2 hidden" id="remove_ing_button">
+                    <a class="btn waves-effect waves-light red" id="remove_ingredient"><i class="material-icons right">remove</i>Remove last</a>
                 </div>
             </div>
 
             <div class="row" id="method_container">
-                <div class="method">
-                    <div class="input-field col s12">
-                        <textarea id="method" placeholder="Enter step 1" type="text" name="1" class="validate"></textarea>
-                        <label for="method">Method</label>
-                    </div>
-                </div>
 
+                <ol>
+                    <div class="row method">
+                        <h5>Method</h5>
+                        <div class="input-field col s12">
+                            <li><textarea type="text" class="validate" name="1" placeholder="Enter step 1" id="step1"></textarea></li>
+                        </div>
+                    </div>
+                </ol>
             </div>
             <div class="row" id="method_button_container">
-                <div class="input-field col s2 offset-s8">
+                <div class="input-field col s2">
                     <a class="btn waves-effect waves-light green" id="add_method"><i class="material-icons right">add</i>Add another</a>
                 </div>
                 <div class="input-field col s2 hidden" id="remove_step_button">
@@ -46,31 +50,17 @@
             <div class="row">
                 <div class="input-field col s4">
                     <input id="prep_time" placeholder="Number of minutes" type="text" name="prep_time" class="validate">
-                    <label>Prep Time</label>
+                    <label>Prep Time (minutes)</label>
                 </div>
                 <div class="input-field col s4">
                     <input id="cook_time" type="text" class="validate" name="cook_time">
                     <label for="cook_time">Cook Time (minutes)</label>
-                </div>
+                </div>                
                 <div class="input-field col s4">
-                    <select id="serves" name="serves">
-                    <option value="" disabled selected>Number of people</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="3">4</option>
-                    <option value="3">5</option>
-                    <option value="3">6</option>
-                    <option value="3">7</option>
-                    <option value="3">8</option>
-                    <option value="3">9</option>
-                    <option value="3">10</option>
-                    <option value="3">11</option>
-                    <option value="3">12</option>
-                    <option value="3">Over 12</option>
-                </select>
-                    <label for="serves">Serves</label>
+                    <input id="serves" type="text" class="validate" name="serves">
+                    <label for="serves">Serves (Number of People)</label>
                 </div>
+            
             </div>
             <div class="row">
                 <div class="input-field col s12">
