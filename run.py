@@ -26,6 +26,7 @@ def add_recipe():
     
 @app.route("/insert_recipe", methods=["POST"])
 def insert_recipe():
+    print(request.form)
     print(request.form.to_dict(flat=False))
     data = data_functions.build_dict(request.form)
     print(data)
@@ -60,15 +61,19 @@ def edit_recipe(recipe_id):
     health_concerns_list = data_functions.build_list("health_concerns")
     recipe_type_list = data_functions.build_list("recipe_type")
     main_ing_list = data_functions.build_list("main_ing")
+    method = data_functions.build_method_to_display(current_recipe)
     return render_template("edit_recipe.html", 
                             recipe=current_recipe, 
                             health_concerns=health_concerns_list, 
                             recipe_type=recipe_type_list, 
-                            main_ing=main_ing_list)
+                            main_ing=main_ing_list, 
+                            method=method)
     
-@app.route("/update_recipe/<recipe_id>")
+@app.route("/update_recipe/<recipe_id>", methods=["POST"])
 def update_recipe(recipe_id):
-    
+    recipes = mongo.db.recipes
+    data = data_functions.build_dict(request.form)
+    recipes.update( {'_id': ObjectId(recipe_id)}, data)
     return redirect(url_for('recipePage', recipe_id=recipe_id))
     
 if __name__ == '__main__':
