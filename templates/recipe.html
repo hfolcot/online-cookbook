@@ -1,10 +1,14 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
-    <h2>{{ recipe.name }} {% if rating > 0 %}
-        <i class="material-icons">{{ rating * "stars" }}</i></h2>
-    {% else %}
-    </h2>
-    {% endif %}
+    <div class="row">
+        <h2>{{ recipe.name }} 
+                {% if rating > 0 %}
+                    <i class="material-icons">{{ rating * "stars" }}</i></h2>
+                {% else %}
+                </h2>
+                {% endif %}
+        <h6>Author: {{ recipe.author }}</h6>
+    </div>
     <div class="row">
         <div class="col s3">
 
@@ -24,7 +28,10 @@
                 
             </form>
         </div>
-        <div class="col s3 offset-s5">
+        <div class="col s3 offset-s1">
+            <p>Serves: {{ serves }}</p>
+        </div>
+        <div class="col s3 offset-s1">
             <p>Problem? <a href={{ url_for('edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
         </div>
     </div>
@@ -35,18 +42,20 @@
                 {% for i in recipe.ingredients %}
                     <p>{{ i }}</p>
                 {% endfor %}
+            
         </div>
         <div class="col s5">
             <h5>Method</h5>
             <ul>
                 {% for i in method %}
                 <li>{{ i }}</li>
+
                 {% endfor %}
             </ul>
         </div>
         <div class="col s4">
             {% if recipe.image %}
-            <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }}></img>
+            <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
             {% endif %}
         </div>
     </div>
