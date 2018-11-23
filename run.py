@@ -41,9 +41,51 @@ def insert_category():
     categories.insert_one(request.form.to_dict())
     return redirect(url_for('add_recipe'))
 
-@app.route("/results")
-def results():
-    return render_template("results.html", recipes=mongo.db.recipes.find())
+@app.route("/home_action", methods=["POST"])
+def home_action():
+    if request.form['action'] == 'search':
+        searchTerm = request.form['search']
+        return redirect(url_for('search', searchTerm=searchTerm))
+    elif request.form['action'] == 'browse':
+        browseTerm = request.form['browse']
+        return redirect(url_for('browse', browse=browseTerm))
+    
+@app.route("/search/<searchTerm>", methods=["GET", "POST"])
+def search(searchTerm):
+    mongo.db.recipes.create_index([('name', 'text')])
+    query = ( { "$text": { "$search": searchTerm } } )
+    results = mongo.db.recipes.find(query)
+    return render_template("results.html", recipes=results)
+
+@app.route("/browse/<browse>", methods=["GET", "POST"])
+def browse(browse):
+    print("I am here!")
+    browseTerm = browse
+    print(browseTerm)
+    health_concerns_list = data_functions.build_list("health_concerns")
+    recipe_type_list = data_functions.build_list("recipe_type")
+    main_ing_list = data_functions.build_list("main_ing")
+    print("Now I am here!")
+    if browseTerm in health_concerns_list:
+        print("it's a health concern")
+        query =  {"categories": [{ "health_concerns" : { browseTerm.lower(): "on" }}]} 
+        print(query)
+    elif browseTerm in recipe_type_list:
+        print("it's a recipe type")
+        query =  {"categories": [{ "recipe_type" : { browseTerm.lower(): "on" }}]}
+        print(query)
+    elif browseTerm in main_ing_list:
+        print("it's a main ingredient")
+        query =  {"categories": [{ "main_ing" : { browseTerm: "on" }}]}
+        print(query)
+    print("I made it all the way here!")
+    results = mongo.db.recipes.find(query)
+    print(results)
+    for result in results:
+        print("found one!")
+        if not result:
+            print("No results")
+    return render_template("results.html", recipes=results)
     
 @app.route("/recipe/<recipe_id>")
 def recipePage(recipe_id):
