@@ -72,14 +72,14 @@ def sort_categories(form):
 def build_dict(form):
     #Build a nested dictionary from the data in the add recipe form to send to db
     flatFalseForm = form.to_dict(flat=False) #Allows access to the list of ingredients in the form - without this it will only return the first item
-    recipe = {"name" : form['name'], 
+    recipe = {"name" : form['name'].lower(), 
               "image" : form['image'],
               "ingredients" : flatFalseForm['ingredients'],
               "method" : [],
-              "prep_time" : form['prep_time'],
-              "cook_time" : form['cook_time'],
-              "serves" : form['serves'],
-              "author" : form['author'],
+              "prep_time" : form['prep_time'].lower(),
+              "cook_time" : form['cook_time'].lower(),
+              "serves" : form['serves'].lower(),
+              "author" : form['author'].lower(),
               "categories" : [],
               "rating" : form['rating']
               }
