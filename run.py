@@ -38,7 +38,9 @@ def add_category():
 @app.route("/insert_category", methods=["POST"])
 def insert_category():
     categories =  mongo.db.categories
-    categories.insert_one(request.form.to_dict())
+    data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
+    print(data)
+    categories.insert_one(data)
     return redirect(url_for('add_recipe'))
 
 @app.route("/home_action", methods=["POST"])
@@ -59,26 +61,22 @@ def search(searchTerm):
 
 @app.route("/browse/<browse>", methods=["GET", "POST"])
 def browse(browse):
-    print("I am here!")
-    browseTerm = browse
+    browseTerm = str(browse) #changing variable from unicode to string
     print(browseTerm)
     health_concerns_list = data_functions.build_list("health_concerns")
     recipe_type_list = data_functions.build_list("recipe_type")
     main_ing_list = data_functions.build_list("main_ing")
-    print("Now I am here!")
+    print("I am here!")
     if browseTerm in health_concerns_list:
         print("it's a health concern")
         query =  {"categories": [{ "health_concerns" : { browseTerm.lower(): "on" }}]} 
-        print(query)
     elif browseTerm in recipe_type_list:
         print("it's a recipe type")
         query =  {"categories": [{ "recipe_type" : { browseTerm.lower(): "on" }}]}
-        print(query)
     elif browseTerm in main_ing_list:
         print("it's a main ingredient")
-        query =  {"categories": [{ "main_ing" : { browseTerm: "on" }}]}
-        print(query)
-    print("I made it all the way here!")
+        query =  {"categories": [{ "main_ing" : { browseTerm.lower(): "on" }}]}
+    print(query)
     results = mongo.db.recipes.find(query)
     print(results)
     for result in results:
