@@ -1,8 +1,8 @@
 import os, pymongo, json
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, url_for, redirect
 from flask_pymongo import PyMongo
-from bson.objectid import ObjectId
+
 
 app = Flask(__name__)
 
@@ -68,13 +68,14 @@ def sort_categories(form):
             categories['recipe_type'].update(category)
     return categories
 
-
-def build_dict(form):
+    
+    
+def build_dict(form, filepath):
     #Build a nested dictionary from the data in the add recipe form to send to db
     flatFalseForm = form.to_dict(flat=False) #Allows access to the list of ingredients in the form - without this it will only return the first item
     recipe = {"name" : form['name'].lower(), 
-              "image" : form['image'],
               "ingredients" : flatFalseForm['ingredients'],
+              "image" : filepath,
               "method" : [],
               "prep_time" : form['prep_time'].lower(),
               "cook_time" : form['cook_time'].lower(),
@@ -83,8 +84,6 @@ def build_dict(form):
               "categories" : [],
               "rating" : form['rating']
               }
-    if form['image'] == "": 
-        recipe['image'] = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
     recipe['method'] = sort_method(form)
     recipe['categories'] = [sort_categories(form)]
     return recipe
@@ -120,6 +119,10 @@ def build_method_to_display(recipe):
         count += 1    
     return sorted(returned_method)
 
+"""
+Result filtering
+"""
+
 def count_results(results):
     #Count the number of results returned
     count_cursor_length = []
@@ -127,23 +130,40 @@ def count_results(results):
         count_cursor_length.append(result)
     results.rewind()
     return len(count_cursor_length)
-
-def check_filtering_categories(filterBy):
-    #function to check which subcategory to search in when filtering results
-    health_concerns_list = build_list("health_concerns")
-    recipe_type_list = build_list("recipe_type")
-    main_ing_list = build_list("main_ing")
-    if filterBy in health_concerns_list:
-        print("it's a health concern")
-        query = "categories.health_concerns"
-        #results[recipe_id] = recipe
-    if filterBy in main_ing_list:
-        print("it's a main ingredient")
-        query = "categories.main_ing"
-        #results[recipe_id] = recipe
-    if filterBy in recipe_type_list:
-        print("it's a recipe type")            
-        query = "categories.recipe_type"
-        #results[recipe_id] = recipe
-            
+    
+def build_query_for_filtering(form):
+    #determines which query should be used when filtering recipes list
+    if len(form) == 0:
+                return redirect(url_for('get_all_recipes'))
+    elif len(form) == 1:
+        for key, value in form.items():
+            subcatname = key
+            subcatvalue = value
+            category = "categories." + subcatname
+            query = mongo.db.recipes.find({category : { subcatvalue : "on" }})
+    elif len(form) == 2:
+        if "main_ing" in form:
+            print("yes")
+            cat1 = "categories.main_ing"
+            value1 = str(form['main_ing'])
+            if "recipe_type" in form:
+                cat2 = "categories.recipe_type"
+                value2 = str(form["recipe_type"])
+            else:
+                cat2 = "categories.health_concerns"
+                value2 = str(form["health_concerns"])
+        else:
+            cat1 = "categories.health_concerns"
+            value1 = str(form["health_concerns"])
+            cat2 = "categories.recipe_type"
+            value2 = str(form["recipe_type"])
+            query = mongo.db.recipes.find({cat1 : { value1 : "on" }} and {cat2 : {value2: "on"}})
+    elif len(form) == 3:
+        cat1 = "categories.main_ing"
+        value1 = str(form["main_ing"])
+        cat2 = "categories.recipe_type"
+        value2 = str(form['recipe_type'])
+        cat3 = "categories.health_concerns"
+        value3 = str(form['health_concerns'])
+        query = mongo.db.recipes.find( { '$and': [ {cat1 : { value1 : "on" }}, {cat2 : {value2: "on"}}, {cat3 : {value3: "on"}} ] } )
     return query

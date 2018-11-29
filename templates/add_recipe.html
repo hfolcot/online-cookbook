@@ -2,7 +2,7 @@
 <main class="text-centered container">
     <h2>Add a Recipe</h2>
     <div class="row">
-        <form action="{{ url_for('insert_recipe') }}" method="POST">
+        <form action="{{ url_for('insert_recipe') }}" enctype="multipart/form-data" method="POST">
             <div class="row">
                 <div class="row recipe_name">
                     <div class="input-field col s12">
@@ -32,7 +32,7 @@
 
                 <ol>
                     <div class="row method">
-                        <h5>Method</h5>
+                         <h5>Method</h5>
                         <div class="input-field col s12">
                             <li><textarea type="text" class="validate" name="1" placeholder="Enter step 1" id="step1"></textarea></li>
                         </div>
@@ -73,10 +73,10 @@
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Add an Image</span>
-                            <input type="file">
+                            <input type="file" name="image">
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" name="image">
+                            <input class="file-path validate" type="text" name="filepath">
                         </div>
                     </div>
                 </div>
