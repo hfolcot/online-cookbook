@@ -1,9 +1,9 @@
-import os, pymongo, data_functions
+import os, pymongo, data_functions, json
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-
+from bson.json_util import dumps
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = "online_cookbook"
@@ -12,11 +12,87 @@ app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203
 mongo = PyMongo(app)
 
 
+"""
+Global Variables
+"""
+health_concerns_list = data_functions.build_list("health_concerns")
+recipe_type_list = data_functions.build_list("recipe_type")
+main_ing_list = data_functions.build_list("main_ing")
 
-@app.route("/")
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html", categories=mongo.db.categories.find())
-    
+    if request.method == "POST":
+        if request.form['action'] == 'search':
+            search_term = request.form['search']
+            if search_term == "":
+                error = "Please enter a value to search"
+                return render_template('index.html', error=error)
+            return redirect(url_for('search', search_term=search_term))
+        elif request.form['action'] == 'browse':
+           return redirect(url_for('get_all_recipes'))
+    return render_template("index.html")
+
+@app.route('/get_all_recipes')
+def get_all_recipes():
+    results = mongo.db.recipes.find()
+    results_count = data_functions.count_results(results)
+    return render_template("browse.html", 
+                            recipes=results, 
+                            health_concerns=health_concerns_list, 
+                            main_ing=main_ing_list, 
+                            recipe_type=recipe_type_list,
+                            results_count = results_count)
+
+@app.route("/filter_results", methods=["GET", "POST"])
+def filter_results():
+    form = request.form.to_dict()
+    print(len(form))
+    if len(form) == 0:
+            return redirect(url_for('get_all_recipes'))
+    elif len(form) == 1:
+        for key, value in form.items():
+            subcatname = key
+            subcatvalue = value
+        category = "categories." + subcatname
+        results = mongo.db.recipes.find({category : { subcatvalue : "on" }})
+    elif len(form) == 2:
+        if "main_ing" in form:
+            print("yes")
+            cat1 = "categories.main_ing"
+            value1 = str(form['main_ing'])
+            if "recipe_type" in form:
+                cat2 = "categories.recipe_type"
+                value2 = str(form["recipe_type"])
+            else:
+                cat2 = "categories.health_concerns"
+                value2 = str(form["health_concerns"])
+        else:
+            cat1 = "categories.health_concerns"
+            value1 = str(form["health_concerns"])
+            cat2 = "categories.recipe_type"
+            value2 = str(form["recipe_type"])
+        results = mongo.db.recipes.find({cat1 : { value1 : "on" }} and {cat2 : {value2: "on"}})
+    elif len(form) == 3:
+        cat1 = "categories.main_ing"
+        value1 = str(form["main_ing"])
+        cat2 = "categories.recipe_type"
+        value2 = str(form['recipe_type'])
+        cat3 = "categories.health_concerns"
+        value3 = str(form['health_concerns'])
+        results = mongo.db.recipes.find( { '$and': [ {cat1 : { value1 : "on" }}, {cat2 : {value2: "on"}}, {cat3 : {value3: "on"}} ] } )
+    error = ''
+    results_count = data_functions.count_results(results)
+    if  results_count == 0:
+        error = "No results found"
+    return render_template("browse.html", 
+                            recipes=results, 
+                            health_concerns=health_concerns_list, 
+                            main_ing=main_ing_list, 
+                            recipe_type=recipe_type_list,
+                            error=error,
+                            results_count = results_count)
+
 @app.route("/add_recipe")
 def add_recipe():
     health_concerns_list = data_functions.build_list("health_concerns")
@@ -39,25 +115,20 @@ def add_category():
 def insert_category():
     categories =  mongo.db.categories
     data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
-    print(data)
     categories.insert_one(data)
     return redirect(url_for('add_recipe'))
 
-@app.route("/home_action", methods=["POST"])
-def home_action():
-    if request.form['action'] == 'search':
-        searchTerm = request.form['search']
-        return redirect(url_for('search', searchTerm=searchTerm))
-    elif request.form['action'] == 'browse':
-        browseTerm = request.form['browse']
-        return redirect(url_for('browse', browse=browseTerm))
     
-@app.route("/search/<searchTerm>", methods=["GET", "POST"])
-def search(searchTerm):
+@app.route("/search/<search_term>", methods=["GET", "POST"])
+def search(search_term):
     mongo.db.recipes.create_index([('name', 'text')])
-    query = ( { "$text": { "$search": searchTerm } } )
+    query = ( { "$text": { "$search": search_term } } )
     results = mongo.db.recipes.find(query)
-    return render_template("results.html", recipes=results)
+    return render_template("results.html",
+                            recipes=results,
+                            search_term=search_term)
+
+
 
 @app.route("/browse/<browse>", methods=["GET", "POST"])
 def browse(browse):

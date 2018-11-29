@@ -1,0 +1,71 @@
+{% extends 'base.html'%} {% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col s8">
+            <h2>{{ results_count }} Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h2>
+        </div>
+        <div class="col s3 offset-s1">
+            <a href="{{ url_for('get_all_recipes') }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>Reset</a>
+        </div>
+    </div>
+    <div class="row">
+        <form action="{{ url_for('filter_results') }}" method="POST">
+            <div class="input-field col s4">
+                <select id="main_ing" name="main_ing">
+                    <option value="" disabled selected>Choose your option</option>
+                    {% for i in main_ing %}
+                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    {% endfor %}
+                </select>
+                <label>Main Ingredient</label>
+            </div>
+            <div class="input-field col s4">
+                <select id="recipe_type" name="recipe_type">
+                    <option value="" disabled selected>Choose your option</option>
+                    {% for i in recipe_type %}
+                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    {% endfor %}
+                </select>
+                <label>Recipe Type</label>
+            </div>
+            <div class="input-field col s4">
+                <select id="health_concerns" name="health_concerns">
+                    <option value="" disabled selected>Choose your option</option>
+                    {% for i in health_concerns %}
+                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    {% endfor %}
+                </select>
+                <label>Health</label>
+            </div>
+            <button class="btn-small waves-effect waves-light" type='submit'>Update Results<i class="material-icons right">filter_list</i></button>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col s12 results" id="results">
+
+            <div class="row">
+                {% if error %}
+                <p>{{ error }}</p>
+                {% endif %} {% for recipe in recipes %}
+
+                <div class="col s12 m3">
+                    <div class="card" id={{ recipe._id }}>
+                        <div class="card-image">
+                            <img src={{ recipe.image }}>
+                        </div>
+                        <div class="card-content">
+                            <p>{{ recipe.name.capitalize() }}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">See this recipe</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

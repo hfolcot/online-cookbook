@@ -1,4 +1,4 @@
-import os, pymongo
+import os, pymongo, json
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask_pymongo import PyMongo
@@ -119,3 +119,31 @@ def build_method_to_display(recipe):
                 break
         count += 1    
     return sorted(returned_method)
+
+def count_results(results):
+    #Count the number of results returned
+    count_cursor_length = []
+    for result in results:
+        count_cursor_length.append(result)
+    results.rewind()
+    return len(count_cursor_length)
+
+def check_filtering_categories(filterBy):
+    #function to check which subcategory to search in when filtering results
+    health_concerns_list = build_list("health_concerns")
+    recipe_type_list = build_list("recipe_type")
+    main_ing_list = build_list("main_ing")
+    if filterBy in health_concerns_list:
+        print("it's a health concern")
+        query = "categories.health_concerns"
+        #results[recipe_id] = recipe
+    if filterBy in main_ing_list:
+        print("it's a main ingredient")
+        query = "categories.main_ing"
+        #results[recipe_id] = recipe
+    if filterBy in recipe_type_list:
+        print("it's a recipe type")            
+        query = "categories.recipe_type"
+        #results[recipe_id] = recipe
+            
+    return query
