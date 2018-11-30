@@ -9,6 +9,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <title>Your Online Cookbook</title>
+
+    <!--Flashed messages to appear at the top of the viewport-->
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class=flashes>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %}
+
 </head>
 
 <body>
@@ -24,7 +34,11 @@
                 <li>|</li>
                 <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
                 <li>|</li>
-                <li><a href="{{url_for('index')}}">Search</a></li>
+                {% if user %}
+                <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
+                {% else %}
+                <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Log In</a></li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -37,7 +51,40 @@
     </ul>
 
     {% block content %} {% endblock %}
-
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Log in to add, edit or rate recipes!</h4>
+            <form id="login-form">
+                <input type="text" id="username" name="username" required />
+                <label for="username">Username: </label>
+                <input type="password" id="password" name="password">
+                <label for="password">Password: </label>
+                <p class="warning"><strong>WARNING: PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE, PLEASE USE A UNIQUE PASSWORD</strong></p>
+                <button class="waves-effect waves-green btn">Log In</button>
+            </form>
+            <div class="row" id="errors-here"></div>
+        </div>
+        <div class="modal-footer">
+            <a href="#newusermodal" class="modal-close waves-effect waves-light modal-trigger">Create an account</a>
+        </div>
+    </div>
+    <div id="newusermodal" class="modal">
+        <div class="modal-content">
+            <h4>Log in to add, edit or rate recipes!</h4>
+            <form id="create-new-user">
+                <input type="text" id="newusername" name="newusername" required />
+                <label for="newusername">Username: </label>
+                <input type="password" id="newpassword" name="newpassword">
+                <label for="newpassword">Password: </label>
+                <input type="password" id="repeatpassword" name="repeatpassword">
+                <label for="repeatpassword">Re-enter Password: </label>
+                <p class="warning"><strong>WARNING: PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE, PLEASE USE A UNIQUE PASSWORD</strong></p>
+                <button type="submit" class="waves-effect waves-green btn">Create User</button>
+            </form>
+            <div class="row" id="new-errors-here"></div>
+        </div>
+    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script type="text/javascript" src="/static/js/script.js"></script>

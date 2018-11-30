@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('.sidenav').sidenav(); //Materializecss.com navigation bar
     $('select').formSelect(); //Materializecss.com select elements in forms
+    $('.modal').modal(); //Materializecss.com modal for login
 
     //Button to add next ingredient on add recipe page
     var ing_count = 1;
@@ -90,5 +91,65 @@ $(document).ready(function() {
         if (step_count_edit == 2) {
             $('#remove_step_from_existing').addClass('hidden');
         }
+
     });
+
+    $('#login-form').submit(function(e) {
+        e.preventDefault();
+        console.log("click");
+        if (!$('input[name="username"]').val()) {
+            $("#errors-here").text("Please enter a username")
+        }
+        else {
+            $.get('/login', {
+                u: $('input[name="username"]').val(),
+                p: $('input[name="password"]').val()
+            }, function(data) {
+                if (data == "You were successfully logged in") {
+                    $("#errors-here").text(data);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+                $("#errors-here").text(data);
+            });
+            return false;
+        }
+    });
+
+    $('#create-new-user').submit(function(e) {
+        e.preventDefault();
+        console.log('click');
+        console.log($('input[name="newpassword"]').val())
+        console.log($('input[name="repeatpassword"]').val())
+        if (!$('input[name="newusername"]').val()) {
+            $("#new-errors-here").text("Please enter a username");
+        }
+        else {
+            console.log("username ok");
+        }
+        if ($('input[name="newpassword"]').val() != $('input[name="repeatpassword"]').val()) {
+            $("#new-errors-here").text("Passwords don't match");
+        }
+        else {
+            console.log("password ok");
+            $.get('/create_user', {
+                u: $('input[name="newusername"]').val(),
+                p: $('input[name="newpassword"]').val()
+            }, function(data) {
+                console.log(data);
+                if (data == "User created, you will now be logged in") {
+                    $("#new-errors-here").text(data);
+                    setTimeout(function() {
+                        location.reload();
+                    }, 2000);
+                }
+                $("#new-errors-here").text(data);
+            });
+            return false;
+        }
+    });
+    
+
+
 });

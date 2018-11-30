@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.warning {
+    color: red;
+}
+
 .ticked_categories {
     color: green;
 }

@@ -1,11 +1,12 @@
 import os, pymongo, data_functions, json
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, session, g, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_uploads import UploadSet, configure_uploads, IMAGES #Required for image uploads
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24) #Creates a random string to use as session key
 
 #config for image uploads
 images = UploadSet('images', IMAGES)
@@ -37,16 +38,90 @@ def index():
             search_term = request.form['search']
             if search_term == "":
                 error = "Please enter a value to search"
-                return render_template('index.html', error=error)
-            return redirect(url_for('search', search_term=search_term))
+                return redirect(url_for('index', error=error, user=g.user))
+            return redirect(url_for('search', search_term=search_term, user=g.user))
         elif request.form['action'] == 'browse':
            return redirect(url_for('get_all_recipes'))
-    return render_template("index.html")
+    return render_template("index.html", user=g.user)
+    
+"""
+Login/User sessions
+"""
+
+@app.route('/login', methods=['GET'])
+#Check that the username is found in the database and the password is valid
+#Called by script.js on click of login button in login modal
+def check_password():
+    u = request.args.get('u')
+    p = request.args.get('p')
+    print(u)
+    print(p)
+    user = mongo.db.users.find({"username" : u})
+    count = 0
+    for item in user:
+        print("hi " + u)
+        count += 1
+        if count == 1:
+            print("User found")
+            if p == item['password']:
+                print("password correct")
+                session['user'] = u
+                message = "You were successfully logged in"
+                return message
+            else:
+                print("incorrect password")
+                message = "Incorrect password"
+                return message
+    if count == 0:
+        print("user not found")
+        message="User not found"
+        return message    
+
+
+@app.route('/logout')
+def end_session():
+    session.pop('user', None)
+    return redirect(url_for('index'))
+    
+@app.route('/create_user', methods=['GET'])
+def create_user():
+    #Creates a new user in the database if that user does not already exist
+    #Called by script.js on click of create account button in create user modal
+    u = request.args.get('u')
+    p = request.args.get('p')
+    session.pop('user', None) #ensures there is not currently an active session
+    #Check that the username is not already taken
+    user = mongo.db.users.find({"username" : u})
+    count = 0
+    for item in user:
+        count += 1
+        if count > 0:
+            message = "That username has already been taken"
+            return message
+    if count == 0:
+        mongo.db.users.insert_one({"username" : u, "password" : p})
+        session['user'] = u
+        message = "User created, you will now be logged in"
+        return message
+    
+    
+@app.before_request
+def before_request():
+#checks to see if the user is logged in before each request
+    g.user = None
+    if 'user' in session:
+        print("user is in session")
+        g.user = session['user']
+    else:
+        print("user not in session")
+    
+"""
+"""
 
 
 @app.route('/get_all_recipes')
 def get_all_recipes():
-    #function to reset browse.html page to show all recipe
+    #function to reset browse.html page to show all recipes
     results = mongo.db.recipes.find()
     results_count = data_functions.count_results(results)
     return render_template("browse.html", 
@@ -54,7 +129,9 @@ def get_all_recipes():
                             health_concerns=health_concerns_list, 
                             main_ing=main_ing_list, 
                             recipe_type=recipe_type_list,
-                            results_count = results_count)
+                            results_count = results_count,
+                            user=g.user
+                            )
 
 @app.route("/filter_results", methods=["GET", "POST"])
 def filter_results():
@@ -72,15 +149,19 @@ def filter_results():
                             main_ing=main_ing_list, 
                             recipe_type=recipe_type_list,
                             error=error,
-                            results_count = results_count)
+                            results_count = results_count,
+                            user=g.user)
 
 @app.route("/add_recipe")
 def add_recipe():
     #supplies the data for add_recipe.html
-    health_concerns_list = data_functions.build_list("health_concerns")
-    recipe_type_list = data_functions.build_list("recipe_type")
-    main_ing_list = data_functions.build_list("main_ing")
-    return render_template("add_recipe.html", health_concerns=health_concerns_list, recipe_type=recipe_type_list, main_ing=main_ing_list)
+    if g.user:
+        health_concerns_list = data_functions.build_list("health_concerns")
+        recipe_type_list = data_functions.build_list("recipe_type")
+        main_ing_list = data_functions.build_list("main_ing")
+        return render_template("add_recipe.html", health_concerns=health_concerns_list, recipe_type=recipe_type_list, main_ing=main_ing_list, user=g.user)
+    else:
+        return redirect(url_for('index'))
     
 @app.route("/insert_recipe", methods=["POST"])
 def insert_recipe():
@@ -98,7 +179,7 @@ def insert_recipe():
 @app.route("/add_category")
 def add_category():
     #supplies the data for add_category.html
-    return render_template("add_category.html", categories=mongo.db.categories.find())
+    return render_template("add_category.html", categories=mongo.db.categories.find(), user=g.user)
     
 @app.route("/insert_category", methods=["POST"])
 def insert_category():
@@ -117,7 +198,8 @@ def search(search_term):
     results = mongo.db.recipes.find(query)
     return render_template("results.html",
                             recipes=results,
-                            search_term=search_term)
+                            search_term=search_term,
+                            user=g.user)
 
 
     
@@ -132,7 +214,8 @@ def recipePage(recipe_id):
                             recipe=current_recipe, 
                             rating=rating, 
                             method=method,
-                            serves=serving)
+                            serves=serving,
+                            user=g.user)
     
 @app.route("/edit_recipe/<recipe_id>")
 def edit_recipe(recipe_id):
@@ -147,7 +230,8 @@ def edit_recipe(recipe_id):
                             health_concerns=health_concerns_list, 
                             recipe_type=recipe_type_list, 
                             main_ing=main_ing_list, 
-                            method=method)
+                            method=method,
+                            user=g.user)
     
 @app.route("/update_recipe/<recipe_id>", methods=["POST"])
 def update_recipe(recipe_id):
@@ -162,6 +246,8 @@ def update_recipe(recipe_id):
     data = data_functions.build_dict(request.form, filepath)
     recipes.update( {'_id': ObjectId(recipe_id)}, data)
     return redirect(url_for('recipePage', recipe_id=recipe_id))
+    
+
     
 if __name__ == '__main__':                  #prevents the app from running if imported by another file
     app.run(host=os.environ.get("IP"),
