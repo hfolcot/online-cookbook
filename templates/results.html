@@ -1,24 +1,32 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <h2>Search Results</h2>
-    </div>
-    {% for recipe in recipes %}
-    <div class="row">
-        <div class="col s12 m7">
-            <div class="card">
-                <div class="card-image">
-                    <img src={{ recipe.image }}>
+        <p id="search_term">Search results for: "<span>{{ search_term }}</span>"</p>
+        <div class="col s12 results" id="results">
+            <div class="row">
+                <h2>Search Results</h2>
+            </div>
+            <div class="row">
+            {% for recipe in recipes %}
+                {% if not recipe.deleted %}
+                <div class="col s12 m3">
+                    <div class="card" id={{ recipe._id }}>
+                        <div class="card-image">
+                            <img src={{ recipe.image }}>
+                        </div>
+                        <div class="card-content">
+                            <p>{{ recipe.name.capitalize() }}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">See this recipe</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-content">
-                    <p>{{ recipe.name }}</p>
-                </div>
-                <div class="card-action">
-                    <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">See this recipe</a>
-                </div>
+                {% endif %}
+            {% endfor %}
             </div>
         </div>
     </div>
-    {% endfor %}
 </main>
+
 {% endblock %}

@@ -169,12 +169,12 @@ def insert_recipe():
     if 'image' in request.files:
         #uploads image to static/img/uploads and creates the filepath to store in the database
         filename = images.save(request.files['image'])
-        filepath = "static/img/" + filename
+        filepath = "../static/img/uploads/" + filename
     else:
         filepath = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
     data = data_functions.build_dict(request.form, filepath)
-    mongo.db.recipes.insert_one(data)
-    return redirect(url_for('index'))
+    newid = mongo.db.recipes.insert_one(data)
+    return redirect(url_for('recipePage', recipe_id = newid.inserted_id))
     
 @app.route("/add_category")
 def add_category():
@@ -236,18 +236,50 @@ def edit_recipe(recipe_id):
 @app.route("/update_recipe/<recipe_id>", methods=["POST"])
 def update_recipe(recipe_id):
     #updates the edited recipe in the database
+    print(request.files)
     if 'image' in request.files:
         #uploads image to static/img/uploads and creates the filepath to store in the database
         filename = images.save(request.files['image'])
-        filepath = "static/img/" + filename
+        filepath = "../static/img/uploads" + filename
     else:
+        print("image not found")
         filepath = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
     recipes = mongo.db.recipes
     data = data_functions.build_dict(request.form, filepath)
     recipes.update( {'_id': ObjectId(recipe_id)}, data)
     return redirect(url_for('recipePage', recipe_id=recipe_id))
     
-
+@app.route('/delete_recipe', methods=['GET'])
+def delete_recipe():
+    
+    print("get request received")
+    user = request.args.get('user')
+    print(user)
+    password = request.args.get('password')
+    recipe_id = request.args.get('recipe_id')
+    print(recipe_id)
+    recipes = mongo.db.recipes
+    finduser = mongo.db.users.find({"username" : user})
+    count = 0
+    for item in finduser:
+        print("hi " + item['username'])
+        count += 1
+        if count == 1:
+            print("User found")
+            if password == item['password']:
+                print("password correct")
+                recipes.update( {'_id': ObjectId(recipe_id)}, {"$set" :{"deleted" : "on", "deleted_by" : user}})
+                message = "Recipe Deleted"
+                return message
+            else:
+                print("incorrect password")
+                message = "Incorrect password"
+                return message
+    if count == 0:
+        print("user not found")
+        message="User not found"
+        return message
+    
     
 if __name__ == '__main__':                  #prevents the app from running if imported by another file
     app.run(host=os.environ.get("IP"),

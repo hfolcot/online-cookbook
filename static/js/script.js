@@ -149,7 +149,35 @@ $(document).ready(function() {
             return false;
         }
     });
-    
 
+    $('#delete-recipe').submit(function(e) {
+        e.preventDefault();
+        console.log('click');
+        if (!$('input[name="user-deleting"]').val()) {
+            $("#delete-errors-here").text("Please enter a username");
+        }
+        else {
+            console.log("username ok");
+        }
+        var recipe_id = $('input[name="recipe-id"]').val()
+        console.log(recipe_id)
+        console.log("about to get")
+        $.get('/delete_recipe', {
+            user: $('input[name="user-deleting"]').val(),
+            password: $('input[name="password-to-delete"]').val(),
+            recipe_id : recipe_id
+        }, function(data) {
+            console.log(data);
+            if (data == "Recipe Deleted") {
+                $("#delete-errors-here").text(data);
+                setTimeout(function() {
+                    window.location=('/');
+                }, 2000);
+            }
+            $("#delete-errors-here").text(data);
+        });
+        return false;
+
+    });
 
 });

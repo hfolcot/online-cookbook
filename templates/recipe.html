@@ -1,12 +1,11 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <h2>{{ recipe.name }} 
-                {% if rating > 0 %}
-                    <i class="material-icons">{{ rating * "stars" }}</i></h2>
-                {% else %}
-                </h2>
-                {% endif %}
+        <h2>{{ recipe.name.capitalize() }} {% if rating > 0 %}
+            <i class="material-icons">{{ rating * "stars" }}</i></h2>
+        {% else %}
+        </h2>
+        {% endif %}
         <h6>Author: {{ recipe.author }}</h6>
     </div>
     <div class="row">
@@ -25,24 +24,25 @@
                     <option value="5">5</option>
                     <input type="submit" value="Rate!">
                 </select>
-                
+
             </form>
         </div>
         <div class="col s3 offset-s1">
             <p>Serves: {{ serves }}</p>
         </div>
         <div class="col s3 offset-s1">
-            <p>Problem? <a href={{ url_for('edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
+            <p>Problem? <a href={{ url_for( 'edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
+            <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
         </div>
     </div>
     <div class="row">
         <div class="col s3">
             <h5>Ingredients</h5>
-            
-                {% for i in recipe.ingredients %}
-                    <p>{{ i }}</p>
-                {% endfor %}
-            
+
+            {% for i in recipe.ingredients %}
+            <p>{{ i.capitalize() }}</p>
+            {% endfor %}
+
         </div>
         <div class="col s5">
             <h5>Method</h5>
@@ -54,9 +54,7 @@
             </ul>
         </div>
         <div class="col s4">
-            {% if recipe.image %}
             <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
-            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -81,4 +79,21 @@
     </div>
 
 </main>
+
+<!--Delete Recipe Modal-->
+<div id="delete-recipe-modal" class="modal">
+    <div class="modal-content">
+        <h4>Delete Recipe</h4>
+        <p>If you are sure you want to delete this recipe, please enter your account details to continue.</p>
+        <form id="delete-recipe">
+            <input type="hidden" name="recipe-id" value={{ recipe._id }}>
+            <input type="text" id="user-deleting" name="user-deleting" {% if user %} value={{ user }} {% endif %}>
+            <input type="password" id="password-to-delete" name="password-to-delete">
+            <label for="password-to-delete">Password: </label>
+            <button type="submit" class="waves-effect red btn">Delete Recipe</button>
+        </form>
+        <div class="row" id="delete-errors-here"></div>
+    </div>
+</div>
+
 {% endblock %}

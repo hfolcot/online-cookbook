@@ -41,9 +41,7 @@ def sort_method(form):
     for item in form:
         for item, value in form.items():
             if item == str(count):
-                print(item)
                 step = {item : value}
-                print(step)
                 method.update(step)
                 count += 1
     return method
@@ -77,10 +75,10 @@ def build_dict(form, filepath):
               "ingredients" : flatFalseForm['ingredients'],
               "image" : filepath,
               "method" : [],
-              "prep_time" : form['prep_time'].lower(),
-              "cook_time" : form['cook_time'].lower(),
-              "serves" : form['serves'].lower(),
-              "author" : form['author'].lower(),
+              "prep_time" : form['prep_time'],
+              "cook_time" : form['cook_time'],
+              "serves" : form['serves'],
+              "author" : form['author'],
               "categories" : [],
               "rating" : form['rating']
               }
@@ -112,8 +110,7 @@ def build_method_to_display(recipe):
     for item in method:
         for k,v in method.items():
             if k == str(count):
-                step = k + ": " + v.capitalize()
-                print(step)
+                step = k + ": " + v
                 returned_method.append(step)
                 break
         count += 1    
@@ -124,12 +121,18 @@ Result filtering
 """
 
 def count_results(results):
-    #Count the number of results returned
+    #Count the number of results returned, minus the number marked as deleted
     count_cursor_length = []
+    deleted_recipes = 0
     for result in results:
+        if 'deleted' in result:
+            deleted_recipes += 1
         count_cursor_length.append(result)
     results.rewind()
-    return len(count_cursor_length)
+    print(len(count_cursor_length))
+    print(deleted_recipes)
+    final_count = len(count_cursor_length) - deleted_recipes
+    return final_count
     
 def build_query_for_filtering(form):
     #determines which query should be used when filtering recipes list
@@ -143,7 +146,6 @@ def build_query_for_filtering(form):
             query = mongo.db.recipes.find({category : { subcatvalue : "on" }})
     elif len(form) == 2:
         if "main_ing" in form:
-            print("yes")
             cat1 = "categories.main_ing"
             value1 = str(form['main_ing'])
             if "recipe_type" in form:

@@ -47,6 +47,7 @@
                 {% if error %}
                 <p>{{ error }}</p>
                 {% endif %} {% for recipe in recipes %}
+                {% if not recipe.deleted %}
 
                 <div class="col s12 m3">
                     <div class="card" id={{ recipe._id }}>
@@ -61,6 +62,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>

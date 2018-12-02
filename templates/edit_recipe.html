@@ -2,7 +2,7 @@
 <main class="text-centered container">
     <h2>Edit</h2>
     <div class="row">
-        <form action="{{ url_for('update_recipe', recipe_id=recipe._id) }}" method="POST">
+        <form action="{{ url_for('update_recipe', recipe_id=recipe._id) }}" enctype="multipart/form-data" method="POST">
             <div class="row">
                 <div class="input-field col s12">
                     <input value="{{ recipe.name }}" id="recipe_name" type="text" name="name" class="validate">
@@ -13,7 +13,7 @@
                     {% for i in recipe.ingredients %}
                     <div class="row ingredient">
                         <div class="input-field col s6 offset-s3">
-                            <input type="text" name="ingredients" value="{{ i }}" class="validate" disabled>
+                            <input type="text" name="ingredients" value="{{ i }}" class="validate">
                         </div>
                         <div class="input-field col s2">
                             <a class="btn waves-effect waves-light red remove_current_ingredient"><i class="material-icons">remove</i></a>
@@ -74,10 +74,10 @@
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Add an Image</span>
-                            <input type="file">
+                            <input type="file" name="image">
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text" name="image" value="{{ recipe.image }}">
+                            <input class="file-path validate" type="text" name="filepath">
                         </div>
                     </div>
                 </div>

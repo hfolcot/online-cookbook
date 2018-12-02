@@ -32,7 +32,7 @@
                 <li>|</li>
                 <li><a href="#">Browse</a></li>
                 <li>|</li>
-                <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
+                <li><a {% if user %} href="{{url_for('add_recipe')}}" {% else %} href="#modal1" class="modal-trigger" {% endif %}>Add a Recipe</a></li>
                 <li>|</li>
                 {% if user %}
                 <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
@@ -51,6 +51,10 @@
     </ul>
 
     {% block content %} {% endblock %}
+    
+    <!--Modals-->
+    
+    <!--Login Modal-->
     <div id="modal1" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
@@ -59,7 +63,6 @@
                 <label for="username">Username: </label>
                 <input type="password" id="password" name="password">
                 <label for="password">Password: </label>
-                <p class="warning"><strong>WARNING: PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE, PLEASE USE A UNIQUE PASSWORD</strong></p>
                 <button class="waves-effect waves-green btn">Log In</button>
             </form>
             <div class="row" id="errors-here"></div>
@@ -68,6 +71,8 @@
             <a href="#newusermodal" class="modal-close waves-effect waves-light modal-trigger">Create an account</a>
         </div>
     </div>
+    
+    <!--Create User Modal-->
     <div id="newusermodal" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
@@ -84,6 +89,8 @@
             <div class="row" id="new-errors-here"></div>
         </div>
     </div>
+    
+
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
