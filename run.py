@@ -1,7 +1,7 @@
 import os, pymongo, data_functions, json
 
 from flask import Flask, render_template, url_for, request, redirect, session, g, flash
-from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo, pymongo
 from bson.objectid import ObjectId
 from flask_uploads import UploadSet, configure_uploads, IMAGES #Required for image uploads
 
@@ -122,7 +122,7 @@ def before_request():
 @app.route('/get_all_recipes')
 def get_all_recipes():
     #function to reset browse.html page to show all recipes
-    results = mongo.db.recipes.find()
+    results = mongo.db.recipes.find().sort('rating', pymongo.DESCENDING)
     results_count = data_functions.count_results(results)
     return render_template("browse.html", 
                             recipes=results, 
@@ -259,6 +259,7 @@ def delete_recipe():
     recipe_id = request.args.get('recipe_id')
     print(recipe_id)
     recipes = mongo.db.recipes
+    deleted_recipes = mongo.db.deleted
     finduser = mongo.db.users.find({"username" : user})
     count = 0
     for item in finduser:
@@ -268,7 +269,11 @@ def delete_recipe():
             print("User found")
             if password == item['password']:
                 print("password correct")
-                recipes.update( {'_id': ObjectId(recipe_id)}, {"$set" :{"deleted" : "on", "deleted_by" : user}})
+                for doc in recipes.find({'_id' : ObjectId(recipe_id)}):
+                    document = doc #There should only be one document returned in the cursor as search is by id.
+                deleted_recipes.insert_one(document) #Copies the recipe to the deleted collection
+                deleted_recipes.update({'_id': ObjectId(recipe_id)}, {"$set" :{"deleted" : "on", "deleted_by" : user}}) #adds details of who has deleted the recipe
+                recipes.remove({'_id': ObjectId(recipe_id)}) #removes the recipe from the active recipes collection
                 message = "Recipe Deleted"
                 return message
             else:
