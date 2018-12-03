@@ -10,22 +10,27 @@
     </div>
     <div class="row">
         <div class="col s3">
-
-            <form>
-                {% if rating == 0 %}
-                <label>Be the first to rate this recipe!</label> {% else %}
-                <label>Rating: </label> {% endif %}
-
-                <select>
-                    <option value="1" selected>1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <input type="submit" value="Rate!">
-                </select>
-
-            </form>
+            {% if recipe_id in user_rated %}
+            <p>You have already rated this recipe</p>
+            {% else %}
+                {% if user %}
+                    <form action="{{ url_for('rate_recipe', recipe_id=recipe._id) }}" method="POST">
+                    {% if rating == 0 %}
+                        <label>Be the first to rate this recipe!</label> {% else %}
+                        <label>Rating: </label> {% endif %}
+                        <select id="rating" name="rating">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                            <input type="submit" value="Rate!">
+                        </select>
+                    </form>
+                {% else %}
+                <p>You must be logged in to rate recipes!</p>
+                {% endif %}
+            {% endif %}
         </div>
         <div class="col s3 offset-s1">
             <p>Serves: {{ serves }}</p>
