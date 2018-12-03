@@ -1,4 +1,4 @@
-import os, pymongo, data_functions, json
+import os, pymongo, data_functions, json, math
 
 from flask import Flask, render_template, url_for, request, redirect, session, g, flash
 from flask_pymongo import PyMongo, pymongo
@@ -26,7 +26,6 @@ health_concerns_list = data_functions.build_list("health_concerns")
 recipe_type_list = data_functions.build_list("recipe_type")
 main_ing_list = data_functions.build_list("main_ing")
 
-
 """
 Home page
 """
@@ -39,9 +38,9 @@ def index():
             if search_term == "":
                 error = "Please enter a value to search"
                 return redirect(url_for('index', error=error, user=g.user))
-            return redirect(url_for('search', search_term=search_term, user=g.user))
-        elif request.form['action'] == 'browse':
-           return redirect(url_for('get_all_recipes'))
+            return redirect(url_for('search', 
+                                     search_term=search_term,
+                                     page_no=1))
     return render_template("index.html", user=g.user)
     
 """
@@ -116,41 +115,60 @@ def before_request():
         print("user not in session")
     
 """
+Recipe Methods
 """
 
 
-@app.route('/get_all_recipes')
-def get_all_recipes():
-    #function to reset browse.html page to show all recipes
-    results = mongo.db.recipes.find().sort('rating', pymongo.DESCENDING)
-    results_count = data_functions.count_results(results)
+@app.route('/get_recipes/<page_no>', methods=['GET', 'POST'])
+def get_recipes(page_no):
+    #function to reset browse.html page to show all recipes in paginated list
+    skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
+    if request.method == 'POST':
+        form = request.form.to_dict()
+        print("Form: ")
+        print(form)
+        query = data_functions.build_query_for_filtering(form)
+        non_paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]) #To count the total number of results
+        results_count = data_functions.count_results(non_paginated_results) #To count the total number of results
+        paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    else:
+        results = mongo.db.recipes.find()
+        results_count = data_functions.count_results(results)
+        paginated_results = mongo.db.recipes.find().sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    total_page_no=int(math.ceil(results_count/8.0))
     return render_template("browse.html", 
-                            recipes=results, 
+                            recipes=paginated_results, 
                             health_concerns=health_concerns_list, 
                             main_ing=main_ing_list, 
                             recipe_type=recipe_type_list,
                             results_count = results_count,
-                            user=g.user
+                            user=g.user,
+                            page_no=page_no,
+                            total_page_no=total_page_no
                             )
 
-@app.route("/filter_results", methods=["GET", "POST"])
-def filter_results():
-    #function to allow filtering on browse.html with 3 select elements
-    form = request.form.to_dict()
-    print(len(form))
-    results = data_functions.build_query_for_filtering(form)
-    error = ''
+
+    
+@app.route("/search/<search_term>/<page_no>", methods=["GET", "POST"])
+def search(search_term, page_no):
+    #runs the search query based on user input and returns a list of paginated results.
+    mongo.db.recipes.create_index([('name', 'text')])
+    query = ( { "$text": { "$search": search_term } } )
+    results = mongo.db.recipes.find(query)
     results_count = data_functions.count_results(results)
-    if  results_count == 0:
-        error = "No results found"
-    return render_template("browse.html", 
-                            recipes=results, 
+    skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
+    paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    total_page_no=int(math.ceil(results_count/8.0))
+    return render_template("results.html", 
+                            recipes=paginated_results, 
                             health_concerns=health_concerns_list, 
                             main_ing=main_ing_list, 
                             recipe_type=recipe_type_list,
-                            error=error,
                             results_count = results_count,
-                            user=g.user)
+                            user=g.user,
+                            page_no=page_no,
+                            total_page_no=total_page_no
+                            )
 
 @app.route("/add_recipe")
 def add_recipe():
@@ -189,17 +207,6 @@ def insert_category():
     categories.insert_one(data)
     return redirect(url_for('add_recipe'))
 
-    
-@app.route("/search/<search_term>", methods=["GET", "POST"])
-def search(search_term):
-    #runs the search query based on user input and returns a list of results.
-    mongo.db.recipes.create_index([('name', 'text')])
-    query = ( { "$text": { "$search": search_term } } )
-    results = mongo.db.recipes.find(query)
-    return render_template("results.html",
-                            recipes=results,
-                            search_term=search_term,
-                            user=g.user)
 
 
     

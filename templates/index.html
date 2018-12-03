@@ -18,8 +18,8 @@
             </div>
             {% endif %}
             <div class="row">
-                <div class="input-field col s10">
-                    <button type="submit" name="action" value="browse" class="waves-effect waves-light btn">Browse all Recipes</button>
+                <div class="input-field col s10"></div>
+                    <a href="{{ url_for('get_recipes', page_no=1) }}" class="waves-effect waves-light btn-large">Browse all Recipes</a>
                 </div>
             </div>
             <div class="row">

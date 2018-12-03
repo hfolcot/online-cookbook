@@ -1,16 +1,33 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <p id="search_term">Search results for: "<span>{{ search_term }}</span>"</p>
+        <div class="col s8">
+            <h2><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h2>
+        </div>
+        <div class="col s3 offset-s1">
+            <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>Browse All Recipes</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <ul class="pagination">
+            <li id="prev-page" {% if page_no|int != 1 %}class="waves-effect"{% else %}class="disabled"{% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+            <li id="next-page" {% if page_no|int != total_page_no|int %}class="waves-effect"{% else %}class="disabled"{% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <p> Page number {{ page_no }} of {{ total_page_no }}</p>
+    </div>
+    <div class="row">
         <div class="col s12 results" id="results">
+
             <div class="row">
-                <h2>Search Results</h2>
-            </div>
-            <div class="row">
-            {% for recipe in recipes %}
-                {% if not recipe.deleted %}
+                {% if error %}
+                <p>{{ error }}</p>
+                {% endif %} {% for recipe in recipes %}
+
                 <div class="col s12 m3">
-                    <div class="card" id={{ recipe._id }}>
+                    <div class="card small" id={{ recipe._id }}>
                         <div class="card-image">
                             <img src={{ recipe.image }}>
                         </div>
@@ -22,11 +39,11 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
     </div>
+
 </main>
 
 {% endblock %}

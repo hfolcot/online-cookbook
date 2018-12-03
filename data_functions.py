@@ -122,17 +122,11 @@ Result filtering
 
 def count_results(results):
     #Count the number of results returned, minus the number marked as deleted
-    count_cursor_length = []
-    deleted_recipes = 0
+    number_of_recipes = 0
     for result in results:
-        if 'deleted' in result:
-            deleted_recipes += 1
-        count_cursor_length.append(result)
+        number_of_recipes += 1
     results.rewind()
-    print(len(count_cursor_length))
-    print(deleted_recipes)
-    final_count = len(count_cursor_length) - deleted_recipes
-    return final_count
+    return number_of_recipes
     
 def build_query_for_filtering(form):
     #determines which query should be used when filtering recipes list
@@ -143,7 +137,7 @@ def build_query_for_filtering(form):
             subcatname = key
             subcatvalue = value
             category = "categories." + subcatname
-            query = mongo.db.recipes.find({category : { subcatvalue : "on" }})
+            query = {category : { subcatvalue : "on" }}
     elif len(form) == 2:
         if "main_ing" in form:
             cat1 = "categories.main_ing"
@@ -159,7 +153,7 @@ def build_query_for_filtering(form):
             value1 = str(form["health_concerns"])
             cat2 = "categories.recipe_type"
             value2 = str(form["recipe_type"])
-            query = mongo.db.recipes.find({cat1 : { value1 : "on" }} and {cat2 : {value2: "on"}})
+            query = {cat1 : { value1 : "on" }} and {cat2 : {value2: "on"}}
     elif len(form) == 3:
         cat1 = "categories.main_ing"
         value1 = str(form["main_ing"])
@@ -167,5 +161,5 @@ def build_query_for_filtering(form):
         value2 = str(form['recipe_type'])
         cat3 = "categories.health_concerns"
         value3 = str(form['health_concerns'])
-        query = mongo.db.recipes.find( { '$and': [ {cat1 : { value1 : "on" }}, {cat2 : {value2: "on"}}, {cat3 : {value3: "on"}} ] } )
+        query = { '$and': [ {cat1 : { value1 : "on" }}, {cat2 : {value2: "on"}}, {cat3 : {value3: "on"}} ] }
     return query
