@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <link rel="icon" type="image/png" href="../static/img/favicon.ico">
     <title>Your Online Cookbook</title>
 
     <!--Flashed messages to appear at the top of the viewport-->
@@ -30,7 +31,7 @@
             <ul class="right hide-on-med-and-down">
                 <li><a href="{{url_for('index')}}">Home</a></li>
                 <li>|</li>
-                <li><a href="#">Browse</a></li>
+                <li><a href="{{ url_for('get_recipes', page_no=1) }}">Browse</a></li>
                 <li>|</li>
                 <li><a {% if user %} href="{{url_for('add_recipe')}}" {% else %} href="#modal1" class="modal-trigger" {% endif %}>Add a Recipe</a></li>
                 <li>|</li>
