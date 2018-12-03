@@ -46,11 +46,19 @@ $(document).ready(function() {
 
 
     //Button to add next step for method on add_recipe.html
-    var step_count = 2; //must start from 2 as id=1 is already used on add_recipe.html form for the first method
+    var step_count = 2; //must start from 2 as id=01 is already used on add_recipe.html form for the first method
+
     $('#add_method').on('click', function() {
+        //Adds zeros to all numbers below 10 so that method appears alphabetically on recipe page
+        if (step_count < 10) {
+            var zero = "0";
+        }
+        else {
+            zero = "";
+        }
         var new_method = `<div class="row method">
                                 <div class="input-field col s12">
-                                    <li><textarea type="text" class="validate" name="` + step_count + `" placeholder="Enter step ` + step_count + `"></textarea></li>
+                                    <li><textarea type="text" class="validate" name="` + zero + step_count + `" placeholder="Enter step ` + step_count + `"></textarea></li>
                                 </div>
                             </div>`;
         $(new_method).hide().appendTo("#method_container ol").fadeIn(300);
@@ -165,13 +173,13 @@ $(document).ready(function() {
         $.get('/delete_recipe', {
             user: $('input[name="user-deleting"]').val(),
             password: $('input[name="password-to-delete"]').val(),
-            recipe_id : recipe_id
+            recipe_id: recipe_id
         }, function(data) {
             console.log(data);
             if (data == "Recipe Deleted") {
                 $("#delete-errors-here").text(data);
                 setTimeout(function() {
-                    window.location=('/');
+                    window.location = ('/');
                 }, 2000);
             }
             $("#delete-errors-here").text(data);
@@ -179,5 +187,6 @@ $(document).ready(function() {
         return false;
 
     });
+
 
 });

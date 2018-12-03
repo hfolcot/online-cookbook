@@ -51,12 +51,12 @@
         </div>
         <div class="col s5">
             <h5>Method</h5>
-            <ul>
+            <ol>
                 {% for i in method %}
-                <li>{{ i }}</li>
+                <li>{{ i[3:] }}</li>
 
                 {% endfor %}
-            </ul>
+            </ol>
         </div>
         <div class="col s4">
             <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>

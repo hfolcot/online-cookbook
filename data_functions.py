@@ -109,8 +109,8 @@ def build_method_to_display(recipe):
     count = 1
     for item in method:
         for k,v in method.items():
-            if k == str(count):
-                step = k + ": " + v
+            if int(k) == count:
+                step = str(k) + ": " + v
                 returned_method.append(step)
                 break
         count += 1    
