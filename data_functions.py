@@ -80,7 +80,7 @@ def build_dict(form, filepath):
               "serves" : form['serves'],
               "author" : form['author'],
               "categories" : [],
-              "rating" : {"number_times_rated" : 0, "score" : 0, "rating" : 0}
+              "ratings" : {"number_times_rated" : 0, "score" : 0, "rating" : 0}
               }
     recipe['method'] = sort_method(form)
     recipe['categories'] = [sort_categories(form)]
