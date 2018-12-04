@@ -159,7 +159,10 @@ def search(search_term, page_no):
     skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
     paginated_results = mongo.db.recipes.find(query).sort([("ratings.number_times_rated", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
     total_page_no=int(math.ceil(results_count/8.0))
-    return render_template("results.html", 
+    if results_count == 0:
+        page_no = 0
+    return render_template("results.html",
+                            search_term=search_term,
                             recipes=paginated_results, 
                             health_concerns=health_concerns_list, 
                             main_ing=main_ing_list, 
