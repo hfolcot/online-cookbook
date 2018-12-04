@@ -1,29 +1,29 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <h4>Results for '{{ search_term }}'...</h4>
+        <div class="col s12 m4">
+            <p>Results for '{{ search_term }}'...</p>
+        </div>
+        <div class="col s12 m8 right-align">
+            <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>All Recipes</a>
+        </div>
     </div>
     <div class="row">
-        <div class="col s8">
-            <h2><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h2>
+        <div class="col s12">
+            <h4 class="page-title"><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h4>
         </div>
-        <div class="col s3 offset-s1">
-            <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>Browse All Recipes</a>
-        </div>
+
     </div>
 
     <div class="row">
-        <div class="col s3">
+        <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
-        </div>
-        <div class="col s2 offset-s7">
-            <ul class="pagination">
-                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+            <ul class="pagination right-align">
+                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
                 <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>
-
     <div class="row">
         <div class="col s12 results" id="results">
 
@@ -50,12 +50,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col s3">
+        <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
-        </div>
-        <div class="col s2 offset-s7">
-            <ul class="pagination">
-                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+            <ul class="pagination right-align">
+                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
                 <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>

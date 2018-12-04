@@ -1,38 +1,42 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <h2>{{ recipe.name.capitalize() }}</h2>
-        {% if rating > 0 %}
-        <p>Rating: <i class="material-icons">{{ rating * "stars" }}</i></p>
-        {% endif %}
-        <h6>Author: {{ recipe.author }}</h6>
+        <h2 class="page-title center-align">{{ recipe.name.capitalize() }} {% if rating > 0 %}
+            <i class="material-icons">{{ rating * "stars" }}</i> {% endif %}</h2>
+        <h6 class="center-align">Author: {{ recipe.author }}</h6>
     </div>
     <div class="row">
-        <div class="col s3">
+        <div class="col s12 m3">
             {% if recipe_id in user_rated %}
             <p>You have already rated this recipe</p>
             {% else %} {% if user %}
             <form action="{{ url_for('rate_recipe', recipe_id=recipe._id) }}" method="POST">
                 {% if rating == 0 %}
-                <label>Be the first to rate this recipe!</label> {% else %}
-                <label>Rating: </label> {% endif %}
-                <select id="rating" name="rating">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5" selected>5</option>
-                            <input type="submit" value="Rate!">
-                        </select>
+                <p>Be the first to rate this recipe!</p>
+                {% else %}
+                <p>Rate this recipe:</p>
+                {% endif %}
+                <div class="input-field col s6 m3">
+                    <select id="rating" name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                </select>
+                </div>
+                <div class="input-field col s2">
+                    <input type="submit" class="waves-effect waves-light btn" value="Rate!">
+                </div>
             </form>
             {% else %}
             <p><a href="#login-modal" class="modal-trigger">Login</a> to rate recipes!</p>
             {% endif %} {% endif %}
         </div>
-        <div class="col s3 offset-s1">
+        <div class="col s12 m3 offset-m1">
             <p>Serves: {{ serves }}</p>
         </div>
-        <div class="col s3 offset-s1">
+        <div class="col s12 m3 offset-m1">
             {% if user %}
             <p>Problem? <a href={{ url_for( 'edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
             <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
@@ -41,8 +45,8 @@
             {% endif %}
         </div>
     </div>
-    <div class="row">
-        <div class="col s3">
+    <div class="row hide-on-med-and-down">
+        <div class="col m3">
             <h5>Ingredients</h5>
 
             {% for i in recipe.ingredients %}
@@ -50,7 +54,7 @@
             {% endfor %}
 
         </div>
-        <div class="col s5">
+        <div class="col m5">
             <h5>Method</h5>
             <ol>
                 {% for i in method %}
@@ -59,24 +63,48 @@
                 {% endfor %}
             </ol>
         </div>
-        <div class="col s4">
+        <div class="col m4">
+            <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
+        </div>
+    </div>
+    <div class="row hide-on-large-only">
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">restaurant</i>Ingredients</div>
+                <div class="collapsible-body"><span>
+          {% for i in recipe.ingredients %}
+            <p>{{ i.capitalize() }}</p>
+            {% endfor %}
+            </span></div>
+            </li>
+            <li>
+                <div class="collapsible-header"><i class="material-icons">view_list</i>Method</div>
+                <div class="collapsible-body"><span>            <ol>
+                {% for i in method %}
+                <li>{{ i[3:] }}</li><br>
+
+                {% endfor %}
+            </ol></span></div>
+            </li>
+        </ul>
+        <div class="col s12">
             <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
         </div>
     </div>
     <div class="row">
-        <div class="col s4">
+        <div class="col s12 m4 center-align">
             <h6>Main ingredient:</h6>
             {% for i, j in recipe.categories[0].main_ing.items() %} {% if j == "on" %}
             <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
             {% endif %} {% endfor %}
         </div>
-        <div class="col s4">
+        <div class="col s12 m4 center-align">
             <h6>Recipe type :</h6>
             {% for i, j in recipe.categories[0].recipe_type.items() %} {% if j == "on" %}
             <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
             {% endif %} {% endfor %}
         </div>
-        <div class="col s4">
+        <div class="col s12 m4 center-align">
             <h6>Health:</h6>
             {% for i, j in recipe.categories[0].health_concerns.items() %} {% if j == "on" %}
             <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
@@ -104,11 +132,9 @@
             <button type="submit" class="waves-effect red btn">Delete Recipe</button>
         </form>
         <div class="row">
-            <div class="col s12 text-centered" id="delete-errors-here"></div>
-        </div>
-        <div class="row">
-            <div class="col s12 text-centered no-display" id="delete-recipe-loader">
-                <div class="preloader-wrapper big active">
+            <div class="col s10 m4 offset-m4" id="delete-errors-here"></div>
+            <div class="col s2 m2 offset-m5 no-display" id="delete-recipe-loader">
+                <div class="preloader-wrapper small active">
                     <div class="spinner-layer spinner-blue-only">
                         <div class="circle-clipper left">
                             <div class="circle"></div>

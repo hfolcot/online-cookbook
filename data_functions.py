@@ -1,6 +1,6 @@
 import os, pymongo, json
 
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect, flash
 from flask_pymongo import PyMongo
 
 
@@ -37,13 +37,15 @@ Packing up the data to send to the database
 def sort_method(form):
     #Build the list to push into the 'method' heading of the recipe dict   
     method = {}
+    print(form)
     count = 1
     for item in form:
         for item, value in form.items():
-            if item == str(count):
-                step = {item : value}
-                method.update(step)
-                count += 1
+            if item.isdigit():
+                if int(item) == count:
+                    step = {item : value}
+                    method.update(step)
+                    count += 1
     return method
     
 def sort_categories(form):
@@ -130,9 +132,7 @@ def count_results(results):
     
 def build_query_for_filtering(form):
     #determines which query should be used when filtering recipes list
-    if len(form) == 0:
-                return redirect(url_for('get_all_recipes'))
-    elif len(form) == 1:
+    if len(form) == 1:
         for key, value in form.items():
             subcatname = key
             subcatvalue = value

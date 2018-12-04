@@ -126,9 +126,12 @@ def get_recipes(page_no):
     skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
     if request.method == 'POST':
         form = request.form.to_dict()
-        print("Form: ")
         print(form)
+        if len(form) == 0:
+            flash("Please choose a category to filter")
+            return redirect(url_for('get_recipes', page_no=1))
         query = data_functions.build_query_for_filtering(form)
+        print(query)
         non_paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]) #To count the total number of results
         results_count = data_functions.count_results(non_paginated_results) #To count the total number of results
         paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
@@ -137,6 +140,8 @@ def get_recipes(page_no):
         results_count = data_functions.count_results(results)
         paginated_results = mongo.db.recipes.find().sort([("ratings.rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
     total_page_no=int(math.ceil(results_count/8.0))
+    if results_count == 0:
+        page_no = 0
     return render_template("browse.html", 
                             recipes=paginated_results, 
                             health_concerns=health_concerns_list, 
@@ -259,7 +264,7 @@ def update_recipe(recipe_id):
     if 'image' in request.files:
         #uploads image to static/img/uploads and creates the filepath to store in the database
         filename = images.save(request.files['image'])
-        filepath = "../static/img/uploads" + filename
+        filepath = "../static/img/uploads/" + filename
     else:
         print("image not found")
         filepath = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"

@@ -1,38 +1,158 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Serif');
+
+/************************************GENERIC*/
+
+body {
+    background-color: #C7CEDB;
+    font-family: 'PT Serif', serif;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.no-display {
+    display: none;
+}
+
+.container {
+    padding: 20px;
+}
+
+/***********************************HEADER/FOOTER*/
+
+nav,
+.page-footer {
+    background-color: #2B193D;
+}
+
+.footer-icons {
+    padding: 10px;
+}
+
+/************************************BUTTONS*/
+
+.btn,
+.btn-large:hover,
+.btn-small:hover,
+.btn-large:focus,
+.btn-small:focus {
+    background-color: #2D2D2A;
+    color: #F7F7FF;
+}
+
+
+
+.btn-large,
+.btn-small,
+.btn:focus,
+.btn:hover {
+    background-color: #3F5E5A;
+    color: #F7F7FF;
+}
+
+
+/************************************IMAGES*/
+
 .headerimg {
     margin-left: 5px;
     margin-right: 5px;
 }
 
-.text-centered {
-    text-align: center;
-}
-
-.warning {
-    color: red;
-}
-
-.ticked_categories {
-    color: green;
-}
-
-.hidden {
-   visibility: hidden;
+.home-image img {
+    max-width: 100%;
 }
 
 .recipeimg {
     width: 30vw;
 }
 
-@media (max-width: 992px) {
 
+
+/******************************FORMS*/
+
+input::placeholder {
+    color: #2C365E;
 }
 
+.search-form {
+    padding-bottom: 150px;
+}
+
+
+/*******************************MESSAGES*/
+
+.flashes {
+    background-color: #F1FAEE;
+}
+
+.warning {
+    color: red;
+}
+
+
+/*******************************RECIPES*/
+
+.ticked_categories {
+    color: green;
+}
+
+
+.results {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.collapsible-header {
+    background-color: #3F5E5A;
+    color: #F7F7FF;
+}
+
+
+/************************************MEDIA QUERIES*/
+
+@media (max-width: 1024px) {
+    .search-form {
+        padding-bottom: 50px;
+    }
+
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 601px) {
+    .mobile-only {
+        display: none;
+    }
+}
 
 @media (max-width: 600px) {
     .hidden-mobile {
         display: none;
     }
     nav .brand-logo {
-        font-size: 1.1rem;
+        font-size: 1.0rem;
+    }
+
+    .btn-large {
+        font-size: 1.0rem;
+    }
+    .search-form {
+        padding-bottom: 80px;
+    }
+    .footer-icons {
+        padding: 2px;
+    }
+    .recipeimg {
+        min-width: 100%;
     }
 }

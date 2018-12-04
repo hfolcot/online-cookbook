@@ -1,66 +1,68 @@
 {% extends 'base.html'%} {% block content %}
-<main class="text-centered container">
-    <h2>Add a Recipe</h2>
+<main class="container">
+    <h2 class="center-align page-title">Add a Recipe</h2>
     <div class="row">
         <form action="{{ url_for('insert_recipe') }}" enctype="multipart/form-data" method="POST">
             <div class="row">
                 <div class="row recipe_name">
                     <div class="input-field col s12">
-                        <input placeholder="This is the title that will appear on the recipe's page" id="recipe_name" type="text" name="name" class="validate">
+                        <input id="recipe_name" type="text" name="name" class="validate">
                         <label for="recipe_name">Recipe Name</label>
                     </div>
                 </div>
             </div>
-            <div class="row" id="ingredients_container">
-                <div class="row ingredient">
-                    <div class="input-field col s6 offset-s3">
-                        <input id="ing" type="text" name="ingredients" placeholder="Enter Ingredient" class="validate">
-                        <label for="ing">Ingredients</label>
-                    </div>
-                </div>
-            </div>    
-            <div class="row" id="ing_button_container">
-                <div class="input-field col s2 offset-s3" id="add_ingredient_button">
-                    <a class="btn waves-effect waves-light green" id="add_ingredient"><i class="material-icons right">add</i>Add another</a>
-                </div>
-                <div class="input-field col s2 offset-s2 hidden" id="remove_ing_button">
-                    <a class="btn waves-effect waves-light red" id="remove_ingredient"><i class="material-icons right">remove</i>Remove last</a>
-                </div>
-            </div>
-
-            <div class="row" id="method_container">
-
-                <ol>
-                    <div class="row method">
-                         <h5>Method</h5>
-                        <div class="input-field col s12">
-                            <li><textarea type="text" class="validate" name="1" placeholder="Enter step 1" id="step1"></textarea></li>
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <div class="row" id="ingredients_container">
+                        <div class="row input-field ingredient">
+                            <div class="input-field col s12 m11">
+                                <input id="ing" type="text" name="ingredients" placeholder="First ingredient here..." class="validate">
+                                <label for="ing">Ingredients</label>
+                            </div>
                         </div>
                     </div>
-                </ol>
-            </div>
-            <div class="row" id="method_button_container">
-                <div class="input-field col s2">
-                    <a class="btn waves-effect waves-light green" id="add_method"><i class="material-icons right">add</i>Add another</a>
+                    <div class="row" id="ing_button_container">
+                        <div class="input-field col s9 m5 offset-m1" id="add_ingredient_button">
+                            <a class="btn waves-effect waves-light green" id="add_ingredient"><i class="material-icons right">add</i>Add More</a>
+                        </div>
+                        <div class="input-field col s3 m5 hidden" id="remove_ing_button">
+                            <a class="btn waves-effect waves-light red" id="remove_ingredient"><i class="material-icons">remove</i></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="input-field col s2 hidden" id="remove_step_button">
-                    <a class="btn waves-effect waves-light red" id="remove_step"><i class="material-icons">remove</i></a>
+                <div class="input-field col s12 m6">
+                    <div class="row" id="method_container">
+                        <div class="row input-field method">
+                            <div class="input-field col s12 m11 offset-m1">
+                                <input type="text" class="validate" name="01" placeholder="Enter step 1" id="step1">
+                                <label for="step1">Method</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="method_button_container">
+                        <div class="input-field col s9 m5 offset-m1">
+                            <a class="btn waves-effect waves-light green" id="add_method"><i class="material-icons right">add</i>Add next</a>
+                        </div>
+                        <div class="input-field col s3 m5 hidden" id="remove_step_button">
+                            <a class="btn waves-effect waves-light red" id="remove_step"><i class="material-icons">remove</i></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="input-field col s4">
-                    <input id="prep_time" placeholder="Number of minutes" type="text" name="prep_time" class="validate">
-                    <label>Prep Time (minutes)</label>
+                <div class="input-field col s12 m4">
+                    <input id="prep_time" type="text" name="prep_time" class="validate">
+                    <label for="prep_time">Prep Time (minutes)</label>
                 </div>
-                <div class="input-field col s4">
+                <div class="input-field col s12 m4">
                     <input id="cook_time" type="text" class="validate" name="cook_time">
                     <label for="cook_time">Cook Time (minutes)</label>
-                </div>                
-                <div class="input-field col s4">
+                </div>
+                <div class="input-field col s12 m4">
                     <input id="serves" type="text" class="validate" name="serves">
                     <label for="serves">Serves (Number of People)</label>
                 </div>
-            
+
             </div>
             <div class="row">
                 <div class="input-field col s12">
@@ -69,7 +71,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col s4">
+                <div class="col s12 m4">
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Add an Image</span>
@@ -81,15 +83,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-
+            <div class="row hidden-mobile">
                 <div class="row">
                     <div class="col s2">
                         <h5>Categories</h5>
-
                     </div>
                 </div>
-
                 <div class="col s3">
                     <h6>Main Ingredients</h6>
                     {% for i in main_ing %}
@@ -125,12 +124,52 @@
                     </p>
                     {% endfor %}
                 </div>
-                <div class="row">
-                    <div class="col s2 offset-s9">
-                        <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
-                    </div>
-                </div>
 
+            </div>
+            <div class="row mobile-only">
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Main Ingredient</div>
+                        <div class="collapsible-body"><span>                    {% for i in main_ing %}
+                    <p>
+                        <label>
+                                        <input name="{{ i }}" type="checkbox" />
+                                        <span>{{ i.capitalize() }}</span>
+                            </label>
+                            </p>
+                            {% endfor %}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">place</i>Recipe Type</div>
+                        <div class="collapsible-body"><span>                    {% for i in recipe_type %}
+                    <p>
+                        <label>
+                                        <input name="{{ i }}" type="checkbox" />
+                                        <span>{{ i.capitalize() }}</span>
+                            </label>
+                            </p>
+                            {% endfor %}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Health</div>
+                        <div class="collapsible-body"><span>                    {% for i in health_concerns %}
+                    <p>
+                        <label>
+                                        <input name="{{ i }}" type="checkbox" />
+                                        <span>{{ i.capitalize() }}</span>
+                            </label>
+                            </p>
+                            {% endfor %}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="row center-align">
+                <div class="col s12 m3 offset-m9">
+                    <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
+                </div>
             </div>
         </form>
     </div>

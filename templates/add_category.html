@@ -1,6 +1,6 @@
 {% extends 'base.html'%} {% block content %}
-<main class="container text-centered">
-    <h3>Add a Category</h3>
+<main class="container center-align">
+    <h3 class="page-title">Add a Category</h3>
     <div class="row">
         <div class="input-field col s10 offset-s1 m4 offset-m4">
             <form action="{{ url_for('insert_category') }}" method="POST">
