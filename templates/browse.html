@@ -41,13 +41,15 @@
         </form>
     </div>
     <div class="row">
-        <ul class="pagination">
-            <li id="prev-page" {% if page_no|int != 1 %}class="waves-effect"{% else %}class="disabled"{% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
-            <li id="next-page" {% if page_no|int != total_page_no|int %}class="waves-effect"{% else %}class="disabled"{% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
-        </ul>
-    </div>
-    <div class="row">
-        <p> Page number {{ page_no }} of {{ total_page_no }}</p>
+        <div class="col s3">
+            <p> Page {{ page_no }} of {{ total_page_no }}</p>
+        </div>
+        <div class="col s2 offset-s7">
+            <ul class="pagination">
+                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+                <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
+            </ul>
+        </div>
     </div>
     <div class="row">
         <div class="col s12 results" id="results">
@@ -72,6 +74,17 @@
                 </div>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s3">
+            <p> Page {{ page_no }} of {{ total_page_no }}</p>
+        </div>
+        <div class="col s2 offset-s7">
+            <ul class="pagination">
+                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+                <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
+            </ul>
         </div>
     </div>
 

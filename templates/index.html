@@ -2,7 +2,7 @@
 <main class="text-centered container">
     <h2>Welcome to Your Online Cookbook!</h2>
     <div class="row">
-        <form class="col s12 m7" method="POST">
+        <form class="col s12 m7 offset-m3 search-field" method="POST">
             <div class="row">
                 <div class="input-field col s10">
                     <input placeholder="What are you looking for?" name="search" type="text" class="validate">
@@ -10,25 +10,27 @@
                 <div class="col s2">
                     <button type="submit" name="action" value="search" class="waves-effect waves-light btn"><i class="material-icons">search</i></button>
                 </div>
-
-            </div>
-            {% if error %}
-            <div class="row errors">
-                <p><strong>{{ error }}</strong></p>
-            </div>
-            {% endif %}
-            <div class="row">
-                <div class="input-field col s10"></div>
-                    <a href="{{ url_for('get_recipes', page_no=1) }}" class="waves-effect waves-light btn-large">Browse all Recipes</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <a href="{{url_for('add_recipe')}}" class="waves-effect waves-light btn-large"><i class="material-icons right">add</i>Add your own recipe</a>
-                </div>
             </div>
         </form>
-        <img class="col m5 hidden-mobile" src="/static/img/indeximg.jpg">
+    </div>
+    {% if error %}
+    <div class="row errors">
+        <p><strong>{{ error }}</strong></p>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="input-field col s10">
+            <a href="{{ url_for('get_recipes', page_no=1) }}" class="waves-effect waves-light btn-large">Browse all Recipes</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            <a href="{{url_for('add_recipe')}}" class="waves-effect waves-light btn-large"><i class="material-icons right">add</i>Add your own recipe</a>
+        </div>
+    </div>
+
+    <img class="col m5 hidden-mobile" src="/static/img/indeximg.jpg">
     </div>
 
 </main>

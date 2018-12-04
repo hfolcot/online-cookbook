@@ -11,15 +11,6 @@
     <link rel="icon" type="image/png" href="../static/img/favicon.ico">
     <title>Your Online Cookbook</title>
 
-    <!--Flashed messages to appear at the top of the viewport-->
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %} {% endwith %}
-
 </head>
 
 <body>
@@ -33,12 +24,12 @@
                 <li>|</li>
                 <li><a href="{{ url_for('get_recipes', page_no=1) }}">Browse</a></li>
                 <li>|</li>
-                <li><a {% if user %} href="{{url_for('add_recipe')}}" {% else %} href="#modal1" class="modal-trigger" {% endif %}>Add a Recipe</a></li>
+                <li><a {% if user %} href="{{url_for('add_recipe')}}" {% else %} href="#login-modal" class="modal-trigger" {% endif %}>Add a Recipe</a></li>
                 <li>|</li>
                 {% if user %}
                 <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
                 {% else %}
-                <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Log In</a></li>
+                <li><a class="waves-effect waves-light modal-trigger" href="#login-modal">Log In</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -46,53 +37,115 @@
 
     <ul class="sidenav" id="mobile-demo">
         <li><a href="{{url_for('index')}}">Home</a></li>
-        <li><a href="#">Browse</a></li>
-        <li><a href="#">Add a Recipe</a></li>
-        <li><a href="#">Search</a></li>
+        <li><a href="{{ url_for('get_recipes', page_no=1) }}">Browse</a></li>
+        <li><a {% if user %} href="{{url_for('add_recipe')}}" {% else %} href="#login-modal" class="modal-trigger" {% endif %}>Add a Recipe</a></li>
+        {% if user %}
+        <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
+        {% else %}
+        <li><a class="waves-effect waves-light modal-trigger" href="#login-modal">Log In</a></li>
+        {% endif %}
     </ul>
 
-    {% block content %} {% endblock %}
-    
+    <!--Flashed messages to appear at the top of the viewport, below the nav-->
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul class="flashes text-centered">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %} {% endblock %}
+
     <!--Modals-->
-    
+
     <!--Login Modal-->
-    <div id="modal1" class="modal">
+    <div id="login-modal" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
             <form id="login-form">
-                <input type="text" id="username" name="username" required />
-                <label for="username">Username: </label>
-                <input type="password" id="password" name="password">
-                <label for="password">Password: </label>
-                <button class="waves-effect waves-green btn">Log In</button>
+                <div class="input-field">
+                    <input type="text" id="username" name="username" required />
+                    <label for="username">Username: </label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="password" name="password">
+                    <label for="password">Password: </label>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button class="waves-effect waves-green btn">Log In</button>
+                        <a href="#newusermodal" class="modal-close waves-effect waves-light modal-trigger">Create an account</a>
+                    </div>
+                </div>
             </form>
-            <div class="row" id="errors-here"></div>
-        </div>
-        <div class="modal-footer">
-            <a href="#newusermodal" class="modal-close waves-effect waves-light modal-trigger">Create an account</a>
+            <div class="row">
+                <div class="col s4 offset-s4" id="errors-here"></div>
+            </div>
+            <div class="row">
+                <div class="col s2 offset-s5 no-display" id="loader">
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    
+
     <!--Create User Modal-->
     <div id="newusermodal" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
             <form id="create-new-user">
-                <input type="text" id="newusername" name="newusername" required />
-                <label for="newusername">Username: </label>
-                <input type="password" id="newpassword" name="newpassword">
-                <label for="newpassword">Password: </label>
-                <input type="password" id="repeatpassword" name="repeatpassword">
-                <label for="repeatpassword">Re-enter Password: </label>
+                <div class="input-field">
+                    <input type="text" id="newusername" name="newusername" required />
+                    <label for="newusername">Username: </label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="newpassword" name="newpassword">
+                    <label for="newpassword">Password: </label>
+                </div>
+                <div class="input-field">
+                    <input type="password" id="repeatpassword" name="repeatpassword">
+                    <label for="repeatpassword">Re-enter Password: </label>
+                </div>
                 <p class="warning"><strong>WARNING: PASSWORDS ARE STORED IN PLAIN TEXT AND ARE NOT SECURE, PLEASE USE A UNIQUE PASSWORD</strong></p>
                 <button type="submit" class="waves-effect waves-green btn">Create User</button>
             </form>
-            <div class="row" id="new-errors-here"></div>
+            <div class="row">
+                <div class="col s4 offset-s4" id="new-errors-here"></div>
+            </div>
+            <div class="row">
+                <div class="col s2 offset-s5 no-display" id="new-user-loader">
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
 
-    
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script type="text/javascript" src="/static/js/script.js"></script>

@@ -36,8 +36,8 @@ def index():
         if request.form['action'] == 'search':
             search_term = request.form['search']
             if search_term == "":
-                error = "Please enter a value to search"
-                return redirect(url_for('index', error=error, user=g.user))
+                flash("Please enter a value to search")
+                return redirect(url_for('index', user=g.user))
             return redirect(url_for('search', 
                                      search_term=search_term,
                                      page_no=1))
@@ -80,6 +80,7 @@ def check_password():
 @app.route('/logout')
 def end_session():
     session.pop('user', None)
+    flash("You were successfully logged out")
     return redirect(url_for('index'))
     
 @app.route('/create_user', methods=['GET'])
@@ -115,7 +116,7 @@ def before_request():
         print("user not in session")
     
 """
-Recipe Methods
+Recipe Read Methods
 """
 
 
@@ -134,7 +135,7 @@ def get_recipes(page_no):
     else:
         results = mongo.db.recipes.find()
         results_count = data_functions.count_results(results)
-        paginated_results = mongo.db.recipes.find().sort([("ratings.number_times_rated", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+        paginated_results = mongo.db.recipes.find().sort([("ratings.rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
     total_page_no=int(math.ceil(results_count/8.0))
     return render_template("browse.html", 
                             recipes=paginated_results, 
@@ -157,7 +158,7 @@ def search(search_term, page_no):
     results = mongo.db.recipes.find(query)
     results_count = data_functions.count_results(results)
     skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
-    paginated_results = mongo.db.recipes.find(query).sort([("ratings.number_times_rated", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    paginated_results = mongo.db.recipes.find(query).sort([("ratings.rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
     total_page_no=int(math.ceil(results_count/8.0))
     if results_count == 0:
         page_no = 0
@@ -172,6 +173,31 @@ def search(search_term, page_no):
                             page_no=page_no,
                             total_page_no=total_page_no
                             )
+                            
+    
+@app.route("/recipe/<recipe_id>")
+def recipePage(recipe_id):
+    #supplies the data to display on recipe.html
+    current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    rating = int(current_recipe['ratings']['rating'])
+    serving = current_recipe["serves"]
+    method = data_functions.build_method_to_display(current_recipe)
+    user = mongo.db.users.find({'username' : g.user})
+    user_recipes_rated = []
+    for u in user:
+        user_recipes_rated = u['rated_recipes']
+    return render_template("recipe.html", 
+                            recipe=current_recipe, 
+                            rating=rating, 
+                            method=method,
+                            serves=serving,
+                            user=g.user,
+                            user_rated=user_recipes_rated,
+                            recipe_id=recipe_id)
+
+"""
+Recipe Create/Update/Delete Methods
+"""
 
 @app.route("/add_recipe")
 def add_recipe():
@@ -196,53 +222,19 @@ def insert_recipe():
     data = data_functions.build_dict(request.form, filepath)
     newid = mongo.db.recipes.insert_one(data)
     return redirect(url_for('recipePage', recipe_id = newid.inserted_id))
-    
-@app.route("/add_category")
-def add_category():
-    #supplies the data for add_category.html
-    return render_template("add_category.html", categories=mongo.db.categories.find(), user=g.user)
-    
-@app.route("/insert_category", methods=["POST"])
-def insert_category():
-    #inserts a new category into the database
-    categories =  mongo.db.categories
-    data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
-    categories.insert_one(data)
-    return redirect(url_for('add_recipe'))
+
 
 @app.route('/rate/<recipe_id>', methods=["POST"])
 def rate_recipe(recipe_id):
-    if g.user:
-        print(request.form.to_dict())
-        mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$inc': {'ratings.score': int(request.form['rating']), 'ratings.number_times_rated': 1 } })
-        mongo.db.users.update_one({"username": g.user}, {'$addToSet' : {"rated_recipes" : recipe_id}})
-        current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-        rating = int(current_recipe["ratings"]['score']) / int(current_recipe["ratings"]['number_times_rated'])
-        mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$set': {'ratings.rating': rating}})
-        return redirect(url_for('recipePage', recipe_id = recipe_id))
-    else:
-        return redirect(url_for('recipePage', recipe_id = recipe_id))
-
-    
-@app.route("/recipe/<recipe_id>")
-def recipePage(recipe_id):
-    #supplies the data to display on recipe.html
+    #Calculates the new rating based on user input.
+    #Function not accessible to users unless logged in.
+    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$inc': {'ratings.score': int(request.form['rating']), 'ratings.number_times_rated': 1 } })
+    mongo.db.users.update_one({"username": g.user}, {'$addToSet' : {"rated_recipes" : recipe_id}})
     current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    rating = int(current_recipe['ratings']['rating'])
-    serving = current_recipe["serves"]
-    method = data_functions.build_method_to_display(current_recipe)
-    user = mongo.db.users.find({'username' : g.user})
-    user_recipes_rated = []
-    for u in user:
-        user_recipes_rated = u['rated_recipes']
-    return render_template("recipe.html", 
-                            recipe=current_recipe, 
-                            rating=rating, 
-                            method=method,
-                            serves=serving,
-                            user=g.user,
-                            user_rated=user_recipes_rated,
-                            recipe_id=recipe_id)
+    rating = int(current_recipe["ratings"]['score']) / int(current_recipe["ratings"]['number_times_rated'])
+    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$set': {'ratings.rating': rating}})
+    return redirect(url_for('recipePage', recipe_id = recipe_id))
+
     
 @app.route("/edit_recipe/<recipe_id>")
 def edit_recipe(recipe_id):
@@ -311,8 +303,31 @@ def delete_recipe():
         print("user not found")
         message="User not found"
         return message
+
+"""
+Category adding
+"""
     
+@app.route("/add_category")
+def add_category():
+    #supplies the data for add_category.html
+    return render_template("add_category.html", categories=mongo.db.categories.find(), user=g.user)
     
+@app.route("/insert_category", methods=["POST"])
+def insert_category():
+    #inserts a new category into the database
+    categories =  mongo.db.categories
+    data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
+    categories.insert_one(data)
+    return redirect(url_for('add_recipe'))
+    
+
+
+
+"""
+Run the app
+"""
+
 if __name__ == '__main__':                  #prevents the app from running if imported by another file
     app.run(host=os.environ.get("IP"),
     port=int(os.environ.get("PORT")),

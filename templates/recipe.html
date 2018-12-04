@@ -1,10 +1,9 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <div class="row">
-        <h2>{{ recipe.name.capitalize() }} {% if rating > 0 %}
-            <i class="material-icons">{{ rating * "stars" }}</i></h2>
-        {% else %}
-        </h2>
+        <h2>{{ recipe.name.capitalize() }}</h2>
+        {% if rating > 0 %}
+        <p>Rating: <i class="material-icons">{{ rating * "stars" }}</i></p>
         {% endif %}
         <h6>Author: {{ recipe.author }}</h6>
     </div>
@@ -12,13 +11,12 @@
         <div class="col s3">
             {% if recipe_id in user_rated %}
             <p>You have already rated this recipe</p>
-            {% else %}
-                {% if user %}
-                    <form action="{{ url_for('rate_recipe', recipe_id=recipe._id) }}" method="POST">
-                    {% if rating == 0 %}
-                        <label>Be the first to rate this recipe!</label> {% else %}
-                        <label>Rating: </label> {% endif %}
-                        <select id="rating" name="rating">
+            {% else %} {% if user %}
+            <form action="{{ url_for('rate_recipe', recipe_id=recipe._id) }}" method="POST">
+                {% if rating == 0 %}
+                <label>Be the first to rate this recipe!</label> {% else %}
+                <label>Rating: </label> {% endif %}
+                <select id="rating" name="rating">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -26,18 +24,21 @@
                             <option value="5" selected>5</option>
                             <input type="submit" value="Rate!">
                         </select>
-                    </form>
-                {% else %}
-                <p>You must be logged in to rate recipes!</p>
-                {% endif %}
-            {% endif %}
+            </form>
+            {% else %}
+            <p><a href="#login-modal" class="modal-trigger">Login</a> to rate recipes!</p>
+            {% endif %} {% endif %}
         </div>
         <div class="col s3 offset-s1">
             <p>Serves: {{ serves }}</p>
         </div>
         <div class="col s3 offset-s1">
+            {% if user %}
             <p>Problem? <a href={{ url_for( 'edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
             <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
+            {% else %}
+            <p>Please <a href="#login-modal" class="modal-trigger">login</a> to edit or delete recipes!</p>
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -92,12 +93,36 @@
         <p>If you are sure you want to delete this recipe, please enter your account details to continue.</p>
         <form id="delete-recipe">
             <input type="hidden" name="recipe-id" value={{ recipe._id }}>
-            <input type="text" id="user-deleting" name="user-deleting" {% if user %} value={{ user }} {% endif %}>
-            <input type="password" id="password-to-delete" name="password-to-delete">
-            <label for="password-to-delete">Password: </label>
+            <div class="input-field">
+                <input type="text" id="user-deleting" name="user-deleting" {% if user %} value={{ user }} {% endif %}>
+                <label for="user-deleting">Username: </label>
+            </div>
+            <div class="input-field">
+                <input type="password" id="password-to-delete" name="password-to-delete">
+                <label for="password-to-delete">Password: </label>
+            </div>
             <button type="submit" class="waves-effect red btn">Delete Recipe</button>
         </form>
-        <div class="row" id="delete-errors-here"></div>
+        <div class="row">
+            <div class="col s12 text-centered" id="delete-errors-here"></div>
+        </div>
+        <div class="row">
+            <div class="col s12 text-centered no-display" id="delete-recipe-loader">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

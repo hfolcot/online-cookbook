@@ -115,6 +115,7 @@ $(document).ready(function() {
             }, function(data) {
                 if (data == "You were successfully logged in") {
                     $("#errors-here").text(data);
+                    $('#loader').removeClass('no-display');
                     setTimeout(function() {
                         location.reload();
                     }, 1000);
@@ -148,6 +149,7 @@ $(document).ready(function() {
                 console.log(data);
                 if (data == "User created, you will now be logged in") {
                     $("#new-errors-here").text(data);
+                    $('#new-user-loader').removeClass('no-display');
                     setTimeout(function() {
                         location.reload();
                     }, 2000);
@@ -178,6 +180,7 @@ $(document).ready(function() {
             console.log(data);
             if (data == "Recipe Deleted") {
                 $("#delete-errors-here").text(data);
+                $('#delete-recipe-loader').removeClass('no-display');
                 setTimeout(function() {
                     window.location = ('/');
                 }, 2000);
