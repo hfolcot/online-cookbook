@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 
 mongo = PyMongo(app)
 
@@ -136,12 +136,14 @@ def build_query_for_filtering(form):
     """
     Build the correct query to filter recipes by category, based on user selection
     """
+    print(form)
+    for k, v in form.items():
+        print(k)
     if len(form) == 1:
         for key, value in form.items():
-            subcatname = key
-            subcatvalue = value
-            category = "categories." + subcatname
-            query = {category : { subcatvalue : "on" }}
+            cat1 = 'categories.' + key
+            value1 = value
+            query = {cat1 : value1}
     elif len(form) == 2:
         if "main_ing" in form:
             cat1 = "categories.main_ing"
@@ -157,7 +159,8 @@ def build_query_for_filtering(form):
             value1 = str(form["health_concerns"])
             cat2 = "categories.recipe_type"
             value2 = str(form["recipe_type"])
-            query = {cat1 : { value1 : "on" }} and {cat2 : {value2: "on"}}
+        query = ( {'$and' : [{ cat1: value1 }, { cat2 : value2}]} )
+        print(query)
     elif len(form) == 3:
         cat1 = "categories.main_ing"
         value1 = str(form["main_ing"])
@@ -165,5 +168,5 @@ def build_query_for_filtering(form):
         value2 = str(form['recipe_type'])
         cat3 = "categories.health_concerns"
         value3 = str(form['health_concerns'])
-        query = { '$and': [ {cat1 : { value1 : "on" }}, {cat2 : {value2: "on"}}, {cat3 : {value3: "on"}} ] }
+        query = { '$and': [ {cat1 : value1}, {cat2 : value2}, {cat3 : value3} ] }
     return query
