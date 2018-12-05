@@ -43,6 +43,9 @@ def index():
             if search_term == "":
                 flash("Please enter a value to search")
                 return redirect(url_for('index', user=g.user))
+            for i in search_term:
+                if not i.isalnum():
+                    search_term= search_term.replace(i, "-")
             return redirect(url_for('search', 
                                      search_term=search_term,
                                      page_no=1))
@@ -93,14 +96,19 @@ def create_user():
     p = request.args.get('p')
     session.pop('user', None) #ensures there is not currently an active session
     #Check that the username is not already taken
-    user = mongo.db.users.find({"username" : u})
-    count = 0
-    for item in user:
-        count += 1
-        if count > 0:
-            message = "That username has already been taken"
+    for letter in u:
+        if not letter.isalnum():
+            message = "Invalid characters in username. Please use alphanumeric only."
             return message
-    if count == 0:
+    for letter in p:
+        if not letter.isalnum():
+            message = "Invalid characters in password. Please use alphanumeric only."
+            return message
+    user = mongo.db.users.find_one({"username" : u})
+    if user:
+        message = "That username has already been taken"
+        return message
+    else:
         mongo.db.users.insert_one({"username" : u, "password" : p})
         session['user'] = u
         message = "User created, you will now be logged in"
