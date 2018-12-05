@@ -22,9 +22,16 @@
                 <a href="{{ url_for('get_recipes', page_no=1) }}" class="waves-effect waves-light btn-large">Browse all Recipes</a>
             </div>
             <div class="divider"></div>
+            {% if user %}
             <div class="section">
                 <a href="{{url_for('add_recipe')}}" class="waves-effect waves-light btn-large"><i class="material-icons right">add</i>Add your own recipe</a>
             </div>
+            {% else %}
+            <div class="section">
+                <p>Login to add or edit recipes!</p>
+                <a href="#login-modal" class="waves-effect waves-light btn-large modal-trigger"><i class="material-icons right">person</i>Login</a>
+            </div>
+            {% endif %}
         </div>
 <!--Image (desktop)-->        
         <div class="col hidden-mobile m6 home-image">
