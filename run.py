@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
+app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 mongo = PyMongo(app)
 
 
