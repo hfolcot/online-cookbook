@@ -66,19 +66,12 @@ def sort_categories(form):
     categories = {'health_concerns': {}, 
                   'main_ing'  : {}, 
                   'recipe_type' : {}}
-    health_concerns_list = build_list("health_concerns")
-    main_ing_list = build_list("main_ing")
-    recipe_type_list = build_list("recipe_type")
-    for item, value in form.items():
-        if item in health_concerns_list:
-            category = {item : value}
-            categories['health_concerns'].update(category)
-        elif item in main_ing_list:
-            category = {item : value}
-            categories['main_ing'].update(category)
-        elif item in recipe_type_list:
-            category = {item : value}
-            categories['recipe_type'].update(category)
+    if 'recipe_type' in form:
+        categories['recipe_type'] = form['recipe_type']
+    if 'main_ing' in form:
+        categories['main_ing'] = form['main_ing']
+    if 'health_concerns' in form:
+        categories['health_concerns'] = form['health_concerns']
     return categories
 
     
@@ -96,11 +89,12 @@ def build_dict(form, filepath):
               "cook_time" : form['cook_time'],
               "serves" : form['serves'],
               "author" : form['author'],
-              "categories" : [],
+              "categories" : {},
               "ratings" : {"number_times_rated" : 0, "score" : 0, "rating" : 0}
               }
     recipe['method'] = sort_method(form)
-    recipe['categories'] = [sort_categories(form)]
+    recipe['categories'] = sort_categories(form)
+    print(recipe)
     return recipe
     
     

@@ -102,41 +102,35 @@
                     </div>
                 </div>
                 <div class="col s3">
-                    <h6>Main Ingredients</h6>
-                    {% for i in main_ing %}
-                    <p>
-                        <label>
-                            <input name="{{ i }}" type="checkbox" />
-                            <span>{{ i.capitalize() }}</span>
-                        </label>
-                    </p>
-                    {% endfor %}
+                    <h6>Main Ingredient</h6>
+                    <select name="main_ing">
+                        <option value="" selected disabled>Choose...</option>
+                        {% for i in main_ing %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
     <!--Add Category Link-->
                     <a href="{{url_for('add_category')}}" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Add a category</a>
                 </div>
 
                 <div class="col s3">
                     <h6>Recipe Type</h6>
-                    {% for i in recipe_type %}
-                    <p>
-                        <label>
-                            <input name="{{ i }}" type="checkbox" />
-                            <span>{{ i.capitalize() }}</span>
-                        </label>
-                    </p>
-                    {% endfor %}
+                    <select name="recipe_type">
+                        <option value="" selected disabled>Choose...</option>
+                        {% for i in recipe_type %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 
                 <div class="col s3">
                     <h6>Health</h6>
-                    {% for i in health_concerns %}
-                    <p>
-                        <label>
-                            <input name="{{ i }}" type="checkbox" />
-                            <span>{{ i.capitalize() }}</span>
-                        </label>
-                    </p>
-                    {% endfor %}
+                    <select name="health_concerns">
+                        <option value="" selected disabled>Choose...</option>
+                        {% for i in health_concerns %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
             

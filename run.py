@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 mongo = PyMongo(app)
 
 
@@ -243,6 +243,7 @@ def insert_recipe():
     """
     Insert a new recipe into the database
     """
+    print(request.form)
     if 'image' in request.files:
         #uploads image to static/img/uploads and creates the filepath to store in the database
         filename = images.save(request.files['image'])
