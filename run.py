@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 mongo = PyMongo(app)
 
 
@@ -61,7 +61,7 @@ def check_password():
     Check that the username is found in the database and the password is valid
     Called by script.js on click of login button in login modal
     """
-    u = request.args.get('u')
+    u = request.args.get('u').lower()
     p = request.args.get('p')
     user = mongo.db.users.find_one({"username" : u})
     if not user:
@@ -92,7 +92,7 @@ def create_user():
     Creates a new user in the database if that user does not already exist
     Called by script.js on click of create account button in create user modal
     """
-    u = request.args.get('u')
+    u = request.args.get('u').lower()
     p = request.args.get('p')
     session.pop('user', None) #ensures there is not currently an active session
     #Check that the username is not already taken
