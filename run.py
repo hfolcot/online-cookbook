@@ -109,7 +109,7 @@ def create_user():
         message = "That username has already been taken"
         return message
     else:
-        mongo.db.users.insert_one({"username" : u, "password" : p})
+        mongo.db.users.insert_one({"username" : u, "password" : p, "rated_recipes" : []})
         session['user'] = u
         message = "User created, you will now be logged in"
         return message
