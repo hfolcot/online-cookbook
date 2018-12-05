@@ -7,7 +7,7 @@
             <form action="{{ url_for('insert_category') }}" method="POST">
                 <div class="row">
                     <select required id="cat_type" name="cat_type">
-                    <option disabled selected>Choose a category heading...</option>
+                    <option value="" disabled selected>Choose a category heading...</option>
                     <option value="recipe_type">Recipe Type</option>
                     <option value="main_ing">Main Ingredients</option>
                     <option value="health_concerns">Health</option>

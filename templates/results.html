@@ -23,8 +23,8 @@
         <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
             <ul class="pagination right-align">
-                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
-                <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
+                <li id="prev-page-upper" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+                <li id="next-page-upper" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>
@@ -37,7 +37,7 @@
                 <div class="col s12 m3">
                     <div class="card small" id="{{ recipe._id }}">
                         <div class="card-image">
-                            <img src="{{ recipe.image }}">
+                            <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
                         </div>
                         <div class="card-content">
                             <p>{{ recipe.name.capitalize() }}</p>
@@ -57,8 +57,8 @@
         <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
             <ul class="pagination right-align">
-                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
-                <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
+                <li id="prev-page-lower" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+                <li id="next-page-lower" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('search',search_term=search_term, page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>

@@ -6,7 +6,7 @@
         <h2 class="page-title center-align">{{ recipe.name.capitalize() }} {% if rating > 0 %}
             <i class="material-icons">{{ rating * "stars" }}</i> {% endif %}</h2>
         <h6 class="center-align">Author: {{ recipe.author }}</h6>
-    </div
+    </div>
     
     
     <div class="row">
@@ -46,7 +46,7 @@
         </div>
         
 <!--Edit and Delete links-->
-        <div class="col s12 m3 offset-m1">
+        <div class="col s12 m3">
             {% if user %}
             <p>Problem? <a href="{{ url_for( 'edit_recipe', recipe_id=recipe._id) }}">Edit this recipe</a></p>
             <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
@@ -75,7 +75,7 @@
             </ol>
         </div>
         <div class="col m4">
-            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg"></img>
+            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg">
         </div>
     </div>
     
@@ -85,28 +85,24 @@
             <li>
                 <div class="collapsible-header"><i class="material-icons">restaurant</i>Ingredients</div>
                 <div class="collapsible-body">
-                    <span>
                         {% for i in recipe.ingredients %}
                         <p>{{ i.capitalize() }}</p>
                         {% endfor %}
-                    </span>
                 </div>
             </li>
             <li>
                 <div class="collapsible-header"><i class="material-icons">view_list</i>Method</div>
-                <div class="collapsible-body">
-                    <span>            
+                <div class="collapsible-body">          
                         <ol>
                         {% for i in method %}
-                            <li>{{ i[3:] }}</li><br>
+                            <li>{{ i[3:] }}</li>
                         {% endfor %}
                         </ol>
-                    </span>
                 </div>
             </li>
         </ul>
         <div class="col s12 center-align">
-            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg"></img>
+            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg">
         </div>
     </div>
     
