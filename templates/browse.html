@@ -1,38 +1,42 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
+    
+<!--Results count and reset button-->
     <div class="row">
-        <div class="col s8">
-            <h2><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h2>
+        <div class="col s5">
+            <p><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</p>
         </div>
-        <div class="col s3 offset-s1">
+        <div class="col s7 right-align">
             <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>Reset</a>
         </div>
     </div>
+    
+<!--Filtering select dropdowns-->    
     <div class="row">
         <form action="{{ url_for('get_recipes', page_no=1) }}" method="POST">
-            <div class="input-field col s4">
+            <div class="input-field col s12 m4">
                 <select id="main_ing" name="main_ing">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in main_ing %}
-                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    <option value="{{ i }}">{{ i.capitalize() }}</option>
                     {% endfor %}
                 </select>
                 <label>Main Ingredient</label>
             </div>
-            <div class="input-field col s4">
+            <div class="input-field col s12 m4">
                 <select id="recipe_type" name="recipe_type">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in recipe_type %}
-                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    <option value="{{ i }}">{{ i.capitalize() }}</option>
                     {% endfor %}
                 </select>
                 <label>Recipe Type</label>
             </div>
-            <div class="input-field col s4">
+            <div class="input-field col s12 m4">
                 <select id="health_concerns" name="health_concerns">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in health_concerns %}
-                    <option value={{ i }}>{{ i.capitalize() }}</option>
+                    <option value="{{ i }}">{{ i.capitalize() }}</option>
                     {% endfor %}
                 </select>
                 <label>Health</label>
@@ -40,51 +44,49 @@
             <button class="btn-small waves-effect waves-light" type='submit'>Update Results<i class="material-icons right">filter_list</i></button>
         </form>
     </div>
+    
+<!--Pagination links-->    
     <div class="row">
-        <div class="col s3">
+        <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
-        </div>
-        <div class="col s2 offset-s7">
-            <ul class="pagination">
-                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+            <ul class="pagination right-align">
+                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
                 <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
         </div>
     </div>
+    
+<!--Results-->
     <div class="row">
         <div class="col s12 results" id="results">
-
-            <div class="row">
-                {% if error %}
-                <p>{{ error }}</p>
-                {% endif %} {% for recipe in recipes %}
-
-                <div class="col s12 m3">
-                    <div class="card small" id={{ recipe._id }}>
+            {% for recipe in recipes %}
+            <div class="col s12 m3">
+                <div class="card small" id="{{ recipe._id }}">
+                    <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">
                         <div class="card-image">
-                            <img src={{ recipe.image }}>
+                            <img src="{{ recipe.image }}">
                         </div>
-                        <div class="card-content">
-                            <p>{{ recipe.name.capitalize() }}</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">See this recipe</a>
-                        </div>
+                    </a>
+                    <div class="card-content">
+                        <p>{{ recipe.name.capitalize() }}</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">See this recipe</a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
+    
+<!--Pagination Links-->    
     <div class="row">
-        <div class="col s3">
-            <p> Page {{ page_no }} of {{ total_page_no }}</p>
-        </div>
-        <div class="col s2 offset-s7">
-            <ul class="pagination">
-                <li id="prev-page" {% if page_no|int !=1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
+        <div class="col s12">
+            <ul class="pagination right-align">
+                <li id="prev-page" {% if page_no|int> 1 %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int-1)}}"><i class="material-icons">chevron_left</i>Prev</a></li>
                 <li id="next-page" {% if page_no|int !=total_page_no|int %}class="waves-effect" {% else %}class="disabled" {% endif %}><a href="{{url_for('get_recipes', page_no=page_no|int+1)}}">Next<i class="material-icons">chevron_right</i></a></li>
             </ul>
+            <p> Page {{ page_no }} of {{ total_page_no }}</p>
         </div>
     </div>
 

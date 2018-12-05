@@ -2,15 +2,17 @@ $(document).ready(function() {
     $('.sidenav').sidenav(); //Materializecss.com navigation bar
     $('select').formSelect(); //Materializecss.com select elements in forms
     $('.modal').modal(); //Materializecss.com modal for login
+    $('.collapsible').collapsible(); //Materializecss.com collapsible elements for mobile view
 
     //Button to add next ingredient on add recipe page
     var ing_count = 1;
     $('#add_ingredient').on('click', function() {
         var new_ingredient = `<div class="row ingredient">
-                                    <div class="input-field col s6 offset-s3">
-                                        <input id="ing" type="text" name="ingredients" placeholder="Enter Ingredient" class="validate">
+                                    <div class="input-field col s12 m11">
+                                        <input id="ing" type="text" name="ingredients" placeholder="Next ingredient" class="validate">
                                     </div>
                             </div>`;
+                            
         $(new_ingredient).hide().appendTo("#ingredients_container").fadeIn(300);
         if (ing_count > 0) {
             $('#remove_ing_button').removeClass('hidden');
@@ -57,11 +59,11 @@ $(document).ready(function() {
             zero = "";
         }
         var new_method = `<div class="row method">
-                                <div class="input-field col s12">
-                                    <li><textarea type="text" class="validate" name="` + zero + step_count + `" placeholder="Enter step ` + step_count + `"></textarea></li>
+                                <div class="input-field col s12 m11 offset-m1">
+                                    <input type="text" class="validate" name="` + zero + step_count + `" placeholder="Enter step ` + step_count + `">
                                 </div>
                             </div>`;
-        $(new_method).hide().appendTo("#method_container ol").fadeIn(300);
+        $(new_method).hide().appendTo("#method_container").fadeIn(300);
         if (step_count > 1) {
             $('#remove_step_button').removeClass('hidden');
         }
@@ -79,18 +81,19 @@ $(document).ready(function() {
         }
     });
 
-
-    var step_count_edit = $('#method_container ol li').length + 1
+    //the edit page requires a different count when adding steps due to already having the current recipe's steps counted
+    var step_count_edit = $('#method_container .method').length + 1
     $('#add_method_to_existing').on('click', function() {
-        var new_method_to_existing = `<div class="row method">
-                                        <div class="input-field col s12">
-                                            <li><textarea type="text" class="validate" name="` + step_count_edit + `" placeholder="Enter step ` + step_count_edit + `"></textarea></li>
+        var new_method_to_existing = `<div class="row input-field method">
+                                        <div class="input-field col s12 m11 offset-m1">
+                                            <input type="text" class="validate" name="` + step_count_edit + `" placeholder="Enter step ` + step_count_edit + `">
                                         </div>
                                     </div>`;
-        $(new_method_to_existing).hide().appendTo('#method_container ol').fadeIn(300);
+        $(new_method_to_existing).hide().appendTo('#method_container').fadeIn(300);
         step_count_edit++;
     });
 
+    //Button to remove step from method in edit_recipe.html
     $('#remove_step_from_existing').on('click', function() {
         if (step_count_edit > 2) {
             $('.method').last().fadeOut(300).remove();
@@ -102,6 +105,7 @@ $(document).ready(function() {
 
     });
 
+    //On submit of login modal: triggers the run.py login function and appends the returned message to the relevant div.
     $('#login-form').submit(function(e) {
         e.preventDefault();
         console.log("click");
@@ -126,6 +130,8 @@ $(document).ready(function() {
         }
     });
 
+
+    //On submit of new user modal: triggers the run.py create_user function and appends the returned message to the relevant div.
     $('#create-new-user').submit(function(e) {
         e.preventDefault();
         console.log('click');
@@ -160,6 +166,7 @@ $(document).ready(function() {
         }
     });
 
+    //On submit of delete recipe modal: triggers the run.py delete_recipe function and appends the returned message to the relevant div.
     $('#delete-recipe').submit(function(e) {
         e.preventDefault();
         console.log('click');

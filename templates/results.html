@@ -1,5 +1,7 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
+    
+<!--Search term and browse link-->
     <div class="row">
         <div class="col s12 m4">
             <p>Results for '{{ search_term }}'...</p>
@@ -8,13 +10,15 @@
             <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>All Recipes</a>
         </div>
     </div>
+    
+<!--Results count-->    
     <div class="row">
         <div class="col s12">
             <h4 class="page-title"><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</h4>
         </div>
-
     </div>
 
+<!--Pagination links-->
     <div class="row">
         <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>
@@ -24,18 +28,16 @@
             </ul>
         </div>
     </div>
+    
+<!--Results-->    
     <div class="row">
         <div class="col s12 results" id="results">
-
             <div class="row">
-                {% if error %}
-                <p>{{ error }}</p>
-                {% endif %} {% for recipe in recipes %}
-
+                {% for recipe in recipes %}
                 <div class="col s12 m3">
-                    <div class="card small" id={{ recipe._id }}>
+                    <div class="card small" id="{{ recipe._id }}">
                         <div class="card-image">
-                            <img src={{ recipe.image }}>
+                            <img src="{{ recipe.image }}">
                         </div>
                         <div class="card-content">
                             <p>{{ recipe.name.capitalize() }}</p>
@@ -49,6 +51,8 @@
             </div>
         </div>
     </div>
+    
+<!--Pagination links-->
     <div class="row">
         <div class="col s12">
             <p> Page {{ page_no }} of {{ total_page_no }}</p>

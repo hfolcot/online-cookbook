@@ -1,6 +1,6 @@
 import os, pymongo, json
 
-from flask import Flask, url_for, redirect, flash
+from flask import Flask
 from flask_pymongo import PyMongo
 
 
@@ -11,16 +11,21 @@ app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203
 
 mongo = PyMongo(app)
 
-categories = mongo.db.categories.find() #Creates the cursor for the collection 'Categories' in the database
-
-#Create a local variable to prevent repeated calls to the database
-cats = []
-for i in categories:
-    cats.append(i)
+"""
+Categories:
+The categories are the most heavily nested section of each recipe document.
+"""
 
 
 def build_list(cat_type):
-    #Build a list of categories for each category type
+    """
+    Build a list of categories for each of the three types of category.
+    Called by run.py on startup and used by multiple functions.
+    """
+    categories = mongo.db.categories.find()
+    cats = []
+    for i in categories:
+        cats.append(i)
     output = []
     for i in cats:
         if i["cat_type"] == cat_type:
@@ -31,13 +36,18 @@ def build_list(cat_type):
 
 
 """
-Packing up the data to send to the database
+Packing up the data to send to the database:
+Because of the nested nature of the database documents, it is necessary to build this 
+structure from user input before uploading to the database.
 """
 
 def sort_method(form):
-    #Build the list to push into the 'method' heading of the recipe dict   
+    """
+    Build the list to push into the 'method' key of the recipe dict. Items are
+    numbered automatically using the form and stored in the db as a key:value of 
+    step number : method details
+    """
     method = {}
-    print(form)
     count = 1
     for item in form:
         for item, value in form.items():
@@ -49,7 +59,10 @@ def sort_method(form):
     return method
     
 def sort_categories(form):
-    #Organise the categories to push into the recipe dict
+    """
+    Build a nested list of categories based on their type and then return to the 
+    main build_dict function 
+    """
     categories = {'health_concerns': {}, 
                   'main_ing'  : {}, 
                   'recipe_type' : {}}
@@ -71,7 +84,9 @@ def sort_categories(form):
     
     
 def build_dict(form, filepath):
-    #Build a nested dictionary from the data in the add recipe form to send to db
+    """
+    Build a full dict ready to send to the db in the correct nested format.
+    """
     flatFalseForm = form.to_dict(flat=False) #Allows access to the list of ingredients in the form - without this it will only return the first item
     recipe = {"name" : form['name'].lower(), 
               "ingredients" : flatFalseForm['ingredients'],
@@ -90,22 +105,13 @@ def build_dict(form, filepath):
     
     
 """
-Unpacking the data when retrieving from the database
+Unpacking the data when retrieving from the database.
 """
 
-def build_ings_to_display(recipe):
-    #Pair up the ingredients and amounts and return a single value for each
-    ingredients = recipe['ingredients']
-    count = 1
-    displayed_ingredients = {}
-    for i in ingredients:
-        value = (i['ing_amount_{0}'.format(count)] + " " + i['ing_name_{0}'.format(count)])
-        displayed_ingredients[count] = value
-        count += 1
-    return displayed_ingredients
-
 def build_method_to_display(recipe):
-    #Pair up the step numbers with the associated step and return a single value for each
+    """
+    Build a list to diplay on the recipe page in the correct order of steps.
+    """
     method = recipe['method']
     returned_method = []
     count = 1
@@ -123,7 +129,9 @@ Result filtering
 """
 
 def count_results(results):
-    #Count the number of results returned, minus the number marked as deleted
+    """
+    Count the number of results returned
+    """
     number_of_recipes = 0
     for result in results:
         number_of_recipes += 1
@@ -131,7 +139,9 @@ def count_results(results):
     return number_of_recipes
     
 def build_query_for_filtering(form):
-    #determines which query should be used when filtering recipes list
+    """
+    Build the correct query to filter recipes by category, based on user selection
+    """
     if len(form) == 1:
         for key, value in form.items():
             subcatname = key

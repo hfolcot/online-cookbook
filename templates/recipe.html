@@ -1,11 +1,17 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
+    
+<!--Title and Author-->    
     <div class="row">
         <h2 class="page-title center-align">{{ recipe.name.capitalize() }} {% if rating > 0 %}
             <i class="material-icons">{{ rating * "stars" }}</i> {% endif %}</h2>
         <h6 class="center-align">Author: {{ recipe.author }}</h6>
-    </div>
+    </div
+    
+    
     <div class="row">
+    
+<!--Recipe rating input-->  
         <div class="col s12 m3">
             {% if recipe_id in user_rated %}
             <p>You have already rated this recipe</p>
@@ -33,82 +39,102 @@
             <p><a href="#login-modal" class="modal-trigger">Login</a> to rate recipes!</p>
             {% endif %} {% endif %}
         </div>
+        
+<!--Serves-->
         <div class="col s12 m3 offset-m1">
             <p>Serves: {{ serves }}</p>
         </div>
+        
+<!--Edit and Delete links-->
         <div class="col s12 m3 offset-m1">
             {% if user %}
-            <p>Problem? <a href={{ url_for( 'edit_recipe', recipe_id=recipe._id) }}>Edit this recipe</a></p>
+            <p>Problem? <a href="{{ url_for( 'edit_recipe', recipe_id=recipe._id) }}">Edit this recipe</a></p>
             <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
             {% else %}
             <p>Please <a href="#login-modal" class="modal-trigger">login</a> to edit or delete recipes!</p>
             {% endif %}
         </div>
     </div>
+    
+<!--Ingredients, method, image (desktop)-->
     <div class="row hide-on-med-and-down">
+        
         <div class="col m3">
             <h5>Ingredients</h5>
-
             {% for i in recipe.ingredients %}
             <p>{{ i.capitalize() }}</p>
             {% endfor %}
-
         </div>
+        
         <div class="col m5">
             <h5>Method</h5>
             <ol>
                 {% for i in method %}
                 <li>{{ i[3:] }}</li>
-
                 {% endfor %}
             </ol>
         </div>
         <div class="col m4">
-            <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
+            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg"></img>
         </div>
     </div>
+    
+<!--Ingredients, method and image(mobile)-->    
     <div class="row hide-on-large-only">
         <ul class="collapsible">
             <li>
                 <div class="collapsible-header"><i class="material-icons">restaurant</i>Ingredients</div>
-                <div class="collapsible-body"><span>
-          {% for i in recipe.ingredients %}
-            <p>{{ i.capitalize() }}</p>
-            {% endfor %}
-            </span></div>
+                <div class="collapsible-body">
+                    <span>
+                        {% for i in recipe.ingredients %}
+                        <p>{{ i.capitalize() }}</p>
+                        {% endfor %}
+                    </span>
+                </div>
             </li>
             <li>
                 <div class="collapsible-header"><i class="material-icons">view_list</i>Method</div>
-                <div class="collapsible-body"><span>            <ol>
-                {% for i in method %}
-                <li>{{ i[3:] }}</li><br>
-
-                {% endfor %}
-            </ol></span></div>
+                <div class="collapsible-body">
+                    <span>            
+                        <ol>
+                        {% for i in method %}
+                            <li>{{ i[3:] }}</li><br>
+                        {% endfor %}
+                        </ol>
+                    </span>
+                </div>
             </li>
         </ul>
-        <div class="col s12">
-            <img src={{ recipe.image }} title={{ recipe.name }} alt={{ recipe.name }} class="recipeimg"></img>
+        <div class="col s12 center-align">
+            <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg"></img>
         </div>
     </div>
+    
+<!--Categories-->
     <div class="row">
         <div class="col s12 m4 center-align">
             <h6>Main ingredient:</h6>
-            {% for i, j in recipe.categories[0].main_ing.items() %} {% if j == "on" %}
-            <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
-            {% endif %} {% endfor %}
+            {% for i, j in recipe.categories[0].main_ing.items() %} 
+                {% if j == "on" %}
+                <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
+                {% endif %} 
+            {% endfor %}
         </div>
         <div class="col s12 m4 center-align">
             <h6>Recipe type :</h6>
-            {% for i, j in recipe.categories[0].recipe_type.items() %} {% if j == "on" %}
-            <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
-            {% endif %} {% endfor %}
+            {% for i, j in recipe.categories[0].recipe_type.items() %} 
+                {% if j == "on" %}
+                <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
+                {% endif %} 
+            {% endfor %}
         </div>
         <div class="col s12 m4 center-align">
             <h6>Health:</h6>
-            {% for i, j in recipe.categories[0].health_concerns.items() %} {% if j == "on" %}
-            <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
-            {% endif %} {% endfor %}
+            {% for i, j in recipe.categories[0].health_concerns.items() %} 
+                {% if j == "on" %}
+                <p class="ticked_categories"><i class="material-icons">check</i> {{ i.capitalize() }}</p>
+                {% endif %} 
+            {% endfor %}
         </div>
     </div>
 
@@ -120,9 +146,9 @@
         <h4>Delete Recipe</h4>
         <p>If you are sure you want to delete this recipe, please enter your account details to continue.</p>
         <form id="delete-recipe">
-            <input type="hidden" name="recipe-id" value={{ recipe._id }}>
+            <input type="hidden" name="recipe-id" value="{{ recipe._id }}">
             <div class="input-field">
-                <input type="text" id="user-deleting" name="user-deleting" {% if user %} value={{ user }} {% endif %}>
+                <input type="text" id="user-deleting" name="user-deleting" {% if user %} value="{{ user }}" {% endif %}>
                 <label for="user-deleting">Username: </label>
             </div>
             <div class="input-field">
@@ -133,7 +159,7 @@
         </form>
         <div class="row">
             <div class="col s10 m4 offset-m4" id="delete-errors-here"></div>
-            <div class="col s2 m2 offset-m5 no-display" id="delete-recipe-loader">
+            <div class="col s2 m2 no-display" id="delete-recipe-loader">
                 <div class="preloader-wrapper small active">
                     <div class="spinner-layer spinner-blue-only">
                         <div class="circle-clipper left">

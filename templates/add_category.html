@@ -1,11 +1,12 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container center-align">
     <h3 class="page-title">Add a Category</h3>
+    
     <div class="row">
         <div class="input-field col s10 offset-s1 m4 offset-m4">
             <form action="{{ url_for('insert_category') }}" method="POST">
                 <div class="row">
-                <select required id="cat_type" name="cat_type">
+                    <select required id="cat_type" name="cat_type">
                     <option disabled selected>Choose a category heading...</option>
                     <option value="recipe_type">Recipe Type</option>
                     <option value="main_ing">Main Ingredients</option>
@@ -13,17 +14,12 @@
                 </select>
                 </div>
                 <div class="row">
-                <input placeholder="Give your category a name" name="cat_name" id="cat_name" type="text" class="validate" required>
+                    <input placeholder="Give your category a name" name="cat_name" id="cat_name" type="text" class="validate" required>
                 </div>
                 <div class="row">
-                <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
+                    <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
                 </div>
             </form>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col s2">
-
         </div>
     </div>
 </main>

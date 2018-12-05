@@ -1,7 +1,11 @@
 {% extends 'base.html'%} {% block content %}
 <main class="center-align container">
+
+<!--Page Title-->    
     <h2 class="page-title">Welcome to Your Online Cookbook!</h2>
+    
     <div class="row">
+<!--Search form, browse, and add/login buttons-->
         <div class="col s12 m6">
             <div class="search-form">
                 <form method="POST">
@@ -20,13 +24,15 @@
             <div class="divider"></div>
             <div class="section">
                 <a href="{{url_for('add_recipe')}}" class="waves-effect waves-light btn-large"><i class="material-icons right">add</i>Add your own recipe</a>
-
             </div>
         </div>
+<!--Image (desktop)-->        
         <div class="col hidden-mobile m6 home-image">
             <a href="{{ url_for('get_recipes', page_no=1) }}"><img src="/static/img/indeximg.jpg"></a>
         </div>
     </div>
+    
+<!--Image(mobile)-->    
     <div class="row hide-on-med-and-up home-image">
         <a href="{{ url_for('get_recipes', page_no=1) }}"><img src="/static/img/indeximg.jpg"></a>
     </div>
