@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 
 mongo = PyMongo(app)
 
@@ -94,7 +94,6 @@ def build_dict(form, filepath):
               }
     recipe['method'] = sort_method(form)
     recipe['categories'] = sort_categories(form)
-    print(recipe)
     return recipe
     
     
@@ -136,9 +135,6 @@ def build_query_for_filtering(form):
     """
     Build the correct query to filter recipes by category, based on user selection
     """
-    print(form)
-    for k, v in form.items():
-        print(k)
     if len(form) == 1:
         for key, value in form.items():
             cat1 = 'categories.' + key
@@ -160,7 +156,6 @@ def build_query_for_filtering(form):
             cat2 = "categories.recipe_type"
             value2 = str(form["recipe_type"])
         query = ( {'$and' : [{ cat1: value1 }, { cat2 : value2}]} )
-        print(query)
     elif len(form) == 3:
         cat1 = "categories.main_ing"
         value1 = str(form["main_ing"])

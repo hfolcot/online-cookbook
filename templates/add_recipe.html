@@ -102,28 +102,20 @@
                     </div
                 </div>
             </div>
-                
-    <!--Add category link-->
-            <div class="row">
-                <div class="col s6"><a href="{{url_for('add_category')}}" target="_blank" class="waves-effect waves-light btn"><i class="material-icons right">add</i>Add a category</a></div>
-            </div>
-                
             <div class="row">
                 <div class="col s3">
                     <h6>Main Ingredient</h6>
-                    <select name="main_ing">
+                    <select name="main_ing" id="main_ing">
                         <option value="" selected disabled>Choose...</option>
                         {% for i in main_ing %}
                         <option value="{{ i }}">{{ i.capitalize() }}</option>
                         {% endfor %}
                     </select>
-
-                    
                 </div>
 
                 <div class="col s3">
                     <h6>Recipe Type</h6>
-                    <select name="recipe_type">
+                    <select name="recipe_type" id="recipe_type">
                         <option value="" selected disabled>Choose...</option>
                         {% for i in recipe_type %}
                         <option value="{{ i }}">{{ i.capitalize() }}</option>
@@ -133,7 +125,7 @@
                 
                 <div class="col s3">
                     <h6>Health</h6>
-                    <select name="health_concerns">
+                    <select name="health_concerns" id="health_concerns">
                         <option value="" selected disabled>Choose...</option>
                         {% for i in health_concerns %}
                         <option value="{{ i }}">{{ i.capitalize() }}</option>
@@ -141,7 +133,7 @@
                     </select>
                 </div>
             </div>
-
+            
 <!--Submit button-->
             <div class="row center-align">
                 <div class="col s12 m3 offset-m9">
@@ -152,4 +144,6 @@
         </form>
     </div>
 </main>
+
+  
 {% endblock %}

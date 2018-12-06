@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 mongo = PyMongo(app)
 
 
@@ -109,7 +109,9 @@ def create_user():
         message = "That username has already been taken"
         return message
     else:
-        mongo.db.users.insert_one({"username" : u, "password" : p, "rated_recipes" : []})
+        mongo.db.users.insert_one({"username" : u,
+                                   "password" : p, 
+                                   "rated_recipes" : []})
         session['user'] = u
         message = "User created, you will now be logged in"
         return message
@@ -133,24 +135,44 @@ def get_recipes(page_no):
     """
     Reset browse.html page to show all recipes in paginated list
     """
-    skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
+    selected_recipe_type = None
+    selected_main_ing = None
+    selected_health_concerns = None
+    #this is the number of results to skip when searching in mongodb to find 
+    #the next page's worth of results:
+    skip_count = (int(page_no) - 1) * 8 
     if request.method == 'POST':
         #User has selected to filter by category
         form = request.form.to_dict()
+        print(form)
+        if 'recipe_type'in form:
+            selected_recipe_type = form['recipe_type']
+        if 'main_ing' in form:
+            selected_main_ing = form['main_ing']
+        if 'health_concerns' in form:
+            selected_health_concerns = form['health_concerns']
         if len(form) == 0:
             #catch for if user clicks update button without selecting a filtering option
             flash("Please choose a category to filter")
             return redirect(url_for('get_recipes', page_no=1))
         query = data_functions.build_query_for_filtering(form)
-        non_paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]) #To give to the count_results function to count the total number of results
-        results_count = data_functions.count_results(non_paginated_results) #Count the total number of results
-        paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8) #Returns only 8 results to display on the given page number.
+        #To give to the count_results function to count the total number of results:
+        non_paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), 
+                                                                 ("_id", pymongo.ASCENDING)]) 
+        #Count the total number of results:
+        results_count = data_functions.count_results(non_paginated_results)
+        #To return only 8 results to display on the given page number:
+        paginated_results = mongo.db.recipes.find(query).sort([("rating", pymongo.DESCENDING), 
+                                                               ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8) 
     else:
         #Show all results (paginated)
         results = mongo.db.recipes.find()
         results_count = data_functions.count_results(results)
-        paginated_results = mongo.db.recipes.find().sort([("ratings.rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
-    total_page_no=int(math.ceil(results_count/8.0)) #calculates how many pages of results will be required
+        paginated_results = mongo.db.recipes.find().sort([("ratings.rating", pymongo.DESCENDING), 
+                                                        ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    #calculate how many pages of results will be required:
+    total_page_no=int(math.ceil(results_count/8.0))
+    #For the html page to show 0 of 0 pages if no results:
     if results_count == 0:
         page_no = 0
     return render_template("browse.html", 
@@ -161,7 +183,10 @@ def get_recipes(page_no):
                             results_count = results_count,
                             user=g.user,
                             page_no=page_no,
-                            total_page_no=total_page_no
+                            total_page_no=total_page_no,
+                            selected_recipe_type = selected_recipe_type,
+                            selected_main_ing = selected_main_ing,
+                            selected_health_concerns = selected_health_concerns
                             )
 
 
@@ -169,16 +194,21 @@ def get_recipes(page_no):
 @app.route("/search/<search_term>/<page_no>", methods=["GET", "POST"])
 def search(search_term, page_no):
     """
-    Runs the search query based on user input and returns a list of paginated results.
+    Runs the search query based on user input and returns a list of paginated 
+    results.
     """
     mongo.db.recipes.create_index([('name', 'text')])
     query = ( { "$text": { "$search": search_term } } )
     #return all results and then count how many there are
     results = mongo.db.recipes.find(query)
     results_count = data_functions.count_results(results)
-    #split the results into blocks of 8 depending on which page number has been requested
-    skip_count = (int(page_no) - 1) * 8 #this is the number of results to skip when searching in mongodb to find the next page's worth of results
-    paginated_results = mongo.db.recipes.find(query).sort([("ratings.rating", pymongo.DESCENDING), ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
+    #Split the results into blocks of 8 depending on which page number has been 
+    #requested.
+    #Skip_count is the number of results to skip when searching in mongodb to 
+    #find the next page's worth of results
+    skip_count = (int(page_no) - 1) * 8
+    paginated_results = mongo.db.recipes.find(query).sort([("ratings.rating", pymongo.DESCENDING), 
+                                                           ("_id", pymongo.ASCENDING)]).skip(skip_count).limit(8)
     total_page_no=int(math.ceil(results_count/8.0))
     if results_count == 0:
         page_no = 0
@@ -224,7 +254,8 @@ Recipe Create/Update/Delete Methods
 @app.route("/add_recipe")
 def add_recipe():
     """
-    Supplies the data for add_recipe.html, will only return data if user is logged in
+    Supplies the data for add_recipe.html, will only return data if user is 
+    logged in
     """
     if g.user: 
         health_concerns_list = data_functions.build_list("health_concerns")
@@ -236,6 +267,7 @@ def add_recipe():
                                 main_ing=main_ing_list, 
                                 user=g.user)
     else:
+        flash("You must be logged in to add a recipe")
         return redirect(url_for('index'))
     
 @app.route("/insert_recipe", methods=["POST"])
@@ -243,9 +275,9 @@ def insert_recipe():
     """
     Insert a new recipe into the database
     """
-    print(request.form)
     if 'image' in request.files:
-        #uploads image to static/img/uploads and creates the filepath to store in the database
+        #uploads image to static/img/uploads and creates the filepath to store 
+        #in the database
         filename = images.save(request.files['image'])
         filepath = "../static/img/uploads/" + filename
     else:
@@ -261,11 +293,17 @@ def rate_recipe(recipe_id):
     Calculates the new rating based on user input.
     Function not accessible to users unless logged in.
     """
-    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$inc': {'ratings.score': int(request.form['rating']), 'ratings.number_times_rated': 1 } })
-    mongo.db.users.update_one({"username": g.user}, {'$addToSet' : {"rated_recipes" : recipe_id}})
+    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, 
+                                { '$inc': 
+                                    {'ratings.score': int(request.form['rating']), 
+                                    'ratings.number_times_rated': 1 } })
+    mongo.db.users.update_one({"username": g.user}, 
+                                    {'$addToSet' : 
+                                        {"rated_recipes" : recipe_id}})
     current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     rating = int(current_recipe["ratings"]['score']) / int(current_recipe["ratings"]['number_times_rated'])
-    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, { '$set': {'ratings.rating': rating}})
+    mongo.db.recipes.update_one({"_id": ObjectId(recipe_id)}, 
+                                { '$set': {'ratings.rating': rating}})
     return redirect(url_for('recipePage', recipe_id = recipe_id))
 
     
@@ -298,7 +336,8 @@ def update_recipe(recipe_id):
     Updates the edited recipe in the database
     """
     if 'image' in request.files:
-        #uploads image to static/img/uploads and creates the filepath to store in the database
+        #uploads image to static/img/uploads and creates the filepath to store 
+        #in the database
         filename = images.save(request.files['image'])
         filepath = "../static/img/uploads/" + filename
     elif 'filepath' in request.form:
@@ -313,10 +352,13 @@ def update_recipe(recipe_id):
 @app.route('/delete_recipe', methods=['GET'])
 def delete_recipe():
     """
-    Called by the #delete-recipe button on recipe.html(#delete-recipe-modal), which runs a get request through script.js.
-    The user can only do this if they are logged in and they must confirm their credentials.
-    Once a password has been entered and validated, the recipe document in the db will be updated with 
-    a 'deleted : on' and the name of the user who has authorised the delete.
+    Called by the #delete-recipe button on recipe.html(#delete-recipe-modal), 
+    which runs a get request through script.js.
+    The user can only do this if they are logged in and they must confirm their 
+    credentials.
+    Once a password has been entered and validated, the recipe document in the 
+    db will be updated with a 'deleted : on' and the name of the user who has 
+    authorised the delete.
     """
     user = request.args.get('user')
     password = request.args.get('password')
@@ -331,9 +373,15 @@ def delete_recipe():
     #check password and delete recipe if correct
     if password == username['password']:
         document =  recipes.find_one({'_id' : ObjectId(recipe_id)})
-        deleted_recipes.insert_one(document) #Copies the recipe to the deleted collection
-        deleted_recipes.update({'_id': ObjectId(recipe_id)}, {"$set" :{"deleted" : "on", "deleted_by" : user}}) #adds details of who has deleted the recipe
-        recipes.remove({'_id': ObjectId(recipe_id)}) #removes the recipe from the active recipes collection
+        #Copy the recipe to the deleted collection:
+        deleted_recipes.insert_one(document)
+        #add details of who has deleted the recipe:
+        deleted_recipes.update({'_id': ObjectId(recipe_id)}, 
+                                                {"$set" :
+                                                    {"deleted" : "on", 
+                                                    "deleted_by" : user}})
+        #remove the recipe from the active recipes collection:    
+        recipes.remove({'_id': ObjectId(recipe_id)})
         message = "Recipe Deleted"
         return message
     else:
@@ -350,17 +398,39 @@ def add_category():
     """
     Supplies the data for add_category.html
     """
-    return render_template("add_category.html", categories=mongo.db.categories.find(), user=g.user)
+    if g.user:
+        return render_template("add_category.html",
+                            health_concerns=health_concerns_list, 
+                            recipe_type=recipe_type_list, 
+                            main_ing=main_ing_list,  
+                            user=g.user)
+    else:
+        flash("You must be logged in to manage categories")
+        return redirect(url_for('index'))
     
 @app.route("/insert_category", methods=["POST"])
 def insert_category():
     """
     Inserts a new category into the database
     """
-    categories =  mongo.db.categories
-    data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
-    categories.insert_one(data)
-    return redirect(url_for('add_recipe'))
+    if request.form['cat_type'] == '':
+        flash("Please select a category type")
+        return redirect(url_for('add_category'))
+    else:
+        data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
+        mongo.db.categories.insert_one(data)
+        return redirect(url_for('add_recipe'))
+    
+@app.route("/delete_category", methods=["POST"])
+def delete_category():
+    """
+    Removes a category from the database
+    """
+    for k, v in request.form.items():
+        mongo.db.categories.delete_one({"cat_name" : v})
+    flash("Category deleted")
+    return redirect(url_for('index'))
+    
     
 """
 404
@@ -373,8 +443,7 @@ def page_not_found(error):
 """
 Run the app
 """
-
-if __name__ == '__main__':   #prevents the app from running if imported by another file
+if __name__ == '__main__':   
     app.run(host=os.environ.get("IP"),
     port=int(os.environ.get("PORT")),
-    debug=False)
+    debug=True)

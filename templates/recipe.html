@@ -44,17 +44,16 @@
         <div class="col s12 m3 offset-m1">
             <p>Serves: {{ serves }}</p>
         </div>
+
         
-<!--Edit and Delete links-->
+<!--Categories-->
         <div class="col s12 m3 offset-m1">
-            {% if user %}
-            <p>Problem? <a href="{{ url_for( 'edit_recipe', recipe_id=recipe._id) }}">Edit this recipe</a></p>
-            <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
-            {% else %}
-            <p>Please <a href="#login-modal" class="modal-trigger">login</a> to edit or delete recipes!</p>
-            {% endif %}
+            <p>Main ingredient: {% if recipe.categories.main_ing %}{{ recipe.categories.main_ing.capitalize() }}{% endif %}</p>
+            <p>Recipe type : {% if recipe.categories.recipe_type %}{{ recipe.categories.recipe_type.capitalize() }}{% endif %}</p>
+            <p>Health: {% if recipe.categories.health_concerns %}{{ recipe.categories.health_concerns.capitalize() }}{% endif %}</p>
         </div>
     </div>
+    
     
 <!--Ingredients, method, image (desktop)-->
     <div class="row hide-on-med-and-down">
@@ -105,29 +104,17 @@
             <img src="{{ recipe.image }}" title="{{ recipe.name }}" alt="{{ recipe.name }}" class="recipeimg">
         </div>
     </div>
-    
-<!--Categories-->
-    <div class="row">
-        <div class="col s12 m4 center-align">
-            <h6>Main ingredient:</h6>
-                {% if recipe.categories.main_ing %}
-                <p class="ticked_categories"><i class="material-icons">check</i> {{ recipe.categories.main_ing.capitalize() }}</p>
-                {% endif %}
-        </div>
-        <div class="col s12 m4 center-align">
-            <h6>Recipe type :</h6>
-                {% if recipe.categories.recipe_type %}
-                <p class="ticked_categories"><i class="material-icons">check</i> {{ recipe.categories.recipe_type.capitalize() }}</p>
-                {% endif %}
-        </div>
-        <div class="col s12 m4 center-align">
-            <h6>Health:</h6>
-                {% if recipe.categories.health_concerns %}
-                <p class="ticked_categories"><i class="material-icons">check</i> {{ recipe.categories.health_concerns.capitalize() }}</p>
-                {% endif %}
-        </div>
-    </div>
 
+        
+<!--Edit and Delete links-->
+        <div class="col s12 m3 offset-m1">
+            {% if user %}
+            <p>Problem? <a href="{{ url_for( 'edit_recipe', recipe_id=recipe._id) }}">Edit this recipe</a></p>
+            <p><a href="#delete-recipe-modal" class="modal-trigger">Delete this recipe</a></p>
+            {% else %}
+            <p>Please <a href="#login-modal" class="modal-trigger">login</a> to edit or delete recipes!</p>
+            {% endif %}
+        </div>
 </main>
 
 <!--Delete Recipe Modal-->

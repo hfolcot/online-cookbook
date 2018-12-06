@@ -1,13 +1,16 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container center-align">
-    <h3 class="page-title">Add a Category</h3>
+    
     
     <div class="row">
-        <div class="input-field col s10 offset-s1 m4 offset-m4">
+        
+        <div class="input-field col s12 m5 offset-m1 center-align addremove_category">
+            <div class="col s11">
+            <h3 class="page-title">Add a Category</h3>
             <form action="{{ url_for('insert_category') }}" method="POST">
                 <div class="row">
-                    <select required id="cat_type" name="cat_type">
-                    <option value="" disabled selected>Choose a category heading...</option>
+                    <select id="cat_type" name="cat_type">
+                    <option value="" selected>Choose a category heading...</option>
                     <option value="recipe_type">Recipe Type</option>
                     <option value="main_ing">Main Ingredients</option>
                     <option value="health_concerns">Health</option>
@@ -17,7 +20,44 @@
                     <input placeholder="Give your category a name" name="cat_name" id="cat_name" type="text" class="validate" required>
                 </div>
                 <div class="row">
-                    <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
+                    <button class="btn waves-effect waves-light" type="submit">Add<i class="material-icons right">add</i></button>
+                </div>
+                <div id="cat-errors-here"></div>
+            </form>
+            </div>
+        </div>
+        <div class="col s12 m1 center-align hidden-mobile add-or-delete">OR</div>
+        <div class="input-field col s12 m5 center-align addremove_category">
+            <h3 class="page-title">Delete a Category</h3>
+            <form action="{{ url_for('delete_category') }}" method="POST">
+                <div class="col s12">
+                    <select name="main_ing" id="delete_main_ing">
+                        <option value="" selected disabled>Main Ingredient</option>
+                        {% for i in main_ing %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col s12">
+                    <select name="recipe_type" id="delete_recipe_type">
+                        <option value="" selected disabled>Recipe Type</option>
+                        {% for i in recipe_type %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col s12">
+                    <select name="health_concerns" id="delete_health_concerns">
+                        <option value="" selected disabled>Health</option>
+                        {% for i in health_concerns %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" type="submit">Delete<i class="material-icons right">remove</i></button>
                 </div>
             </form>
         </div>

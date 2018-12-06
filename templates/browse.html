@@ -4,7 +4,13 @@
 <!--Results count and reset button-->
     <div class="row">
         <div class="col s5">
-            <p><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found</p>
+            <p><span id="results_count">{{ results_count }}</span> Recipe{% if ((results_count > 1) or (results_count == 0)) %}s{% endif %} found
+            {% if selected_health_concerns or selected_main_ing or selected_recipe_type %}for
+            {% if selected_main_ing %} {{ selected_main_ing.capitalize() }}...{% endif %}
+            {% if selected_recipe_type %} {{ selected_recipe_type.capitalize() }}...{% endif %}
+            {% if selected_health_concerns %} {{ selected_health_concerns.capitalize() }} {% endif %}
+            {% endif %}
+            </p>
         </div>
         <div class="col s7 right-align">
             <a href="{{ url_for('get_recipes', page_no=1) }}" class="btn-small waves-effect waves-light"><i class="material-icons right">sync</i>Reset</a>
@@ -44,7 +50,6 @@
             <button class="btn-small waves-effect waves-light" type='submit'>Update Results<i class="material-icons right">filter_list</i></button>
         </form>
     </div>
-    
 <!--Pagination links-->    
     <div class="row">
         <div class="col s12">
