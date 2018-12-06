@@ -38,6 +38,13 @@ nav,
     padding: 10px;
 }
 
+
+.dropdown-content {
+/*Opens the menu below the nav bar instead of in front*/
+    top: -65px;
+    width: auto!important;
+}
+
 /************************************BUTTONS*/
 
 .btn,
@@ -98,6 +105,17 @@ input::placeholder {
     color: red;
 }
 
+/******************************CATEGORIES*/
+
+.add-or-delete {
+        margin-top: 180px;
+}
+
+.addremove_category {
+
+    border: 1px outset black;
+    box-shadow: 5px 10px;
+}
 
 /*******************************RECIPES*/
 

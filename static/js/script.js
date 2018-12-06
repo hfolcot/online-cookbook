@@ -3,6 +3,8 @@ $(document).ready(function() {
     $('select').formSelect(); //Materializecss.com select elements in forms
     $('.modal').modal(); //Materializecss.com modal for login
     $('.collapsible').collapsible(); //Materializecss.com collapsible elements for mobile view
+    $('.dropdown-trigger').dropdown(); //materializecss.com dropdown menu (navbar)
+    
 
     //Button to add next ingredient on add recipe page
     var ing_count = 1;
@@ -12,7 +14,7 @@ $(document).ready(function() {
                                         <input id="ing" type="text" name="ingredients" placeholder="Next ingredient" class="validate">
                                     </div>
                             </div>`;
-                            
+
         $(new_ingredient).hide().appendTo("#ingredients_container").fadeIn(300);
         if (ing_count > 0) {
             $('#remove_ing_button').removeClass('hidden');
@@ -108,7 +110,6 @@ $(document).ready(function() {
     //On submit of login modal: triggers the run.py login function and appends the returned message to the relevant div.
     $('#login-form').submit(function(e) {
         e.preventDefault();
-        console.log("click");
         if (!$('input[name="username"]').val()) {
             $("#errors-here").text("Please enter a username")
         }
@@ -134,25 +135,17 @@ $(document).ready(function() {
     //On submit of new user modal: triggers the run.py create_user function and appends the returned message to the relevant div.
     $('#create-new-user').submit(function(e) {
         e.preventDefault();
-        console.log('click');
-        console.log($('input[name="newpassword"]').val())
-        console.log($('input[name="repeatpassword"]').val())
         if (!$('input[name="newusername"]').val()) {
             $("#new-errors-here").text("Please enter a username");
-        }
-        else {
-            console.log("username ok");
         }
         if ($('input[name="newpassword"]').val() != $('input[name="repeatpassword"]').val()) {
             $("#new-errors-here").text("Passwords don't match");
         }
         else {
-            console.log("password ok");
             $.get('/create_user', {
                 u: $('input[name="newusername"]').val(),
                 p: $('input[name="newpassword"]').val()
             }, function(data) {
-                console.log(data);
                 if (data == "User created, you will now be logged in") {
                     $("#new-errors-here").text(data);
                     $('#new-user-loader').removeClass('no-display');
@@ -169,22 +162,15 @@ $(document).ready(function() {
     //On submit of delete recipe modal: triggers the run.py delete_recipe function and appends the returned message to the relevant div.
     $('#delete-recipe').submit(function(e) {
         e.preventDefault();
-        console.log('click');
         if (!$('input[name="user-deleting"]').val()) {
             $("#delete-errors-here").text("Please enter a username");
         }
-        else {
-            console.log("username ok");
-        }
         var recipe_id = $('input[name="recipe-id"]').val()
-        console.log(recipe_id)
-        console.log("about to get")
         $.get('/delete_recipe', {
             user: $('input[name="user-deleting"]').val(),
             password: $('input[name="password-to-delete"]').val(),
             recipe_id: recipe_id
         }, function(data) {
-            console.log(data);
             if (data == "Recipe Deleted") {
                 $("#delete-errors-here").text(data);
                 $('#delete-recipe-loader').removeClass('no-display');
@@ -197,6 +183,7 @@ $(document).ready(function() {
         return false;
 
     });
+
 
 
 });

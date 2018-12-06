@@ -28,7 +28,11 @@
                 <li><a href="{{ url_for('get_recipes', page_no=1) }}">Browse</a></li>
                 <li>|</li>
                 {% if user %}
-                <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
+                <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Manage</a></li>
+                <ul id='dropdown1' class='dropdown-content'>
+                    <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
+                    <li><a href="{{url_for('add_category')}}">Categories</a></li>
+                </ul>
                 <li>|</li>
                 <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
                 {% else %}
