@@ -275,18 +275,22 @@ def edit_recipe(recipe_id):
     Supplies the data to display on edit_recipe.html
     Function not accessible to users unless logged in.
     """
-    current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    health_concerns_list = data_functions.build_list("health_concerns")
-    recipe_type_list = data_functions.build_list("recipe_type")
-    main_ing_list = data_functions.build_list("main_ing")
-    method = data_functions.build_method_to_display(current_recipe)
-    return render_template("edit_recipe.html", 
-                            recipe=current_recipe, 
-                            health_concerns=health_concerns_list, 
-                            recipe_type=recipe_type_list, 
-                            main_ing=main_ing_list, 
-                            method=method,
-                            user=g.user)
+    if g.user:
+        current_recipe =  mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+        health_concerns_list = data_functions.build_list("health_concerns")
+        recipe_type_list = data_functions.build_list("recipe_type")
+        main_ing_list = data_functions.build_list("main_ing")
+        method = data_functions.build_method_to_display(current_recipe)
+        return render_template("edit_recipe.html", 
+                                recipe=current_recipe, 
+                                health_concerns=health_concerns_list, 
+                                recipe_type=recipe_type_list, 
+                                main_ing=main_ing_list, 
+                                method=method,
+                                user=g.user)
+    else:
+        flash("You must be logged in to edit recipes")
+        return redirect(url_for('index'))
     
 @app.route("/update_recipe/<recipe_id>", methods=["POST"])
 def update_recipe(recipe_id):
@@ -361,10 +365,10 @@ def insert_category():
 """
 404
 """
-@app.route('/404.html')
-def page_not_found():
-    return render_template('404.html')
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 """
 Run the app
