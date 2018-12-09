@@ -88,7 +88,7 @@ $(document).ready(function() {
     });
 
     //the edit page requires a different count when adding steps due to already having the current recipe's steps counted
-    var step_count_edit = $('#method_container .method').length + 1
+    var step_count_edit = $('#method_container .method').length + 1;
 
     $('#add_method_to_existing').on('click', function() {
         if (step_count_edit > 1) {
@@ -118,7 +118,7 @@ $(document).ready(function() {
     $('#login-form').submit(function(e) {
         e.preventDefault();
         if (!$('input[name="username"]').val()) {
-            $("#errors-here").text("Please enter a username")
+            $("#errors-here").text("Please enter a username");
         }
         else {
             $.get('/login', {
@@ -172,7 +172,7 @@ $(document).ready(function() {
         if (!$('input[name="user-deleting"]').val()) {
             $("#delete-errors-here").text("Please enter a username");
         }
-        var recipe_id = $('input[name="recipe-id"]').val()
+        var recipe_id = $('input[name="recipe-id"]').val();
         $.get('/delete_recipe', {
             user: $('input[name="user-deleting"]').val(),
             password: $('input[name="password-to-delete"]').val(),
