@@ -418,6 +418,7 @@ def insert_category():
     else:
         data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
         mongo.db.categories.insert_one(data)
+        flash("Category Added")
         return redirect(url_for('index'))
     
 @app.route("/delete_category", methods=["POST"])
