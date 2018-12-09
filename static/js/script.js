@@ -104,7 +104,6 @@ $(document).ready(function() {
 
     //Button to remove step from method in edit_recipe.html
     $('#remove_step_from_existing').on('click', function() {
-        console.log(step_count_edit)
         if (step_count_edit > 2) {
             $('.method').last().fadeOut(300).remove();
             step_count_edit--;
