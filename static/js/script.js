@@ -9,13 +9,24 @@ $(document).ready(function() {
     //Button to add next ingredient on add recipe page
     var ing_count = 1;
     $('#add_ingredient').on('click', function() {
-        var new_ingredient = `<div class="row ingredient">
-                                    <div class="input-field col s12 m11">
-                                        <input id="ing" type="text" name="ingredients" placeholder="Next ingredient" class="validate">
+        //check to see which page is being used before assigning the variable:
+        //this button appears on both add_recipe.html and edit_recipe.html but the 
+        //html varies slightly on each page.
+        if ($('.page-title').text() == 'Add a Recipe') {
+            var new_ingredient = `<div class="col s12 input-field ingredient white-background z-depth-2">
+                                <input id="ing" type="text" name="ingredients" placeholder="Next ingredient..." class="validate" required>
+                        </div>`;
+        }
+        else {
+            new_ingredient = `<div class="row">
+                                    <div class="col s12 input-field ingredient white-background z-depth-2">
+                                        <input id="ing" type="text" name="ingredients" placeholder="Next ingredient..." class="validate" required>
                                     </div>
-                            </div>`;
-
+                                </div>`;
+        }
         $(new_ingredient).hide().appendTo("#ingredients_container").fadeIn(300);
+        //the remove button should not be available if there are no elements to 
+        //remove
         if (ing_count > 0) {
             $('#remove_ing_button').removeClass('hidden');
         }
@@ -23,6 +34,7 @@ $(document).ready(function() {
         ing_count++;
 
     });
+
 
     //Button to remove ingredient on add_recipe.html
     $('#remove_ingredient').on('click', function() {
@@ -35,17 +47,10 @@ $(document).ready(function() {
         }
     });
 
-    //Reveal remove button on edit_recipe.html
-    $('.edit_new_ingredient').on('click', function() {
-        $('#remove_ing_button').removeClass('hidden');
-    });
 
-
-    //Button to remove ingredient on edit_recipe.html
-    var ing_count_edit = $('.ingredient').length //counts the number of ingredients already on the page
+    //Button to remove single ingredient on edit_recipe.html
     $('.remove_current_ingredient').on('click', function() {
-        $(this).closest(".ingredient").fadeOut(300).remove();
-        ing_count_edit--;
+        $(this).parent().fadeOut(300).remove();
     });
 
 
@@ -60,9 +65,8 @@ $(document).ready(function() {
         else {
             zero = "";
         }
-        var new_method = `<div class="row method">
-                                <div class="input-field col s12 m11 offset-m1">
-                                    <input type="text" class="validate" name="` + zero + step_count + `" placeholder="Enter step ` + step_count + `">
+        var new_method = `<div class="col s12 input-field method white-background z-depth-2">
+                                <textarea class="materialize-textarea" name="` + zero + step_count + `" placeholder="Enter step ` + step_count + `" required></textarea>
                                 </div>
                             </div>`;
         $(new_method).hide().appendTo("#method_container").fadeIn(300);
@@ -86,11 +90,10 @@ $(document).ready(function() {
     //the edit page requires a different count when adding steps due to already having the current recipe's steps counted
     var step_count_edit = $('#method_container .method').length + 1
     $('#add_method_to_existing').on('click', function() {
-        var new_method_to_existing = `<div class="row input-field method">
-                                        <div class="input-field col s12 m11 offset-m1">
-                                            <input type="text" class="validate" name="` + step_count_edit + `" placeholder="Enter step ` + step_count_edit + `">
-                                        </div>
+        var new_method_to_existing = `<div class="col s12 input-field method white-background z-depth-2">
+                                        <textarea class="materialize-textarea" name="` + step_count_edit + `" placeholder="Enter step ` + step_count_edit + `"></textarea>
                                     </div>`;
+
         $(new_method_to_existing).hide().appendTo('#method_container').fadeIn(300);
         step_count_edit++;
     });
@@ -185,5 +188,14 @@ $(document).ready(function() {
     });
 
 
-
+    $('#backToResults').click(function() {
+        parent.history.back();
+        return false;
+    });
+    
+    var lastPageVisited = document.referrer.toString();
+  
+    if (lastPageVisited.indexOf("get_recipes") > -1 || lastPageVisited.indexOf("search") > -1) {
+        $('#back-to-results').removeClass('no-display');
+    }
 });

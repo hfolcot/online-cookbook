@@ -35,11 +35,11 @@
     
 <!--Results-->    
     <div class="row">
-        <div class="col s12 results" id="results">
+        <div class="col s12 results z-depth-2" id="results">
             <div class="row">
                 {% for recipe in recipes %}
                 <div class="col s12 m3">
-                    <div class="card small" id="{{ recipe._id }}">
+                    <div class="card small grow result-card" id="{{ recipe._id }}">
                         <div class="card-image">
                             <img src="{{ recipe.image }}" alt="{{ recipe.name }}">
                         </div>

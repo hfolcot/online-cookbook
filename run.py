@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 mongo = PyMongo(app)
 
 
@@ -144,7 +144,6 @@ def get_recipes(page_no):
     if request.method == 'POST':
         #User has selected to filter by category
         form = request.form.to_dict()
-        print(form)
         if 'recipe_type'in form:
             selected_recipe_type = form['recipe_type']
         if 'main_ing' in form:
@@ -446,4 +445,4 @@ Run the app
 if __name__ == '__main__':   
     app.run(host=os.environ.get("IP"),
     port=int(os.environ.get("PORT")),
-    debug=True)
+    debug=False)

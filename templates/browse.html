@@ -18,7 +18,7 @@
     </div>
     
 <!--Filtering select dropdowns-->    
-    <div class="row">
+    <div class="row filter-form white-background z-depth-2">
         <form action="{{ url_for('get_recipes', page_no=1) }}" method="POST">
             <div class="input-field col s12 m4">
                 <select id="main_ing" name="main_ing">
@@ -67,10 +67,10 @@
     
 <!--Results-->
     <div class="row">
-        <div class="col s12 results" id="results">
+        <div class="col s12 results z-depth-2" id="results">
             {% for recipe in recipes %}
             <div class="col s12 m3">
-                <div class="card small" id="{{ recipe._id }}">
+                <div class="card small grow result-card" id="{{ recipe._id }}">
                     <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">
                         <div class="card-image">
                             <img src="{{ recipe.image }}" alt="{{ recipe.name }}">

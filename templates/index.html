@@ -1,19 +1,19 @@
 {% extends 'base.html'%} {% block content %}
 <main class="center-align container">
 
-<!--Page Title-->    
-    <h2 class="page-title">Welcome to Your Online Cookbook!</h2>
+<!--Page Title-->
+    <h2 class="page-title">Welcome to Your Online Cookbook{% if user %}, {{ user.capitalize() }}{% endif %}!</h2>
     
     <div class="row">
 <!--Search form, browse, and add/login buttons-->
-        <div class="col s12 m6">
-            <div class="search-form">
+        <div class="col s12 l6">
+            <div class=" row white-background z-depth-2">
                 <form method="POST">
-                    <div class="input-field col s10">
+                    <div class="input-field col s8 xl10">
                         <input placeholder="Search Recipes..." name="search" type="text" class="validate">
                     </div>
-                    <div class="col s2">
-                        <button type="submit" name="action" value="search" class="waves-effect waves-light btn"><i class="material-icons">search</i></button>
+                    <div class="col s2 offset-s1 xl2">
+                        <button type="submit" name="action" value="search" class="waves-effect waves-light btn search_btn"><i class="material-icons">search</i></button>
                     </div>
                 </form>
             </div>
@@ -34,13 +34,13 @@
             {% endif %}
         </div>
 <!--Image (desktop)-->        
-        <div class="col hidden-mobile m6 home-image">
+        <div class="col hide-on-med-and-down l6 home-image">
             <a href="{{ url_for('get_recipes', page_no=1) }}"><img src="/static/img/indeximg.jpg" alt="Click to see all recipes"></a>
         </div>
     </div>
     
 <!--Image(mobile)-->    
-    <div class="row hide-on-med-and-up home-image">
+    <div class="row hide-on-large-only home-image">
         <a href="{{ url_for('get_recipes', page_no=1) }}"><img src="/static/img/indeximg.jpg" alt="Click to see all recipes"></a>
     </div>
 

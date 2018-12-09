@@ -14,9 +14,9 @@
 </head>
 
 <body>
-    
-    
-<!--Navbar-->
+
+
+    <!--Navbar-->
     <nav>
         <div class="nav-wrapper">
             <a href="{{url_for('index')}}" class="hidden-mobile"><img class= "headerimg" src="/static/img/headerimg.jpg" alt="Your Online Cookbook"></a>
@@ -29,47 +29,44 @@
                 <li>|</li>
                 {% if user %}
                 <li><a class='dropdown-trigger' href='#' data-target='dropdown1'>Manage</a></li>
-                <ul id='dropdown1' class='dropdown-content'>
-                    <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
-                    <li><a href="{{url_for('add_category')}}">Categories</a></li>
-                </ul>
                 <li>|</li>
-                <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
+                <li><a href="{{ url_for('end_session') }}">Log Out</a></li>
                 {% else %}
-                <li><a class="waves-effect waves-light modal-trigger" href="#login-modal">Log In</a></li>
+                <li><a class="modal-trigger" href="#login-modal">Log In</a></li>
                 {% endif %}
+            </ul>
+            <ul id='dropdown1' class='dropdown-content'>
+                <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
+                <li><a href="{{url_for('add_category')}}">Categories</a></li>
             </ul>
         </div>
     </nav>
-    
-<!--Mobile Navbar-->
+
+    <!--Mobile Navbar-->
     <ul class="sidenav" id="mobile-demo">
         <li><a href="{{url_for('index')}}">Home</a></li>
         <li><a href="{{ url_for('get_recipes', page_no=1) }}">Browse</a></li>
         {% if user %}
-        <li><a href="{{url_for('add_recipe')}}"}>Add a Recipe</a></li>
+        <li><a href="{{url_for('add_recipe')}}">Add a Recipe</a></li>
+        <li><a href="{{url_for('add_category')}}">Manage Categories</a></li>
         <li><a class="waves-effect waves-light" href="{{ url_for('end_session') }}">Log Out</a></li>
         {% else %}
         <li><a class="waves-effect waves-light modal-trigger" href="#login-modal">Log In</a></li>
         {% endif %}
     </ul>
-    
-    
-<!--Flashed messages to appear at the top of the viewport, below the nav-->
+
+
+    <!--Flashed messages to appear at the top of the viewport, below the nav-->
     {% with messages = get_flashed_messages() %} {% if messages %}
     <ul class="flashes center-align">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
     </ul>
-    {% endif %} {% endwith %}
-    
-    
-    
-    {% block content %} {% endblock %}
-    
-    
-<!--Footer-->
+    {% endif %} {% endwith %} {% block content %} {% endblock %}
+
+
+    <!--Footer-->
     <footer class="page-footer">
         <div class="container">
             <div class="row">
@@ -81,14 +78,16 @@
                     <a target="_blank" class="grey-text text-lighten-3 footer-icons" href="https://www.linkedin.com/in/heather-olcot-b49981159/"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <div class="row"><p>Website built as part of Code Institute's Full Stack Web Development course</p></div>
+            <div class="row">
+                <p>Website built as part of Code Institute's Full Stack Web Development course</p>
+            </div>
         </div>
     </footer>
-    
-    
-<!--Modals-->
 
-<!--Login Modal-->
+
+    <!--Modals-->
+
+    <!--Login Modal-->
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
@@ -131,7 +130,7 @@
     </div>
 
 
-<!--Create User Modal-->
+    <!--Create User Modal-->
     <div id="newusermodal" class="modal">
         <div class="modal-content">
             <h4>Log in to add, edit or rate recipes!</h4>
@@ -175,11 +174,11 @@
     </div>
 
 
-<!--Scripts-->
+    <!--Scripts-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script type="text/javascript" src="/static/js/script.js"></script>
-    
+
 </body>
 
 </html>

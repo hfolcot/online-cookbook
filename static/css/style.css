@@ -40,7 +40,7 @@ nav,
 
 
 .dropdown-content {
-/*Opens the menu below the nav bar instead of in front*/
+    /*Opens the menu below the nav bar instead of in front*/
     top: -65px;
     width: auto!important;
 }
@@ -66,12 +66,16 @@ nav,
     color: #F7F7FF;
 }
 
+.search_btn {
+    margin-top: 20px;
+}
+
 
 /************************************IMAGES*/
 
 .headerimg {
-    margin-left: 5px;
     margin-right: 5px;
+
 }
 
 .home-image img {
@@ -79,7 +83,8 @@ nav,
 }
 
 .recipeimg {
-    width: 30vw;
+    width: 100%;
+    margin-top: 2.3733333333rem;
 }
 
 
@@ -90,10 +95,30 @@ input::placeholder {
     color: #2C365E;
 }
 
-.search-form {
-    padding-bottom: 150px;
+.white-background {
+    background-color: #F7F7FF;
+    border-radius: 5px;
 }
 
+.dark-background {
+    background-color: #2D2D2A;
+}
+
+.filter-form {
+    padding: 10px;
+}
+
+.ing-method {
+    margin-bottom: 0px;
+}
+
+.grow {
+    transition: all .2s ease-in-out;
+}
+
+.grow:hover {
+    transform: scale(1.1);
+}
 
 /*******************************MESSAGES*/
 
@@ -108,14 +133,9 @@ input::placeholder {
 /******************************CATEGORIES*/
 
 .add-or-delete {
-        margin-top: 180px;
+    margin-top: 180px;
 }
 
-.addremove_category {
-
-    border: 1px outset black;
-    box-shadow: 5px 10px;
-}
 
 /*******************************RECIPES*/
 
@@ -125,7 +145,13 @@ input::placeholder {
 
 
 .results {
+    background-color: #000000;
     background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.result-card {
+    border-radius: 5px;
 }
 
 .collapsible-header {
@@ -133,15 +159,16 @@ input::placeholder {
     color: #F7F7FF;
 }
 
-
 /************************************MEDIA QUERIES*/
 
-@media (max-width: 1024px) {
-    .search-form {
-        padding-bottom: 50px;
+@media (min-width: 1500px) {
+
+    .recipe-header {
+        padding-bottom: 2.3733333333rem;
     }
+}
 
-
+@media (max-width: 1024px) {
     .page-title {
         font-size: 1.5rem;
     }
@@ -164,13 +191,8 @@ input::placeholder {
     .btn-large {
         font-size: 1.0rem;
     }
-    .search-form {
-        padding-bottom: 80px;
-    }
+
     .footer-icons {
         padding: 2px;
-    }
-    .recipeimg {
-        min-width: 100%;
     }
 }

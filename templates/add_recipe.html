@@ -1,87 +1,128 @@
 {% extends 'base.html'%} {% block content %}
 <main class="container">
     <h2 class="center-align page-title">Add a Recipe</h2>
-    
+
     <div class="row">
         <form action="{{ url_for('insert_recipe') }}" enctype="multipart/form-data" method="POST">
-            
+
 <!--Recipe name field-->
             <div class="row">
-                <div class="row recipe_name">
-                    <div class="input-field col s12">
-                        <input id="recipe_name" type="text" name="name" class="validate">
-                        <label for="recipe_name">Recipe Name</label>
-                    </div>
+                <div class="input-field col s12 xl6 offset-xl3 white-background recipe_name z-depth-2">
+                    <input id="recipe_name" type="text" name="name" class="validate" required>
+                    <label for="recipe_name">Recipe Name</label>
+                </div>
+            </div>
+            
+<!--Author field-->
+            <div class="row">
+                <div class="input-field col s12 xl6 offset-xl3 white-background z-depth-2">
+                    <input placeholder="Who created this recipe?" id="author" type="text" name="author" class="validate">
+                    <label for="author">Author</label>
                 </div>
             </div>
 
-<!--Ingredients and method container-->            
+<!--Ingredients and method container-->
             <div class="row">
-                <div class="input-field col s12 m6">
-                    <div class="row" id="ingredients_container">
-                        <div class="row input-field ingredient">
-                            <div class="input-field col s12 m11">
-                                <input id="ing" type="text" name="ingredients" placeholder="First ingredient here..." class="validate">
-                                <label for="ing">Ingredients</label>
-                            </div>
+                <div class="input-field col s12 xl6 offset-xl3">
+                    <div class="row ing-method" id="ingredients_container">
+                        <div class="col s12 input-field ingredient white-background z-depth-2">
+                            <input id="ing" type="text" name="ingredients" placeholder="First ingredient here..." class="validate" required>
+                            <label for="ing">Ingredients</label>
                         </div>
                     </div>
-                    <div class="row" id="ing_button_container">
-                        <div class="input-field col s9 m5 offset-m1" id="add_ingredient_button">
+                    <div class="row ing-method" id="ing_button_container">
+                        <div class="input-field col s9 l5" id="add_ingredient_button">
                             <a class="btn waves-effect waves-light green" id="add_ingredient"><i class="material-icons right">add</i>Add More</a>
                         </div>
-                        <div class="input-field col s3 m5 hidden" id="remove_ing_button">
+                        <div class="input-field col s3 l5 hidden" id="remove_ing_button">
                             <a class="btn waves-effect waves-light red" id="remove_ingredient"><i class="material-icons">remove</i></a>
                         </div>
                     </div>
                 </div>
-                <div class="input-field col s12 m6">
-                    <div class="row" id="method_container">
-                        <div class="row input-field method">
-                            <div class="input-field col s12 m11 offset-m1">
-                                <input type="text" class="validate" name="01" placeholder="Enter step 1" id="step1">
+                <div class="input-field col s12 xl6 offset-xl3">
+                    <div class="row ing-method" id="method_container">
+                        <div class="col s12 input-field method white-background z-depth-2">
+                                <textarea class="materialize-textarea" name="01" placeholder="Enter step 1" id="step1" required></textarea>
                                 <label for="step1">Method</label>
-                            </div>
                         </div>
                     </div>
-                    <div class="row" id="method_button_container">
-                        <div class="input-field col s9 m5 offset-m1">
+                    <div class="row ing-method" id="method_button_container">
+                        <div class="input-field col s9 l5">
                             <a class="btn waves-effect waves-light green" id="add_method"><i class="material-icons right">add</i>Add next</a>
                         </div>
-                        <div class="input-field col s3 m5 hidden" id="remove_step_button">
+                        <div class="input-field col s3 l5 hidden" id="remove_step_button">
                             <a class="btn waves-effect waves-light red" id="remove_step"><i class="material-icons">remove</i></a>
                         </div>
                     </div>
                 </div>
             </div>
 
-<!--Prep time, cook time and serves fields-->            
+<!--Prep time, cook time and serves fields-->
             <div class="row">
-                <div class="input-field col s12 m4">
+                <div class="input-field col s4 offset-xl3 white-background z-depth-2">
                     <input id="prep_time" type="text" name="prep_time" class="validate">
-                    <label for="prep_time">Prep Time (minutes)</label>
+                    <label for="prep_time">Prep Time</label>
                 </div>
-                <div class="input-field col s12 m4">
+            </div>
+            <div class="row">
+                <div class="input-field col s4 offset-xl3 white-background z-depth-2">
                     <input id="cook_time" type="text" class="validate" name="cook_time">
-                    <label for="cook_time">Cook Time (minutes)</label>
+                    <label for="cook_time">Cook Time</label>
                 </div>
-                <div class="input-field col s12 m4">
+            </div>
+            <div class="row">
+                <div class="input-field col s4 offset-xl3 white-background z-depth-2">
                     <input id="serves" type="text" class="validate" name="serves">
-                    <label for="serves">Serves (Number of People)</label>
+                    <label for="serves">Serves</label>
                 </div>
             </div>
-            
-<!--Author field-->            
+
+
+
+
+<!--Category selection -->
             <div class="row">
-                <div class="input-field col s12">
-                    <input placeholder="Who created this recipe?" id="author" type="text" name="author" class="validate">
-                    <label for="author">Author</label>
+                <div class="col s12 xl6 offset-xl3 center-align">
+                        <h5>Categories</h5>
                 </div>
             </div>
-            
-<!--Image file input-->
             <div class="row">
-                <div class="col s12 m4">
+                <div class="col s12 xl6 offset-xl3 white-background z-depth-2">
+                    <h6>Main Ingredient</h6>
+                        <select name="main_ing" id="main_ing">
+                            <option value="" selected disabled>Choose...</option>
+                            {% for i in main_ing %}
+                            <option value="{{ i }}">{{ i.capitalize() }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col s12 xl6 offset-xl3 white-background z-depth-2">
+                        <h6>Recipe Type</h6>
+                        <select name="recipe_type" id="recipe_type">
+                        <option value="" selected disabled>Choose...</option>
+                        {% for i in recipe_type %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col s12 xl6 offset-xl3 white-background z-depth-2">
+                    <h6>Health</h6>
+                    <select name="health_concerns" id="health_concerns">
+                        <option value="" selected disabled>Choose...</option>
+                        {% for i in health_concerns %}
+                        <option value="{{ i }}">{{ i.capitalize() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!--Image file input-->
+            <div class="row">
+                
+                <div class="col s12 xl6 offset-xl3 white-background z-depth-2">
                     <div class="file-field input-field">
                         <div class="btn">
                             <span>Add an Image</span>
@@ -93,57 +134,16 @@
                     </div>
                 </div>
             </div>
-            
-<!--Category selection -->            
-            <div class="row">
+                <!--Submit button-->
                 <div class="row">
-                    <div class="col s2">
-                        <h5>Categories</h5>
-                    </div
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s3">
-                    <h6>Main Ingredient</h6>
-                    <select name="main_ing" id="main_ing">
-                        <option value="" selected disabled>Choose...</option>
-                        {% for i in main_ing %}
-                        <option value="{{ i }}">{{ i.capitalize() }}</option>
-                        {% endfor %}
-                    </select>
+                    <div class="col s6 offset-s6 offset-xl8">
+                        <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
+                    </div>
                 </div>
 
-                <div class="col s3">
-                    <h6>Recipe Type</h6>
-                    <select name="recipe_type" id="recipe_type">
-                        <option value="" selected disabled>Choose...</option>
-                        {% for i in recipe_type %}
-                        <option value="{{ i }}">{{ i.capitalize() }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <div class="col s3">
-                    <h6>Health</h6>
-                    <select name="health_concerns" id="health_concerns">
-                        <option value="" selected disabled>Choose...</option>
-                        {% for i in health_concerns %}
-                        <option value="{{ i }}">{{ i.capitalize() }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-            
-<!--Submit button-->
-            <div class="row center-align">
-                <div class="col s12 m3 offset-m9">
-                    <button class="btn waves-effect waves-light" type="submit">Submit<i class="material-icons right">send</i></button>
-                </div>
-            </div>
-            
         </form>
-    </div>
+        </div>
 </main>
 
-  
+
 {% endblock %}

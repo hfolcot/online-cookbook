@@ -4,8 +4,8 @@
     
     <div class="row">
         
-        <div class="input-field col s12 m5 offset-m1 center-align addremove_category">
-            <div class="col s11">
+        <div class="input-field col s12 xl6 offset-xl3 center-align white-background z-depth-2">
+            <div class="col s12">
             <h3 class="page-title">Add a Category</h3>
             <form action="{{ url_for('insert_category') }}" method="POST">
                 <div class="row">
@@ -26,8 +26,8 @@
             </form>
             </div>
         </div>
-        <div class="col s12 m1 center-align hidden-mobile add-or-delete">OR</div>
-        <div class="input-field col s12 m5 center-align addremove_category">
+        
+        <div class="input-field col s12 xl6 offset-xl3 center-align white-background z-depth-2">
             <h3 class="page-title">Delete a Category</h3>
             <form action="{{ url_for('delete_category') }}" method="POST">
                 <div class="col s12">
