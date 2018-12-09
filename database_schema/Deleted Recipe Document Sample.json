@@ -1,0 +1,36 @@
+{
+    "_id": {
+        "$oid": "5c0d1e8a5340121afe8a18a1"
+    },
+    "cook_time": "4042542345",
+    "name": "tet",
+    "ingredients": [
+        "test11",
+        "test22",
+        "test44",
+        "test55"
+    ],
+    "image": "../static/img/uploads/GISP5697.jpg",
+    "author": "me",
+    "serves": "432452345",
+    "ratings": {
+        "number_times_rated": 0,
+        "score": 0,
+        "rating": 0
+    },
+    "prep_time": "45544",
+    "method": {
+        "02": " t22",
+        "03": " t33",
+        "01": " t11",
+        "5": "t5new",
+        "4": "t4new"
+    },
+    "categories": {
+        "health_concerns": "nut free",
+        "recipe_type": "soup",
+        "main_ing": "beef"
+    },
+    "deleted": "on",
+    "deleted_by": "heather"
+}

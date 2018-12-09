@@ -1,0 +1,11 @@
+{
+    "_id": {
+        "$oid": "5c001618e7179a6ca07f40ec"
+    },
+    "username": "testuser",
+    "password": "password1",
+    "rated_recipes": ["5c02a079534012650d561286",
+        "5bf3fdff534012350f179601",
+        "5bf7e46353401290b034d74e",
+        "5c06bf59534012e2a2c49186"]
+}

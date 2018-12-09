@@ -1,0 +1,7 @@
+{
+    "_id": {
+        "$oid": "5be56fc0e7179a51a854f7fd"
+    },
+    "cat_name": "chicken",
+    "cat_type": "main_ing"
+}
