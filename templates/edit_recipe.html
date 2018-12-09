@@ -54,7 +54,7 @@
                     <p class="center-align">Method</p>
                         {% for i in method %}
                         <div class="col s12 input-field method white-background z-depth-2">
-                            <textarea class="materialize-textarea" name="{{ i[:2] }}">{{ i[3:] }}</textarea>
+                            <textarea class="materialize-textarea" {% if loop.index < 10 %} name="0{{ loop.index }}" {% else %} name="{{ loop.index }}" {% endif %}>{{ i[3:] }}</textarea>
                         </div>
                         {% endfor %}
                     </div>
