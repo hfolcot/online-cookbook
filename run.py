@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+app.config["MONGO_URI"] = os.getenv('MONGO_URI')
 mongo = PyMongo(app)
 
 
@@ -418,17 +418,21 @@ def insert_category():
     else:
         data = {"cat_name" : request.form['cat_name'].lower(), "cat_type" : request.form['cat_type'].lower()}
         mongo.db.categories.insert_one(data)
-        return redirect(url_for('add_recipe'))
+        return redirect(url_for('index'))
     
 @app.route("/delete_category", methods=["POST"])
 def delete_category():
     """
     Removes a category from the database
     """
-    for k, v in request.form.items():
-        mongo.db.categories.delete_one({"cat_name" : v})
-    flash("Category deleted")
-    return redirect(url_for('index'))
+    if len(request.form) == 0:
+        flash("Please select a category")
+        return redirect(url_for('add_category'))
+    else:
+        for k, v in request.form.items():
+            mongo.db.categories.delete_one({"cat_name" : v})
+        flash("Category deleted")
+        return redirect(url_for('index'))
     
     
 """
