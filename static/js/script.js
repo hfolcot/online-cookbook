@@ -89,7 +89,11 @@ $(document).ready(function() {
 
     //the edit page requires a different count when adding steps due to already having the current recipe's steps counted
     var step_count_edit = $('#method_container .method').length + 1
+
     $('#add_method_to_existing').on('click', function() {
+        if (step_count_edit > 1) {
+            $('#remove_step_from_existing').removeClass('hidden');
+        }
         var new_method_to_existing = `<div class="col s12 input-field method white-background z-depth-2">
                                         <textarea class="materialize-textarea" name="` + step_count_edit + `" placeholder="Enter step ` + step_count_edit + `"></textarea>
                                     </div>`;
@@ -100,8 +104,8 @@ $(document).ready(function() {
 
     //Button to remove step from method in edit_recipe.html
     $('#remove_step_from_existing').on('click', function() {
+        console.log(step_count_edit)
         if (step_count_edit > 2) {
-            $('#remove_step_from_existing').removeClass('hidden');
             $('.method').last().fadeOut(300).remove();
             step_count_edit--;
         }
