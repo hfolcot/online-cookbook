@@ -69,7 +69,7 @@
     <div class="row">
         <div class="col s12 results z-depth-2" id="results">
             {% for recipe in recipes %}
-            <div class="col s12 m3">
+            <div class="col m6 l3">
                 <div class="card small grow result-card" id="{{ recipe._id }}">
                     <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">
                         <div class="card-image">

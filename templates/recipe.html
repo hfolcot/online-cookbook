@@ -11,8 +11,8 @@
         <div class="col s12 l8">
             <h2 class="page-title center-align">{{ recipe.name.capitalize() }} {% if rating > 0 %}
                 <i class="material-icons">{{ rating * "stars" }}</i> {% endif %}</h2>
-            <h6 class="center-align">Author: {{ recipe.author }}</h6>
-            <p class="center-align">Serves: {{ serves }}</p>
+            {% if recipe.author %}<h6 class="center-align">Author: {{ recipe.author }}</h6>{% endif %}
+            {% if serves %} <p class="center-align">Serves: {{ serves }}</p>{% endif %}
             <!--Edit and Delete links-->
             {% if user %}
             <p class="center-align">Problem? <a href="{{ url_for( 'edit_recipe', recipe_id=recipe._id) }}">Edit this recipe</a></p>

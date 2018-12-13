@@ -88,7 +88,7 @@ nav,
 }
 
 .card-image {
-    height: 150px;
+    height: 100px;
 }
 
 
@@ -183,11 +183,20 @@ in an active state.*/
     .recipe-header {
         padding-bottom: 2.3733333333rem;
     }
+    .card-image {
+        height: 150px;
+    }
 }
 
 @media (max-width: 1024px) {
     .page-title {
         font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .card-image {
+        height: 150px;
     }
 }
 

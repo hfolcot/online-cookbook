@@ -38,7 +38,7 @@
         <div class="col s12 results z-depth-2" id="results">
             <div class="row">
                 {% for recipe in recipes %}
-                <div class="col s12 m3">
+                <div class="col s12 m6 l3">
                     <div class="card small grow result-card" id="{{ recipe._id }}">
                         <div class="card-image">
                             <img src="../{{ recipe.image }}" onerror='this.src="../../static/img/not-found.jpg"'  alt="{{ recipe.name }}">
