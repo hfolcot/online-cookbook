@@ -28,17 +28,19 @@ The application can be used with or without a user login, however some features
 are only available to logged in users.
 
 Any user of the website is able to search for specific keywords in a recipe name
-and view a list of results. They can also browse all recipes and filter the list
-based on the attributes of that recipe. From the results they can then view a specific
-recipe's page. Results are always returned in order of rating; the highest rated 
-recipe will be listed first.
+and view a list of results. The search function ONLY returns results with the search 
+term in the recipe name, no categories or ingredients are searched. 
+
+They can also browse all recipes and filter the list based on the attributes of 
+that recipe. From the results they can then view a specific recipe's page. Results 
+are always returned in order of rating; the highest rated recipe will be listed first.
 
 Users can create an account, this is very basic in that usernames and passwords 
 are stored in the database in a collection 'Users' in plain text (users are clearly 
 warned of this insecure nature of the site when signing up and urged to use unique 
 passwords, please see the Features Left to Implement section for further details).
 
-Once an account has been created and users are logged in, the will have the option 
+Once an account has been created and users are logged in, they will have the option 
 to add their own recipes and manage the recipe categories (adding and deleting).
 
 Adding a recipe will create a new document in the database's 'Recipes' collection.
@@ -64,7 +66,7 @@ When a user clicks Rate, the `number_times_rated` field is incremented by 1 and 
 amount they chose is added to the `score` field. The rating is then calculated by dividing 
 the score by the number of times rated. This is then entered into the `rating` field.
 
-The site also features a custom 404 error page.
+The site also features custom 404 and 500 error pages.
 
 
 ## Features Left to Implement
@@ -92,6 +94,11 @@ console when a user is prompted to enter a password because there is no SSL cert
 The passwords are also stored in plain text which the user is made aware of.
 It is an important requirement to make sure that user logins are made more secure.
 
+#### User profiles
+If a user has an account on a site such as this, they would expect to be able to go 
+to a profile page where they can see their own recipes and edit from there. This is 
+something that should be implemented in a future version.
+
 #### Undo Delete
 The recipes are currently moved to a different collection in the database rather 
 than being completely deleted, which allows for an 'undo delete' feature to be added 
@@ -100,15 +107,19 @@ if necessary.
 # Technologies Used
 The main logic of this application is written in [Python](https://www.python.org) 
 using the [Flask](http://flask.pocoo.org/) framework to handle the routes and 
-page rendering, and PyMongo for CRUD operations.
+page rendering, and [PyMongo](https://api.mongodb.com/python/current/) for CRUD operations.
 
 Pages are written in [HTML](https://www.w3.org/html/) using 
 [CSS3](https://www.w3.org/Style/CSS/Overview.en.html) for styling and 
-[JavaScript](https://www.javascript.com/) 
-for enhanced effects and some of the button functions, specifically with [JQuery](https://jquery.com/)
-to minimalise the amount of code required.
+[JavaScript](https://www.javascript.com/) for enhanced effects and some of the 
+button functions, specifically with [JQuery](https://jquery.com/)to minimalise 
+the amount of code required.
 
 The main page layout and styles are from [materializecss](https://materializecss.com/).
+
+The app uses two Python files, run.py for the main Flask app routing and the CRUD 
+functions, and data_functions.py for all other functions such as sorting the data 
+to insert into the database.
 
 ### Database
 The site uses [MongoDB](https://www.mongodb.com/) for data storage and is hosted
@@ -195,12 +206,6 @@ access and share with others.
 - Click Delete without selecting a category.
 - Select the category you have just created and click Delete.
 
-There appear to be some caching issues with the adding and deleting of categories.
-The newly added category will not appear in the list of categories available to delete
-without restarting the app, and then will not disappear after deletion, again without 
-restarting the app. The data is being updated in the database so these functions 
-are definitely working as intended, but the cached information is not always being 
-cleared.
 
 ##### Testing Rating/Logged in access
 - Log out of the app.
@@ -239,6 +244,14 @@ filepath if the requested image is not found. This means that uploaded images on
 heroku will not remain permanently, but when they are deleted they will be replaced
 with a backup image which avoids broken image links.
 
+##### Caching
+There appear to be some caching issues with the adding and deleting of categories.
+The newly added category will not appear in the list of categories available to delete
+without restarting the app, and then will not disappear after deletion, again without 
+restarting the app. The data is being updated in the database so these functions 
+are definitely working as intended, but the cached information is not always being 
+cleared.
+
 # Deployment
 
 The application is currently hosted live on Heroku; the code in the live version 
@@ -275,8 +288,7 @@ where necessary.
 
 
 ## Media
-Some images on recipes are linked directly from the website where the recipe is from.
-Others are from free image websites including www.freeimages.com, www.shutterstock.com
+All images are from free image websites including www.freeimages.com, www.shutterstock.com
 and https://pxhere.com.
 The favicon is from https://www.freefavicon.com
 
