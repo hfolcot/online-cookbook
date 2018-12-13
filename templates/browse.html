@@ -73,7 +73,7 @@
                 <div class="card small grow result-card" id="{{ recipe._id }}">
                     <a href="{{url_for('recipePage', recipe_id=recipe._id)}}">
                         <div class="card-image">
-                            <img src="{{ recipe.image }}" onerror='this.src="https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"' alt="{{ recipe.name }}">
+                            <img src="{{ recipe.image }}" onerror='this.src="../static/img/not-found.jpg"' alt="{{ recipe.name }}">
                         </div>
                     </a>
                     <div class="card-content">

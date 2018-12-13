@@ -15,7 +15,7 @@ configure_uploads(app, images)
 
 #config for db access
 app.config["MONGO_DBNAME"] = "online_cookbook"
-app.config["MONGO_URI"] = os.getenv('MONGO_URI')
+app.config["MONGO_URI"] = "mongodb://turnpike:n0tt00late@ds253203.mlab.com:53203/online_cookbook"
 mongo = PyMongo(app)
 
 
@@ -280,7 +280,7 @@ def insert_recipe():
         filename = images.save(request.files['image'])
         filepath = "../static/img/uploads/" + filename
     else:
-        filepath = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
+        filepath = "../static/img/not-found.jpg"
     data = data_functions.build_dict(request.form, filepath)
     newid = mongo.db.recipes.insert_one(data)
     return redirect(url_for('recipePage', recipe_id = newid.inserted_id))
@@ -342,7 +342,7 @@ def update_recipe(recipe_id):
     elif 'filepath' in request.form:
         filepath = request.form['filepath']
     else:
-        filepath = "https://media.istockphoto.com/photos/place-setting-picture-id513623454?s=2048x2048"
+        filepath = "../static/img/not-found.jpg"
     recipes = mongo.db.recipes
     data = data_functions.build_dict(request.form, filepath)
     recipes.update( {'_id': ObjectId(recipe_id)}, data)
