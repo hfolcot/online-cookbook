@@ -126,6 +126,7 @@ input::placeholder {
 
 .dropdown-content {
     max-height: 400px;
+    min-width: 90%;
 }
 
 /*******************************MESSAGES*/
