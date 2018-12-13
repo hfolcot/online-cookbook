@@ -80,7 +80,7 @@
             <ul class="collapsible">
                 <li>
                     <div class="collapsible-header"><i class="material-icons">restaurant</i>Ingredients</div>
-                    <div class="collapsible-body">
+                    <div class="collapsible-body white-background">
                         {% for i in recipe.ingredients %}
                         <p>{{ i.capitalize() }}</p>
                         {% endfor %}
@@ -88,7 +88,7 @@
                 </li>
                 <li>
                     <div class="collapsible-header"><i class="material-icons">view_list</i>Method</div>
-                    <div class="collapsible-body">
+                    <div class="collapsible-body white-background">
                         <ol>
                             {% for i in method %}
                             <li>{{ i[3:] }}</li>
