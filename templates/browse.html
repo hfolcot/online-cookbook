@@ -20,7 +20,7 @@
 <!--Filtering select dropdowns-->    
     <div class="row filter-form white-background z-depth-2">
         <form action="{{ url_for('get_recipes', page_no=1) }}" method="POST">
-            <div class="input-field col s12 m4">
+            <div class="input-field col s12 m4 edit_category">
                 <select id="main_ing" name="main_ing">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in main_ing %}
@@ -29,7 +29,7 @@
                 </select>
                 <label>Main Ingredient</label>
             </div>
-            <div class="input-field col s12 m4">
+            <div class="input-field col s12 m4 edit_category">
                 <select id="recipe_type" name="recipe_type">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in recipe_type %}
@@ -38,7 +38,7 @@
                 </select>
                 <label>Recipe Type</label>
             </div>
-            <div class="input-field col s12 m4">
+            <div class="input-field col s12 m4 edit_category">
                 <select id="health_concerns" name="health_concerns">
                     <option value="" disabled selected>Choose your option</option>
                     {% for i in health_concerns %}

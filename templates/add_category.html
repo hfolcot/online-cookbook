@@ -8,7 +8,7 @@
             <div class="col s12">
             <h3 class="page-title">Add a Category</h3>
             <form action="{{ url_for('insert_category') }}" method="POST">
-                <div class="row">
+                <div class="row edit_category">
                     <select id="cat_type" name="cat_type">
                     <option value="" selected>Choose a category heading...</option>
                     <option value="recipe_type">Recipe Type</option>
@@ -30,7 +30,7 @@
         <div class="input-field col s12 xl6 offset-xl3 center-align white-background z-depth-2">
             <h3 class="page-title">Delete a Category</h3>
             <form action="{{ url_for('delete_category') }}" method="POST">
-                <div class="col s12">
+                <div class="col s12 edit_category">
                     <select name="main_ing" id="delete_main_ing">
                         <option value="" selected disabled>Main Ingredient</option>
                         {% for i in main_ing %}
@@ -39,7 +39,7 @@
                     </select>
                 </div>
 
-                <div class="col s12">
+                <div class="col s12 edit_category">
                     <select name="recipe_type" id="delete_recipe_type">
                         <option value="" selected disabled>Recipe Type</option>
                         {% for i in recipe_type %}
@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 
-                <div class="col s12">
+                <div class="col s12 edit_category">
                     <select name="health_concerns" id="delete_health_concerns">
                         <option value="" selected disabled>Health</option>
                         {% for i in health_concerns %}

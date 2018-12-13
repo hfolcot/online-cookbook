@@ -124,7 +124,7 @@ input::placeholder {
     transform: scale(1.1);
 }
 
-.dropdown-content {
+.edit_category .select-wrapper .dropdown-content {
     max-height: 400px;
     min-width: 90%;
 }
