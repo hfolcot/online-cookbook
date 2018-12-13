@@ -129,6 +129,14 @@ input::placeholder {
     min-width: 90%;
 }
 
+
+/*The below style prevents the labels sitting directly on top of the input when 
+in an active state.*/
+.input-field>label:not(.label-icon).active {
+    transform: translateY(-18px) scale(0.8);
+    
+}
+
 /*******************************MESSAGES*/
 
 .flashes {
