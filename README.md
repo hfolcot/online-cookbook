@@ -1,6 +1,6 @@
 # Online Cookbook by Heather Olcot
 
-See the project live at https://online-cookbook-hev.herokuapp.com/
+** Project no longer live **
 
 This is the online cookbook, where users can look up a list of recipes in a 
 database and add their own. Recipes can be added, rated, edited and deleted by 
